@@ -1,8 +1,10 @@
 @ hello.S: Hello world! in assembly
 @
-@ Authors: Group Member 1 <email address>
-@          Group Member 2 <email address>
-@ Date:    The current time & date
+@ Authors: Group Member 1 <aanklesh>
+@          Group Member 2 <jitenm>
+	   Group Member 3 <achheda>
+@ Date:    Thu Oct 10 4:50:40
+
 #include <bits/swi.h>
 
 	.file	"hello.S"
@@ -10,11 +12,14 @@
 
 	.global	_start
 _start:
-	adr r0, hello_str
-	swi WRITE_SWI
-	mov r0, #0
+	mov r0, #1		@STDOUT
+	adr r1, hello_str 	@Passing the string
+	mov r2, #hello_size	@Passing the size
+	swi WRITE_SWI		@man 2 write
+	mov r0, #0		@EXIT_STATUS
 	swi EXIT_SWI
 
 
 hello_str:
 	.ascii "Hello world!\n"
+	.set hello_size, .-hello_str
