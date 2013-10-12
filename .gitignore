@@ -17,5 +17,6 @@
 *.out
 *.app
 
-
-.DS_Store
+#Custom ignores
+.DS_Store #for MAC
+*~ #Swapfile ignore
