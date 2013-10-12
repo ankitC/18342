@@ -6,13 +6,11 @@
 
 #include <bits/swi.h>
 
-        .file   "crt0.S"
-        .text
+	.file	"crt0.S"
+	.text
 
-        .global _start
+	.global	_start
 _start:
-        @ Needs more code.
-        LDMFD sp!, {r0-r1}
-        bl main
-        SWI EXIT_SWI
-
+	LDMIA sp!, {r0,r1}
+	b _main
+	SWI EXIT
