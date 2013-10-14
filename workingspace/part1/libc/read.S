@@ -3,7 +3,7 @@
 @ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
 @          Group Member 2: Jiten Mehta <jitenm>
 @		   Group Member 3: Ankit Chheda <achheda>
-@ Date:    The current time & date
+@ Date:    Oct 14, 2013 9:00 AM
 
 #include <bits/swi.h>
 #include <bits/errno.h>
@@ -11,7 +11,7 @@
 	.file	"read.S"
 	.text
 
-	.globl errno
+	.global errno
 	.global	read
 read:
 	str lr, [sp]!

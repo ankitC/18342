@@ -3,20 +3,17 @@
 @ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
 @          Group Member 2: Jiten Mehta <jitenm>
 @		   Group Member 3: Ankit Chheda <achheda>
-@ Date:    The current time & date
+@ Date:    Oct 10 2013, 10:00 AM
 
 #include <bits/swi.h>
 #include <bits/errno.h>
 
 .file   "crt0.S"
 .text
-
+.global exit
 .globl errno
 .global _start
 _start:
 		ldmfd sp!, {r0, r1}
 		bl main
-
-		ldr r3, =errno  @ r3 points to errno
-		str r0, [r3]    @ set errno to what main returns
-		swi EXIT_SWI
+		b exit	@Calling the exit syscall

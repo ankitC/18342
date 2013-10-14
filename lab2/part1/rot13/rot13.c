@@ -1,8 +1,8 @@
 /*
  * rot13.c: ROT13 cipher test application
- *
- * Authors: Group Member 1 <email address>
- *          Group Member 2 <email address>
+ * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *  	    Group Member 3: Ankit Chheda <achheda>
  * Date:    The current time & date
  */
 #include <unistd.h>
@@ -20,33 +20,22 @@ int main(void)
 	{
 		r = read(STDIN_FILENO, buf, BUFSIZE);
 		/* Read 0 bytes hence terminate the program */
-		if(r==0){
+		if(r==0)
 			exit(0);
-		}
-
+		/* Checking return value for errors */
 		else if(r < 0)
-		{
 			exit(1);
-		}
 		else
 		{
 			for(i = 0; i < r; i++)
 			{
 				if(((buf[i] >= 65) && (buf[i] <= 77)) || ((buf[i] >= 97) && (buf[i] <= 109)))
-				{
 					buf[i] += 13;
-				}
 				else if(((buf[i] >= 78) && (buf[i] <= 90)) || ((buf[i] >= 110) && (buf[i] <= 122)))
-				{
 					buf[i] -= 13;
-				}
+				
 			}
 		}
-	/* If Buffer overflows, set number of bytes to be written
-	 * equal to the BUFSIZE */
-		if( r > BUFSIZE)
-			r = BUFSIZE;
-
 		/* Ensuring that we retransmit in case of short count on write */
 		while(r!=w){
 			w = write(STDOUT_FILENO, buf, r);
@@ -55,6 +44,7 @@ int main(void)
 				exit(1);
 			}
 		}
+		w = 0; /* Resetting w for checking r!=w */
 	}
 	return 0;
 }
