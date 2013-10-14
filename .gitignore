@@ -19,4 +19,6 @@
 
 #Custom ignores
 .DS_Store #for MAC
-*.*~ #Swapfile ignore
+*~	#Swapfile ignore
+*.swp
+*.swp
