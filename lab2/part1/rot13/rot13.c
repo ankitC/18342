@@ -8,22 +8,24 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include <unistd.h>
-#include <stdlib.h>
-//#include <bits/swi.h>
+#define BUFSIZE 10
 
-int main(void) {
+int main(void)
+{
 	int i = 0;
-	char buf[10];
+	char buf[BUFSIZE];
 	while(1)
 	{
 		int r = read(0, buf, 15);
-		if(r-1==0){
-			return 0;
+		/* Read 0 bytes hence terminate the program */
+		if(r==0){
+			exit(0);
 		}
 
 		else if(r < 0)
-			return 1;
+		{
+			exit(1);
+		}
 		else
 		{
 			for(i = 0; i < r; i++)
@@ -40,7 +42,9 @@ int main(void) {
 		}
 		int w = write(1, buf, r);
 		if(w < 0)
-			return 1;
+		{
+			exit(1);
+		}
 	}
 	return 0;
 }
