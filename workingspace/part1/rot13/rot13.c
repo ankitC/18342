@@ -1,5 +1,8 @@
 /*
- * rot13.c: ROT13 cipher test application
+ * rot13.c: ROT13 cipher test application. The Application
+ *			exits on any error from the syscall or when
+ *			the user hits CLTR+C.
+ *
  * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
  *          Group Member 2: Jiten Mehta <jitenm>
  *  	    Group Member 3: Ankit Chheda <achheda>
@@ -7,7 +10,7 @@
  */
 #include <unistd.h>
 #include <stdlib.h>
-#include <fileno.h>
+#include <bits/fileno.h>
 
 #define BUFSIZE 10
 

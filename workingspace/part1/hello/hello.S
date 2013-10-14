@@ -2,7 +2,7 @@
 @
 @ Authors: Group Member 1 <aanklesh>
 @          Group Member 2 <jitenm>
-		   Group Member 3 <achheda>
+@		   Group Member 3 <achheda>
 @ Date:    Thu Oct 10 4:50:40 PM
 
 #include <bits/swi.h>
