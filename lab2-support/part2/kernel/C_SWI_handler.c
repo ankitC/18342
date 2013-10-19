@@ -1,6 +1,6 @@
 #include<bits/fileno.h>
 #include<bits/errno.h>
-
+char *buf;
 void main(int swino, char *args)
 {
 	switch (swino)
@@ -48,6 +48,17 @@ void main(int swino, char *args)
 		case(0x900004):
 
 			if(args[0] == STDOUT_FILENO)
+			{
+				int i ;
+				for(i=0; i<args[2] ; i++)
+				{
+					if(buf[i] = '\0')
+						break;
+					putc(buf[i]);
+				}
+
+			}
+
 
 
 			else
