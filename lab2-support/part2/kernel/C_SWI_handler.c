@@ -26,7 +26,9 @@ void main(int swino, char *args)
 
 					if( c == '\b' || c == 127)		//TODO delete encountered
 					{
-						buf[i]='\0';
+						buf[i-1]='\0';
+						i--;
+						puts("\b \b");
 					}
 
 					if( c == '\n' || c == '\r')
