@@ -1,8 +1,11 @@
 #include<bits/fileno.h>
 #include<bits/errno.h>
-char *buf;
-void main(int swino, char *args)
+#include <exports.h>
+
+//char *buf;
+void C_SWI_handler(int swino, unsigned* args)
 {
+	char* buf = (char*) args[1];
 	switch (swino)
 	{
 		case(0x900001):
@@ -12,18 +15,17 @@ void main(int swino, char *args)
 		case(0x900003):
 			puts("Read syscall called");
 			if(args[0]==STDIN_FILENO)
-			{	int i;
-				char *buf = args[1];		// Please check if we can write args[1][0] as args[1] is an array
-
-				for(i=0;i < args [2]; i++)
+			{
+				int i;
+				for(i = 0; i < args [2]; i++)
 				{
 					char c = getc();
 					if( c == '\0')
 						break;
-
+					/* CLTR+D */
 					if( c == 4 )
 						break;
-
+					/* BACKSPACE or DEL */
 					if( c == '\b' || c == 127)		//TODO delete encountered
 					{
 						buf[i-1]='\0';
@@ -31,12 +33,12 @@ void main(int swino, char *args)
 						puts("\b \b");
 						break;
 					}
-
+					/* NEW LINE or CARRAIGE RETURN */
 					if( c == '\n' || c == '\r')
-						{
-							buf[i] = c;
-							break;
-						}
+					{
+						buf[i] = c;
+						break;
+					}
 
 					buf[i] = c;
 				}
@@ -55,7 +57,7 @@ void main(int swino, char *args)
 				int i ;
 				for(i=0; i<args[2] ; i++)
 				{
-					if(buf[i] = '\0')
+					if(buf[i] == '\0')
 						break;
 					putc(buf[i]);
 				}
@@ -71,6 +73,6 @@ void main(int swino, char *args)
 
 		default:
 			puts("Invalid SWI no.\n");
-				args[0] =  -0xBADC0DE;
+			args[0] =  -0xBADC0DE;
 	}
 }
