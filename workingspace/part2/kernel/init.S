@@ -6,7 +6,7 @@
 @ Date:    Oct 14, 2013 9:00 AM
 
 #include "kernel.h"
-
+#include <bits/swi.h>
 	.file	"init.S"
 	.text
 	.align 2
@@ -25,5 +25,4 @@
 	
 	LDR r12, =USR_MAIN_ADDR
  	bl r12
- 	
  	swi EXIT_SWI
