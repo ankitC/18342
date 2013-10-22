@@ -10,7 +10,7 @@ LOAD_ADDR = 0xa3000000
 
 STUBS = ../uboot/stubs.o
 
-objects = kernel.o setinterrupt.o changemode.o 
+objects = kernel.o init.o dispatcher.o
 
 default: kernel.bin
 
