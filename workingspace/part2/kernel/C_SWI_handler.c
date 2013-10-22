@@ -10,12 +10,12 @@ void main(int swino, char *args)
 			break;
 
 		case(0x900003):
-
+			puts("Read syscall called");
 			if(args[0]==STDIN_FILENO)
 			{	int i;
 				char *buf = args[1];		// Please check if we can write args[1][0] as args[1] is an array
 
-				for(i=0;i < args [2])
+				for(i=0;i < args [2]; i++)
 				{
 					char c = getc();
 					if( c == '\0')
@@ -26,7 +26,10 @@ void main(int swino, char *args)
 
 					if( c == '\b' || c == 127)		//TODO delete encountered
 					{
-						buf[i]='\0';
+						buf[i-1]='\0';
+						i--;
+						puts("\b \b");
+						break;
 					}
 
 					if( c == '\n' || c == '\r')
@@ -46,7 +49,7 @@ void main(int swino, char *args)
 			// TODO EFAULT set
 
 		case(0x900004):
-
+			puts("write syscall called");
 			if(args[0] == STDOUT_FILENO)
 			{
 				int i ;
