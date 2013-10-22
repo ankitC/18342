@@ -1,7 +1,7 @@
 /*
  * kernel.c: Kernel main (entry) function
  *
- * Author: Group Member 1 <email address>
+ * Author: Group Member 1<email address>
  *         Group Member 2 <email address>
  * Date:   The current time & date
  */
@@ -17,6 +17,7 @@ extern void dispatcher();
  */
 unsigned int *first_old_instr = 0;
 unsigned int *second_old_instr = 0;
+unsigned* old_SWI_addr = 0;
 
 int main(int argc, char *argv[]) {
 
@@ -26,7 +27,7 @@ int main(int argc, char *argv[]) {
 
 	/* Address of the old SWI handler */
 	unsigned*  old_SWI_container = (unsigned*) (SWI_VECTOR_ADDR + offset + 0x08);
-	unsigned* old_SWI_addr = (unsigned*) *old_SWI_container;
+	old_SWI_addr = (unsigned*) *old_SWI_container;
 	/* Extracting the first 2 instructions */
 	first_old_instr = (unsigned int *) *(old_SWI_addr);
 	second_old_instr = (unsigned int *) *(old_SWI_addr + 1);
