@@ -1,23 +1,34 @@
-.file "S_handler"
+@ init.S: initilizing the main user_space app
+@
+@ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
+@          Group Member 2: Jiten Mehta <jitenm>
+@		   Group Member 3: Ankit Chheda <achheda>
+@ Date:    Oct 14, 2013 9:00 AM
 
-.text
-.global dispatcher
-.global C_SWI_handler
+#include "kernel.h"
+#include <bits/swi.h>
+	
+	.file	"init.S"
+	.text
+	.align 2
+	
+	.global	init
+
+init:
+	@STR r1,[sp]!			@Disabling Interrupts
+	MRS r12, cpsr 
+ 	ORR r12, r12, #0x60 
+ 	
+ 	BIC r12, r12, #0x03 	@Changing to user_mode
+ 	MSR cpsr, r1 
+	
+	ADR sp,addr @Setting up the userspace stack
+	STMFD sp!, {r0-r1}
+	
+	mov lr, pc
+	LDR pc, =USR_MAIN_ADDR 
+ 	swi EXIT_SWI
 
 
-dispatcher:
-
-	SUB sp, sp, #4
-	STMFD sp!, {r0 - r12, lr}
-	MRS r2, spsr
-	STR r2, [sp, #14*4]
-	MOV r1, sp
-	LDR r0, [lr, #-4]
-	BIC r0, r0, 0xff000000
-	BL C_SWI_handler
-	LDR r2, [sp, #14*4]
-	MSR spsr, r2
-	LDMFD sp!,{r0 - r12 , lr}
-	ADD sp, sp, #4
-	MOVS pc, lr
-
+addr:
+	.word USR_STACK_BASE

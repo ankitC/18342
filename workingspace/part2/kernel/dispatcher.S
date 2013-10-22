@@ -5,12 +5,27 @@
 @		   Group Member 3: Ankit Chheda <achheda>
 @ Date:    Oct 14, 2013 9:00 AM
 
-#include "kernel.h"
+.file "dispatcher"
 
-	.file	"dispatcher.S"
-	.text
-	.align 2
-	
-	.global	dispatcher
+.text
+.global dispatcher
+.global C_SWI_handler
 
-	ldr pc, lr
+
+dispatcher:
+
+	SUB sp, sp, #4
+	STMFD sp!, {r0 - r12, lr}
+	MRS r2, spsr
+	STR r2, [sp, #14*4]
+	MOV r1, sp
+	LDR r0, [lr, #-4]
+	BIC r0, r0, #0xff000000
+	BL C_SWI_handler
+	LDR r2, [sp, #14*4]
+	MSR spsr, r2
+	LDMFD sp!,{r0 - r12 , lr}
+	ADD sp, sp, #4
+	MOVS pc, lr
+
+
