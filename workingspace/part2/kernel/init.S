@@ -1,4 +1,4 @@
-@ init.S: Disabling IRQ-FIQ
+@ init.S: initilizing the main user_space app
 @
 @ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
 @          Group Member 2: Jiten Mehta <jitenm>
