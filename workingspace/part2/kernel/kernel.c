@@ -15,23 +15,23 @@ extern void dispatcher();
  * Variables to store the instructions of the
  * original SWI handler
  */
-unsigned* first_old_instr = 0;
-unsigned* second_old_instr = 0;
+unsigned int *first_old_instr = NULL;
+unsigned int *second_old_instr = NULL;
 
 int main(int argc, char *argv[]) {
 
-	unsigned* swi_vector = (unsigned*) SWI_VECTOR_ADDR;
-	unsigned swi_loader = *swi_vector;
-	unsigned offset = swi_loader && (0xFFFFF000);
-	unsigned* old_SWI_addr = swi_vector + offset + 0x08;
+	unsigned int *swi_vector = (unsigned int *) SWI_VECTOR_ADDR;
+	unsigned int swi_loader = *swi_vector;
+	unsigned int offset = swi_loader && (0x0FFF);
+	unsigned int *old_SWI_addr = swi_vector + offset + 0x08;
 
 	/* Extracting the first 2 instructions */
-	first_old_instr = (unsigned*)	*(old_SWI_addr);
-	second_old_instr = (unsigned*) *(old_SWI_addr + 1);
+	first_old_instr = (unsigned int *) *(old_SWI_addr);
+	second_old_instr = (unsigned int *) *(old_SWI_addr + 1);
 
 	/* Preparing instructions to substitute */
-	unsigned first_new_instr = (unsigned) LDR_PC_PC_minus_4;
-	unsigned second_new_instr = (unsigned) &dispatcher;
+	unsigned int first_new_instr = (unsigned int) LDR_PC_PC_minus_4;
+	unsigned int second_new_instr = (unsigned int) &dispatcher;
 
 	/* Wiring in our handler */
 	*old_SWI_addr = first_new_instr;
@@ -40,6 +40,8 @@ int main(int argc, char *argv[]) {
 	init(argc, argv);
 
 	/* Need to restore the handler */
+	//*old_SWI_addr = first_old_instr;
+	//*(old_SWI_addr + 1) = second_old_instr;
+
 	return 0;
 }
-

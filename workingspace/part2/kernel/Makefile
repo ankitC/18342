@@ -26,7 +26,7 @@ kernel: start.o $(objects)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 %.o: %.S
-	$(CC) -c $(ASFLAGS) -o $@ $<
+	$(CC) -S $(ASFLAGS) -o $@ $<	#TODO: confirm -S flag
 
 clean:
 	rm -f kernel start.o $(objects)
