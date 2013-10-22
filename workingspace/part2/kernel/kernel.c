@@ -15,16 +15,18 @@ extern void dispatcher();
  * Variables to store the instructions of the
  * original SWI handler
  */
-unsigned int *first_old_instr = NULL;
-unsigned int *second_old_instr = NULL;
+unsigned int *first_old_instr = 0;
+unsigned int *second_old_instr = 0;
 
 int main(int argc, char *argv[]) {
 
-	unsigned int *swi_vector = (unsigned int *) SWI_VECTOR_ADDR;
-	unsigned int swi_loader = *swi_vector;
-	unsigned int offset = swi_loader && (0x0FFF);
-	unsigned int *old_SWI_addr = swi_vector + offset + 0x08;
+	unsigned*  swi_vector = (unsigned int *) SWI_VECTOR_ADDR;
+	unsigned  swi_loader = *swi_vector;
+	unsigned  offset = swi_loader & (0x0FFF);
 
+	/* Address of the old SWI handler */
+	unsigned*  old_SWI_container = (unsigned*) (SWI_VECTOR_ADDR + offset + 0x08);
+	unsigned* old_SWI_addr = (unsigned*) *old_SWI_container;
 	/* Extracting the first 2 instructions */
 	first_old_instr = (unsigned int *) *(old_SWI_addr);
 	second_old_instr = (unsigned int *) *(old_SWI_addr + 1);

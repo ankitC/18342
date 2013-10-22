@@ -1,8 +1,8 @@
 CC      = arm-linux-gcc
 OBJCOPY = arm-linux-objcopy
 AR		= arm-linux-ar
-CFLAGS  = -O2 -ffixed-r8 -ffreestanding -Wall -Werror -nostdinc \
-          -I ../uboot/include -I include -g
+CFLAGS  = -O0 -g -ffixed-r8 -ffreestanding -Wall -Werror -nostdinc \
+          -I ../uboot/include -I include 
 ASFLAGS = -nostdinc -I ../uboot/include -I include
 LDFLAGS = -nostdlib -Wl,-N,-Ttext,$(LOAD_ADDR)
 
@@ -26,7 +26,8 @@ kernel: start.o $(objects)
 	$(CC) -c $(CFLAGS) -o $@ $<
 
 %.o: %.S
-	$(CC) -S $(ASFLAGS) -o $@ $<	#TODO: confirm -S flag
+	$(CC) -c $(ASFLAGS) -o $@ $<
+
 
 clean:
 	rm -f kernel start.o $(objects)
