@@ -22,6 +22,6 @@ dispatcher:
 	BL C_SWI_handler
 	LDR r2, [sp, #14 * 4]
 	MSR spsr, r2
-	LDMFD sp!,{r0 - r12 , lr}
+	LDMFD sp!, {r0 - r12 , lr}
 	ADD sp, sp, #4
 	MOVS pc, lr
