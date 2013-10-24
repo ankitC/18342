@@ -1,6 +1,6 @@
-CC      = gcc
-OBJCOPY = objcopy
-CFLAGS  = -O2 -ffixed-r8 -ffreestanding -Wall -Werror -nostdinc \
+CC      = arm-linux-gcc
+OBJCOPY = arm-linux-objcopy
+CFLAGS  = -O0 -ffixed-r8 -ffreestanding -Wall -Werror -nostdinc \
           -I ../uboot/include -I include
 LDFLAGS = -nostdlib -Wl,-e,$(ENTRY_SYMBOL),-N,-Ttext,$(LOAD_ADDR)
 
