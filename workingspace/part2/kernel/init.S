@@ -15,11 +15,14 @@
 	.global	init
 
 init:
-	LDR r12,=kernellr			@Disabling Interrupts
+
+	LDR r12,=kernellr			@Saving return address to kernel.c
 	STR lr, [r12]
+
+	STMFD sp!, {r8, lr}
+
 	MRS r12, cpsr 
- 	ORR r12, r12, #0x60 
- 	
+ 	ORR r12, r12, #0x60		@ Disabling IRQ and FIQ
  	BIC r12, r12, #0x03 	@ Changing to user_mode
  	MSR cpsr, r12 
 	
@@ -28,7 +31,5 @@ init:
 	
 	mov lr, pc
 	LDR pc, =USR_MAIN_ADDR
- 	swi EXIT_SWI
 
-addr:
-	.word USR_STACK_BASE
+ 	swi EXIT_SWI

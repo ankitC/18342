@@ -13,9 +13,8 @@ extern unsigned int *second_old_instr;
 extern unsigned* old_SWI_addr;
 
 
-void restore(void)
+void restore_old_SWI(void)
 {
 	*old_SWI_addr =(unsigned) first_old_instr;
 	*(old_SWI_addr + 1) =(unsigned) second_old_instr;
-
 }
