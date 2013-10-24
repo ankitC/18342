@@ -14,10 +14,10 @@
 	.global errno
 	.global	exit
 exit:
-	str lr, [sp]!
-
+@	str lr, [sp]!
+	ldr r8, [sp]!
 @setting the errno before calling SWI
-	ldr r3, =errno	@ r3 points to errno
-	str r0, [r3]	@ set errno
+@	ldr r3, =errno	@ r3 points to errno
+@	str r0, [r3]	@ set errno
 
 	swi EXIT_SWI
