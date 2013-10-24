@@ -15,14 +15,15 @@
 	.global	init
 
 init:
-	@STR r1,[sp]!			@Disabling Interrupts
+	LDR r12,=kernellr			@Disabling Interrupts
+	STR lr, [r12]
 	MRS r12, cpsr 
  	ORR r12, r12, #0x60 
  	
  	BIC r12, r12, #0x03 	@ Changing to user_mode
  	MSR cpsr, r12 
 	
-	ADR sp, addr			@ Setting up the userspace stack
+	LDR sp, =USR_STACK_BASE			@ Setting up the userspace stack
 	STMFD sp!, {r0-r1}
 	
 	mov lr, pc

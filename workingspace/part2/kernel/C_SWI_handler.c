@@ -3,6 +3,10 @@
 #include <exports.h>
 
 //char *buf;
+
+extern void restore(void);
+extern void exit_to_kernel(void);
+
 void C_SWI_handler(int swino, unsigned* args)
 {
 	char* buf = (char*) args[1];
@@ -12,6 +16,9 @@ void C_SWI_handler(int swino, unsigned* args)
 
 			puts("Exit syscall called\n");
 			printf("exit returning %d\n", args[0]);
+			restore();
+			puts("Restored\n");
+			exit_to_kernel();
 			break;
 
 		case(0x900003):

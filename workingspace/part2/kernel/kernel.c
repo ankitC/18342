@@ -18,6 +18,7 @@ extern void dispatcher();
 unsigned int *first_old_instr = 0;
 unsigned int *second_old_instr = 0;
 unsigned* old_SWI_addr = 0;
+unsigned* kernellr = 0;
 
 int main(int argc, char *argv[]) {
 
