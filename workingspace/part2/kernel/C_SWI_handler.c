@@ -32,21 +32,20 @@ void C_SWI_handler(int swino, unsigned* args)
 			exit_to_kernel();
 			break;
 
-		/* Read Syscall*/
+			/* Read Syscall*/
 		case(0x900003):
 			/* Invalid file descriptor */
 			if(!(args[0] == STDIN_FILENO))
-			{
-				args[0] = -EBADF;
-			}
+		{
+			args[0] = -EBADF;
+		}
 			else if(!( (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
-				    || (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
+						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
 			{
 				args[0] = -EFAULT;
 			}
 			else
 			{
-				/* #TODO: BUG */
 				unsigned int i;
 				for(i = 0; i < args [2]; i++)
 				{
@@ -62,10 +61,13 @@ void C_SWI_handler(int swino, unsigned* args)
 					/* Backspace or Delete */
 					if( c == BACKSPACE || c == DELETE)
 					{
-						i--;
-						buf[i]='\0';
-						i--;
-						puts("\b \b");
+						if(i>0)
+						{
+							i--;
+							buf[i]='\0';
+							i--;
+							puts("\b \b");
+						}
 						continue;
 					}
 
@@ -85,19 +87,21 @@ void C_SWI_handler(int swino, unsigned* args)
 
 				args[0] = i;	// return number of bytes read
 			}
-			//puts("\n");
+			/* Taking the prompt to new line if the buffer is full*/
+			if(i==args[2])
+				puts("\n");
 			break;
 
-		/* Write syscall */
+			/* Write syscall */
 		case(0x900004):
 			/* Invalid file descriptor */
 			if(!(args[0] == STDOUT_FILENO))
-			{
-				args[0] = -EBADF;
-			}
+		{
+			args[0] = -EBADF;
+		}
 			else if(!(((unsigned int)buf + args[2] <= 0x00ffffff) \
-					|| (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
-				    || (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
+						|| (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
+						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
 			{
 				args[0] = -EFAULT;
 			}
