@@ -6,10 +6,6 @@
 	.file	"start.S"
 	.text
 
-@	.global setinterrupt
-@	.global switch_to_user_mode
-
-
 	.global	_start
 _start:
 	@ Branch immediately to main without altering the execution environment.
