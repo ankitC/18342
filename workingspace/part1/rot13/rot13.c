@@ -16,14 +16,30 @@
 
 int main(int argc, char **argv)
 {
-	int count = 0;
-	//int i = 0;
+	int count = 1;
+	int i = 0;
 	int w = 0;
-	//char buf[BUFSIZE];
-	while((count + 1) < argc)
+	int r = 0;
+	char buf[BUFSIZE] = {0};
+
+	while(count < argc)
 	{
 		w = write(STDOUT_FILENO, argv[count], BUFSIZE);
-		/*
+		count++;
+	}
+
+	while(1)
+	{
+		r = read(STDIN_FILENO, buf, 10);
+
+		/* Read 0 bytes hence terminate the program */
+		if(r == 0)
+			exit(0);
+
+		/* Checking return value for errors */
+		else if(r < 0)
+			exit(1);
+
 		else
 		{
 			for(i = 0; i < r; i++)
@@ -34,17 +50,18 @@ int main(int argc, char **argv)
 					buf[i] -= 13;
 			}
 		}
-		 Ensuring that we retransmit in case of short count on write 
-		while(r != w){
+
+		/* Ensuring that we retransmit in case of short count on write */
+		while(r != w)
+		{
 			w = write(STDOUT_FILENO, buf, r);
 			if(w < 0)
 			{
 				exit(1);
 			}
 		}
-		w = 0;  Resetting w for checking r!=w 
-		*/
-		count++;
+
+		w = 0; /* Resetting w for checking r!=w */
 	}
 	return 0;
 }

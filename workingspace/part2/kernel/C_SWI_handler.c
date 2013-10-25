@@ -40,7 +40,7 @@ void C_SWI_handler(int swino, unsigned* args)
 			{
 				args[0] = -EBADF;
 			}
-			else if(!( (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
+			else if(!( (((unsigned int)buf <= 0xa3ededf3) && ((unsigned int)buf - args[2] >= 0xa0000000)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
 			{
 				args[0] = -EFAULT;
@@ -89,7 +89,7 @@ void C_SWI_handler(int swino, unsigned* args)
 				args[0] = i;	// return number of bytes read
 			}
 			/* Taking the prompt to new line if the buffer is full*/
-			if(i >= args[2] && buf[i - 1] != '\n')
+			//if(i >= args[2] || buf[i - 1] != '\n')
 				puts("\n");
 			break;
 
@@ -101,7 +101,7 @@ void C_SWI_handler(int swino, unsigned* args)
 				args[0] = -EBADF;
 			}
 			else if(!(((unsigned int)buf + args[2] <= 0x00ffffff) \
-						|| (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
+						|| (((unsigned int)buf <= 0xa3ededf3) && ((unsigned int)buf - args[2] >= 0xa0000000)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
 			{
 				args[0] = -EFAULT;
@@ -121,7 +121,7 @@ void C_SWI_handler(int swino, unsigned* args)
 				}
 				args[0] = i;	// return number of bytes written
 			}
-			if(i >= args[2] && buf[i - 1] != '\n')
+			//if(i >= args[2] || buf[i - 1] != '\n')
 				puts("\n");
 			break;
 
