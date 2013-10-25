@@ -15,12 +15,14 @@
 
 int main(void)
 {
-	//char buf[11] = {};//"hello MAC!\n";
-	//int r = read(0, buf, 11);
-//	printf("read returned %d\n", r);
-	int w = write(1, "hellO\n", 10);
+	char buf[11] = {};//"hello MAC!\n";
+	int r = read(0, buf, 11);
+	//printf("read returned %d\n", r);
+	//int w = write(1,"writing buf\n",10);
+	 int w = write(1, buf, 15);
 	//printf("write returned %d\n", w);
-	w=w;
+	r=r;
+	 w=w;
 	exit(0);
 	return 0;
 }
