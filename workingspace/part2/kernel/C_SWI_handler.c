@@ -21,22 +21,25 @@ void C_SWI_handler(int swino, unsigned* args)
 	switch (swino)
 	{
 		case(0x900001):
-
-			//puts("Exit syscall called\n");
-			//printf("exit returning %d\n", args[0]);
-
 			restore_old_SWI();
-			//puts("Restored\n");
 			exit_to_kernel();
+		
 		case(0x900003):
-			//puts("Read syscall called\n");
-			if(args[0] == STDIN_FILENO)
+			if(!(args[0] == STDIN_FILENO))
 			{
-				int i;
+				args[0] = -EBADF;
+			}
+			else if(!( (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
+				    || (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
+			{
+				args[0] = -EFAULT;
+			}
+			else
+			{
+				unsigned int i;
 				for(i = 0; i < args [2]; i++)
 				{
 					char c = getc();
-					//printf("read character: %c\n", c);
 
 					if(c == '\0')
 						break;
@@ -60,8 +63,7 @@ void C_SWI_handler(int swino, unsigned* args)
 					if(c == NEW_LINE || c == CARRAIGE_RETURN)
 					{
 						buf[i] = c;
-						//putc(buf[i]);
-						//printf("read newline or carraige return: %c\n", c);
+						putc(buf[i]);
 						i++;
 						break;
 					}
@@ -69,28 +71,29 @@ void C_SWI_handler(int swino, unsigned* args)
 					/* For all other (normal) characters */
 					buf[i] = c;
 					putc(buf[i]);
-					//printf("read: buf[i] = %c\n", buf[i]);
 				}
 
 				args[0] = i;	// return number of bytes read
-				//printf("read returning %d\n", args[0]);
-				//break;
+			}
+			
+			puts("\n");
+			break;
+
+		case(0x900004):
+			
+			if(!(args[0] == STDOUT_FILENO))
+			{
+				args[0] = -EBADF;	// return bad fd error
+			}
+			else if(!(((unsigned int)buf + args[2] <= 0x00ffffff) \
+					|| (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
+				    || (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
+			{
+				args[0] = -EFAULT;
 			}
 			else
 			{
-				args[0] = -EBADF;	// return bad fd error
-				//printf("read error: %d\n", args[0]);
-				break;
-			}
-			//printf("exiting read\n");
-			break;
-			// TODO EFAULT set
-
-		case(0x900004):
-			//puts("write syscall called\n");
-			if(args[0] == STDOUT_FILENO)
-			{
-				int i ;
+				unsigned int i ;
 				for(i=0; i<args[2] ; i++)
 				{
 					if(buf[i] == '\0')
@@ -104,25 +107,15 @@ void C_SWI_handler(int swino, unsigned* args)
 				}
 
 				args[0] = i;	// return number of bytes written
-				//printf("write returning %d\n", args[0]);
 			}
-			else
-			{
-				args[0] = -EBADF;	// return bad fd error
-				//printf("write error: %d\n", args[0]);
-			}
-			//printf("exiting write\n");
+			puts("\n");
 			break;
-			//TODO EFAULT set
 
 		default:
 			/* return invalid SWI_number error */
 			puts("Invalid SWI no.\n");
 			args[0] =  -0xBADC0DE;
-			//printf("default: swi no = %d\n", args[0]);
 			break;
 	}
-	//printf("exiting C handler\n");
 	return;
-	//TODO: return value = ssize_t?
 }

@@ -14,9 +14,6 @@
 dispatcher:	
 	SUB sp, sp, #4
 	STMFD sp!, {r0 - r12, lr}
-	
-	@LDR r8, [sp, #16 * 4]
-
 	MRS r2, spsr
 	STR r2, [sp, #14 * 4]
 	MOV r1, sp
@@ -25,7 +22,6 @@ dispatcher:
 	BL C_SWI_handler
 	LDR r2, [sp, #14 * 4]
 	MSR spsr, r2
-	
 	LDMFD sp!, {r0 - r12 , lr}
 	ADD sp, sp, #4
 	MOVS pc, lr

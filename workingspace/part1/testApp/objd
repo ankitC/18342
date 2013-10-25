@@ -1,0 +1,75 @@
+
+testApp:     file format elf32-littlearm
+
+Disassembly of section .text:
+
+a2000000 <_start>:
+a2000000:	e8bd0003 	ldmia	sp!, {r0, r1}
+a2000004:	eb000000 	bl	a200000c <main>
+a2000008:	ea00002c 	b	a20000c0 <exit>
+
+a200000c <main>:
+a200000c:	e1a0c00d 	mov	ip, sp
+a2000010:	e92dd800 	stmdb	sp!, {fp, ip, lr, pc}
+a2000014:	e24cb004 	sub	fp, ip, #4	; 0x4
+a2000018:	e24dd014 	sub	sp, sp, #20	; 0x14
+a200001c:	e24b301f 	sub	r3, fp, #31	; 0x1f
+a2000020:	e3a02000 	mov	r2, #0	; 0x0
+a2000024:	e5c32000 	strb	r2, [r3]
+a2000028:	e2833001 	add	r3, r3, #1	; 0x1
+a200002c:	e3a02000 	mov	r2, #0	; 0x0
+a2000030:	e5c32000 	strb	r2, [r3]
+a2000034:	e2833001 	add	r3, r3, #1	; 0x1
+a2000038:	e3a02000 	mov	r2, #0	; 0x0
+a200003c:	e5c32000 	strb	r2, [r3]
+a2000040:	e2833001 	add	r3, r3, #1	; 0x1
+a2000044:	e3a02000 	mov	r2, #0	; 0x0
+a2000048:	e5c32000 	strb	r2, [r3]
+a200004c:	e2833001 	add	r3, r3, #1	; 0x1
+a2000050:	e3a02000 	mov	r2, #0	; 0x0
+a2000054:	e5c32000 	strb	r2, [r3]
+a2000058:	e2833001 	add	r3, r3, #1	; 0x1
+a200005c:	e3a02000 	mov	r2, #0	; 0x0
+a2000060:	e5c32000 	strb	r2, [r3]
+a2000064:	e2833001 	add	r3, r3, #1	; 0x1
+a2000068:	e3a02000 	mov	r2, #0	; 0x0
+a200006c:	e5c32000 	strb	r2, [r3]
+a2000070:	e2833001 	add	r3, r3, #1	; 0x1
+a2000074:	e3a02000 	mov	r2, #0	; 0x0
+a2000078:	e5c32000 	strb	r2, [r3]
+a200007c:	e2833001 	add	r3, r3, #1	; 0x1
+a2000080:	e3a02000 	mov	r2, #0	; 0x0
+a2000084:	e5c32000 	strb	r2, [r3]
+a2000088:	e2833001 	add	r3, r3, #1	; 0x1
+a200008c:	e3a02000 	mov	r2, #0	; 0x0
+a2000090:	e5c32000 	strb	r2, [r3]
+a2000094:	e2833001 	add	r3, r3, #1	; 0x1
+a2000098:	e3a02000 	mov	r2, #0	; 0x0
+a200009c:	e5c32000 	strb	r2, [r3]
+a20000a0:	e24b301f 	sub	r3, fp, #31	; 0x1f
+a20000a4:	e3a00000 	mov	r0, #0	; 0x0
+a20000a8:	e1a01003 	mov	r1, r3
+a20000ac:	e3a0200b 	mov	r2, #11	; 0xb
+a20000b0:	eb000003 	bl	a20000c4 <read>
+a20000b4:	e1a03000 	mov	r3, r0
+a20000b8:	e50b3014 	str	r3, [fp, #-20]
+a20000bc:	eafffffe 	b	a20000bc <main+0xb0>
+
+a20000c0 <exit>:
+a20000c0:	ef900001 	svc	0x00900001
+
+a20000c4 <read>:
+a20000c4:	e92d5ffe 	stmdb	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+a20000c8:	ef900003 	svc	0x00900003
+a20000cc:	e3500000 	cmp	r0, #0	; 0x0
+a20000d0:	aa000004 	bge	a20000e8 <ret>
+a20000d4:	e3e01000 	mvn	r1, #0	; 0x0
+a20000d8:	e0010190 	mul	r1, r0, r1
+a20000dc:	e59f300c 	ldr	r3, [pc, #12]	; a20000f0 <.text+0xf0>
+a20000e0:	e5831000 	str	r1, [r3]
+a20000e4:	e3e00000 	mvn	r0, #0	; 0x0
+
+a20000e8 <ret>:
+a20000e8:	e8bd5ffe 	ldmia	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip, lr}
+a20000ec:	e1a0f00e 	mov	pc, lr
+a20000f0:	a20080f4 	andge	r8, r0, #244	; 0xf4
