@@ -13,15 +13,8 @@
 	.global	exit_to_kernel
 
 exit_to_kernel:
-	@LDR r2, [sp, #14*4]
-	@MSR spsr, r2
-	LDMFD sp!, {r0 - r12 , lr}
-	ADD sp, sp, #4
-	
-	@ldr r8, [sp]!
-	ldmfd sp!, {r0 - r12, pc}
-	@ADD sp, sp, #44
-	@ldr r12, =kernellr 
-	@ldr pc , [r12]
-	
-	
+	ldr r12, =kernelsp
+	ldr sp, [r12]
+	ldmfd sp!, {r0-r12, lr}
+	mov pc, lr
+

@@ -17,4 +17,8 @@ _start:
 	@ LOAD_ADDR (probably 0xa3000000) without placing strict
 	@ requirements on the layout of kernel.c.
 	stmfd sp!, {r0-r12, lr}
+	LDR r12, =kernelsp
+	STR sp, [r12]
+	LDR r12, =kernellr
+	STR lr, [r12]
 	B	main

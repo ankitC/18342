@@ -36,7 +36,7 @@ void C_SWI_handler(int swino, unsigned* args)
 				for(i = 0; i < args [2]; i++)
 				{
 					char c = getc();
-					printf("read character: %c\n", c);
+					//printf("read character: %c\n", c);
 
 					if(c == '\0')
 						break;
@@ -67,17 +67,20 @@ void C_SWI_handler(int swino, unsigned* args)
 					/* For all other (normal) characters */
 					buf[i] = c;
 					putc(buf[i]);
-					printf("read: buf[i] = %c\n", buf[i]);
+					//printf("read: buf[i] = %c\n", buf[i]);
 				}
 
 				args[0] = i;	// return number of bytes read
 				printf("read returning %d\n", args[0]);
+				//break;
 			}
 			else
 			{
 				args[0] = -EBADF;	// return bad fd error
 				printf("read error: %d\n", args[0]);
+				break;
 			}
+			printf("exiting read\n");
 			break;
 			// TODO EFAULT set
 
@@ -101,6 +104,7 @@ void C_SWI_handler(int swino, unsigned* args)
 				args[0] = -EBADF;	// return bad fd error
 				printf("write error: %d\n", args[0]);
 			}
+			printf("exiting write\n");
 			break;
 			//TODO EFAULT set
 
@@ -109,6 +113,9 @@ void C_SWI_handler(int swino, unsigned* args)
 			puts("Invalid SWI no.\n");
 			args[0] =  -0xBADC0DE;
 			printf("default: swi no = %d\n", args[0]);
+			break;
 	}
+	printf("exiting C handler\n");
+	return;
 	//TODO: return value = ssize_t?
 }
