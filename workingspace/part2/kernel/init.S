@@ -16,10 +16,11 @@
 
 init:
 
-	LDR r12,=kernellr			@Saving return address to kernel.c
-	STR lr, [r12]
-
-	STMFD sp!, {r8, lr}
+	@LDR r12,=kernellr			@Saving return address to kernel.c
+	@STR lr, [r12]
+	@LDR r12, =kernelsp
+	@STR sp, [r12]
+	@STMFD sp!, {r0 - r11}
 
 	MRS r12, cpsr 
  	ORR r12, r12, #0x60		@ Disabling IRQ and FIQ
