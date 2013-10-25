@@ -1,9 +1,14 @@
 /*
- * kernel.c: Kernel main (entry) function
+ * kernel.c: Kernel main (entry) function.
+ *			 Wires in our SWI handler and provides for
+ *			 the backup of the original instructions.
+ *			 Calls the  init() for initializing the
+ *			 userspace env.
  *
- * Author: Group Member 1<email address>
- *         Group Member 2 <email address>
- * Date:   The current time & date
+ * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *			Group Member 2: Jiten Mehta <jitenm>
+ *			Group Member 3: Ankit Chheda <achheda>
+ * Date:    Oct 24, 2013 9:00 AM
  */
 
 #include "kernel.h"
@@ -18,18 +23,21 @@ extern void dispatcher();
 unsigned int *first_old_instr = 0;
 unsigned int *second_old_instr = 0;
 unsigned* old_SWI_addr = 0;
+
+/* Saving the env of U-Boot */
 unsigned* kernellr = 0;
 unsigned* kernelsp = 0;
 
 int main(int argc, char *argv[]) {
-
+	/* Finding the original offset in the Vector table */
 	unsigned*  swi_vector = (unsigned int *) SWI_VECTOR_ADDR;
 	unsigned  swi_loader = *swi_vector;
 	unsigned  offset = swi_loader & (0x0FFF);
 
 	/* Address of the old SWI handler */
-	unsigned*  old_SWI_container = (unsigned*) (SWI_VECTOR_ADDR + offset + 0x08);
+	unsigned*  old_SWI_container = (unsigned*)(SWI_VECTOR_ADDR + offset + 0x08);
 	old_SWI_addr = (unsigned*) *old_SWI_container;
+
 	/* Extracting the first 2 instructions */
 	first_old_instr = (unsigned int *) *(old_SWI_addr);
 	second_old_instr = (unsigned int *) *(old_SWI_addr + 1);
@@ -44,9 +52,7 @@ int main(int argc, char *argv[]) {
 
 	init(argc, argv);
 
-	/* Need to restore the handler */
-	//*old_SWI_addr = first_old_instr;
-	//*(old_SWI_addr + 1) = second_old_instr;
-
-	return 0;
+/* Program never reaches here, if we return here,
+ * there is a problem */
+	return -255;
 }

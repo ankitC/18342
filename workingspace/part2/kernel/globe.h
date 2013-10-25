@@ -1,2 +1,0 @@
-extern unsigned int restorelr;
-
