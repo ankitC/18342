@@ -40,8 +40,8 @@ void C_SWI_handler(int swino, unsigned* args)
 			{
 				args[0] = -EBADF;
 			}
-			else if(!( (((unsigned int)buf <= 0xa3ededf3) && ((unsigned int)buf - args[2] >= 0xa0000000)) \
-						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
+			else if(!( (((unsigned int)buf <= 0xa3ededf3) && (((unsigned int)buf - args[2]) >= 0xa0000000)) \
+						|| (((unsigned int)buf >= 0xa3edf000) && (((unsigned int)buf + args[2]) <= 0xa3efffff))))
 			{
 				args[0] = -EFAULT;
 			}

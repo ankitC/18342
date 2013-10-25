@@ -19,10 +19,11 @@ exit_to_kernel:
 
 	LDR r2, [sp, #14 * 4]			@prepare to restore SPSR
 	MSR spsr, r2					@restore SPSR from r2
-	LDMFD sp!, {r0 - r12 , lr}		@unstack user's registers 
-	SUB sp, sp, #12					@remove space used to store SPSR 	
+	LDMFD sp!, {r0 - r12 , lr}		@unstack user's registers
+
+	SUB sp, sp, #20					@remove space used to store SPSR
 	ldmfd sp!, {r0-r12, lr}			@Resoteing the U-Boot env.
 	ldmfd sp!, {r0-r12, lr}	
-	ldmfd sp!, {r0-r12, lr}
+	ldmfd sp!, {r1-r12, lr}
 	mov pc, lr						@Seeya, our kernel!, going to U-Boot
 

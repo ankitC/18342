@@ -13,7 +13,7 @@ _start:
 	@ LOAD_ADDR (probably 0xa3000000) without placing strict
 	@ requirements on the layout of kernel.c.
 
-	stmfd sp!, {r0-r12, lr}		@Storing the original U-Boot env on the stack.
+	stmfd sp!, {r1-r12, lr}		@Storing the original U-Boot env on the stack.
 
 	@LDR r12, =kernelsp			@Storing the stack pointer before we start with
 								@our kernel to restore the original U-boot env.
