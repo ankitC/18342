@@ -24,6 +24,7 @@ extern void exit_to_kernel(void);
 void C_SWI_handler(int swino, unsigned* args)
 {
 	char* buf = (char*) args[1];
+	int i = 0;
 	switch (swino)
 	{
 		/* EXIT syscall */
@@ -36,9 +37,9 @@ void C_SWI_handler(int swino, unsigned* args)
 		case(0x900003):
 			/* Invalid file descriptor */
 			if(!(args[0] == STDIN_FILENO))
-		{
-			args[0] = -EBADF;
-		}
+			{
+				args[0] = -EBADF;
+			}
 			else if(!( (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
 			{
@@ -46,14 +47,13 @@ void C_SWI_handler(int swino, unsigned* args)
 			}
 			else
 			{
-				unsigned int i;
 				for(i = 0; i < args [2]; i++)
 				{
 					char c = getc();
-
-					if(c == '\0')
+					if(c == '\0'){
+						printf("Got Null at i=%d\n", i);
 						break;
-
+					}
 					/* Ctrl + D */
 					if(c == EOT)
 						break;
@@ -67,7 +67,9 @@ void C_SWI_handler(int swino, unsigned* args)
 							buf[i]='\0';
 							i--;
 							puts("\b \b");
+							continue;
 						}
+						i--;
 						continue;
 					}
 
@@ -84,11 +86,10 @@ void C_SWI_handler(int swino, unsigned* args)
 					buf[i] = c;
 					putc(buf[i]);
 				}
-
 				args[0] = i;	// return number of bytes read
 			}
 			/* Taking the prompt to new line if the buffer is full*/
-			if(i==args[2])
+			if(i >= args[2] && buf[i - 1] != '\n')
 				puts("\n");
 			break;
 
@@ -96,9 +97,9 @@ void C_SWI_handler(int swino, unsigned* args)
 		case(0x900004):
 			/* Invalid file descriptor */
 			if(!(args[0] == STDOUT_FILENO))
-		{
-			args[0] = -EBADF;
-		}
+			{
+				args[0] = -EBADF;
+			}
 			else if(!(((unsigned int)buf + args[2] <= 0x00ffffff) \
 						|| (((unsigned int)buf >= 0xa0000000) && ((unsigned int)buf + args[2] <= 0xa2ffffff)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
@@ -107,8 +108,7 @@ void C_SWI_handler(int swino, unsigned* args)
 			}
 			else
 			{
-				unsigned int i ;
-				for(i=0; i<args[2] ; i++)
+				for(i = 0; i < args[2]; i++)
 				{
 					if(buf[i] == '\0')
 						break;
@@ -119,10 +119,10 @@ void C_SWI_handler(int swino, unsigned* args)
 						break;
 					}
 				}
-
 				args[0] = i;	// return number of bytes written
 			}
-			puts("\n");
+			if(i >= args[2] && buf[i - 1] != '\n')
+				puts("\n");
 			break;
 
 		default:
