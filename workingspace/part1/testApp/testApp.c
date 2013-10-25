@@ -15,9 +15,9 @@
 
 int main(void)
 {
-	char buf[11] = {0};
-	int r = read(0, buf, 11);
-	int w = write(1, buf, 11);
+	char buf[10] = {0};
+	int r = read(0, buf, 15);
+	int w = write(1, buf, r);
 	r=r;
 	w=w;
 	return 0;
