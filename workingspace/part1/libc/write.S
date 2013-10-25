@@ -14,8 +14,7 @@
 	.global errno
 	.global	write
 write:
-	str lr, [sp]!
-	stmfd sp!, {r1-r12}  @ Backing up register
+	stmfd sp!, {r1-r12,lr}  @ Backing up register
     swi WRITE_SWI
     cmp r0, #0		@ check the return value of SWI
     bge ret			@ if no error, then return
@@ -28,5 +27,5 @@ write:
 	mov r0, #-1		@ return -1
 
 ret:
-	ldmfd sp!, {r1-r12}  @ Restoring registers
-    ldr pc, [sp]!
+	ldmfd sp!, {r1-r12,lr}  @ Restoring registers
+    mov pc, lr

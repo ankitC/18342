@@ -14,8 +14,8 @@
 	.global errno
 	.global	read
 read:
-	str lr, [sp]!
-	stmfd sp!, {r1-r12}  @ Backing up registers
+	
+	stmfd sp!, {r1-r12,lr}  @ Backing up registers
 	swi READ_SWI
 	cmp r0, #0		@ Check the return value of SWI
 	bge ret			@ if no error, then return
@@ -28,5 +28,5 @@ read:
 	mov r0, #-1		@ return -1
 
 ret:
-	ldmfd sp!, {r1-r12}  @ Restoring registers
-	ldr pc, [sp]!
+	ldmfd sp!, {r1-r12,lr}  @ Restoring registers
+	mov pc,lr
