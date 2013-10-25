@@ -21,7 +21,7 @@
 extern void restore_old_SWI(void);
 extern void exit_to_kernel(void);
 
-void C_SWI_handler(int swino, unsigned* args)
+int C_SWI_handler(int swino, unsigned* args)
 {
 	char* buf = (char*) args[1];
 	int i = 0;
@@ -38,12 +38,12 @@ void C_SWI_handler(int swino, unsigned* args)
 			/* Invalid file descriptor */
 			if(!(args[0] == STDIN_FILENO))
 			{
-				args[0] = -EBADF;
+				return -EBADF;
 			}
 			else if(!( (((unsigned int)buf <= 0xa3ededf3) && (((unsigned int)buf - args[2]) >= 0xa0000000)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && (((unsigned int)buf + args[2]) <= 0xa3efffff))))
 			{
-				args[0] = -EFAULT;
+				return -EFAULT;
 			}
 			else
 			{
@@ -86,7 +86,7 @@ void C_SWI_handler(int swino, unsigned* args)
 					buf[i] = c;
 					putc(buf[i]);
 				}
-				args[0] = i;	// return number of bytes read
+//				args[0] = i;	// return number of bytes read
 			}
 			/* Taking the prompt to new line if the buffer is full*/
 			//if(i >= args[2] || buf[i - 1] != '\n')
@@ -98,13 +98,14 @@ void C_SWI_handler(int swino, unsigned* args)
 			/* Invalid file descriptor */
 			if(!(args[0] == STDOUT_FILENO))
 			{
-				args[0] = -EBADF;
+				return -EBADF;
 			}
 			else if(!(((unsigned int)buf + args[2] <= 0x00ffffff) \
 						|| (((unsigned int)buf <= 0xa3ededf3) && ((unsigned int)buf - args[2] >= 0xa0000000)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
 			{
-				args[0] = -EFAULT;
+//				args[0] = -EFAULT;
+				return -EFAULT;
 			}
 			else
 			{
@@ -119,7 +120,7 @@ void C_SWI_handler(int swino, unsigned* args)
 						break;
 					}
 				}
-				args[0] = i;	// return number of bytes written
+		//		args[0] = i;	// return number of bytes written
 			}
 			//if(i >= args[2] || buf[i - 1] != '\n')
 				puts("\n");
@@ -128,8 +129,8 @@ void C_SWI_handler(int swino, unsigned* args)
 		default:
 			/* return invalid SWI_number error */
 			puts("Invalid SWI no.\n");
-			args[0] =  -0xBADC0DE;
-			break;
+			return  -0xBADC0DE;
+//		break;
 	}
-	return;
+	return i;
 }

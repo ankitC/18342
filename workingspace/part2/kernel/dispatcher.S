@@ -22,7 +22,8 @@ dispatcher:
 	BIC r0, r0, #0xff000000			@get SWI # by bit-masking
 	BL C_SWI_handler				@Our SWI Handler
 	LDR r2, [sp, #14 * 4]			@prepare to restore SPSR
-	MSR spsr, r2					@restore SPSR from r2
-	LDMFD sp!, {r0 - r12 , lr}		@unstack user's registers 
+	MSR spsr, r2
+	ADD sp, sp, #4					@restore SPSR from r2
+	LDMFD sp!, {r1 - r12 , lr}		@unstack user's registers 
 	ADD sp, sp, #4					@remove space used to store SPSR 
 	MOVS pc, lr						@return from handler
