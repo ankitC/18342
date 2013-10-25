@@ -1,0 +1,81 @@
+
+testApp:     file format elf32-littlearm
+
+Disassembly of section .text:
+
+a2000000 <_start>:
+a2000000:	e8bd0003 	ldmia	sp!, {r0, r1}
+a2000004:	eb000000 	bl	a200000c <main>
+a2000008:	ea000031 	b	a20000d4 <exit>
+
+a200000c <main>:
+a200000c:	e1a0c00d 	mov	ip, sp
+a2000010:	e92dd800 	stmdb	sp!, {fp, ip, lr, pc}
+a2000014:	e24cb004 	sub	fp, ip, #4	; 0x4
+a2000018:	e24dd010 	sub	sp, sp, #16	; 0x10
+a200001c:	e24b301b 	sub	r3, fp, #27	; 0x1b
+a2000020:	e3a02000 	mov	r2, #0	; 0x0
+a2000024:	e5c32000 	strb	r2, [r3]
+a2000028:	e2833001 	add	r3, r3, #1	; 0x1
+a200002c:	e3a02000 	mov	r2, #0	; 0x0
+a2000030:	e5c32000 	strb	r2, [r3]
+a2000034:	e2833001 	add	r3, r3, #1	; 0x1
+a2000038:	e3a02000 	mov	r2, #0	; 0x0
+a200003c:	e5c32000 	strb	r2, [r3]
+a2000040:	e2833001 	add	r3, r3, #1	; 0x1
+a2000044:	e3a02000 	mov	r2, #0	; 0x0
+a2000048:	e5c32000 	strb	r2, [r3]
+a200004c:	e2833001 	add	r3, r3, #1	; 0x1
+a2000050:	e3a02000 	mov	r2, #0	; 0x0
+a2000054:	e5c32000 	strb	r2, [r3]
+a2000058:	e2833001 	add	r3, r3, #1	; 0x1
+a200005c:	e3a02000 	mov	r2, #0	; 0x0
+a2000060:	e5c32000 	strb	r2, [r3]
+a2000064:	e2833001 	add	r3, r3, #1	; 0x1
+a2000068:	e3a02000 	mov	r2, #0	; 0x0
+a200006c:	e5c32000 	strb	r2, [r3]
+a2000070:	e2833001 	add	r3, r3, #1	; 0x1
+a2000074:	e3a02000 	mov	r2, #0	; 0x0
+a2000078:	e5c32000 	strb	r2, [r3]
+a200007c:	e2833001 	add	r3, r3, #1	; 0x1
+a2000080:	e3a02000 	mov	r2, #0	; 0x0
+a2000084:	e5c32000 	strb	r2, [r3]
+a2000088:	e2833001 	add	r3, r3, #1	; 0x1
+a200008c:	e3a02000 	mov	r2, #0	; 0x0
+a2000090:	e5c32000 	strb	r2, [r3]
+a2000094:	e2833001 	add	r3, r3, #1	; 0x1
+a2000098:	e3a02000 	mov	r2, #0	; 0x0
+a200009c:	e5c32000 	strb	r2, [r3]
+a20000a0:	e24b301b 	sub	r3, fp, #27	; 0x1b
+a20000a4:	e3a00000 	mov	r0, #0	; 0x0
+a20000a8:	e1a01003 	mov	r1, r3
+a20000ac:	e3a0200b 	mov	r2, #11	; 0xb
+a20000b0:	eb000008 	bl	a20000d8 <read>
+a20000b4:	e1a03000 	mov	r3, r0
+a20000b8:	e50b3010 	str	r3, [fp, #-16]
+a20000bc:	e3a00000 	mov	r0, #0	; 0x0
+a20000c0:	eb000003 	bl	a20000d4 <exit>
+a20000c4:	e3a03000 	mov	r3, #0	; 0x0
+a20000c8:	e1a00003 	mov	r0, r3
+a20000cc:	e24bd00c 	sub	sp, fp, #12	; 0xc
+a20000d0:	e89da800 	ldmia	sp, {fp, sp, pc}
+
+a20000d4 <exit>:
+a20000d4:	ef900001 	svc	0x00900001
+
+a20000d8 <read>:
+a20000d8:	e5ade000 	str	lr, [sp]!
+a20000dc:	e92d1ffe 	stmdb	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip}
+a20000e0:	ef900003 	svc	0x00900003
+a20000e4:	e3500000 	cmp	r0, #0	; 0x0
+a20000e8:	aa000004 	bge	a2000100 <ret>
+a20000ec:	e3e01000 	mvn	r1, #0	; 0x0
+a20000f0:	e0010190 	mul	r1, r0, r1
+a20000f4:	e59f300c 	ldr	r3, [pc, #12]	; a2000108 <.text+0x108>
+a20000f8:	e5831000 	str	r1, [r3]
+a20000fc:	e3e00000 	mvn	r0, #0	; 0x0
+
+a2000100 <ret>:
+a2000100:	e8bd1ffe 	ldmia	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, sl, fp, ip}
+a2000104:	e5bdf000 	ldr	pc, [sp]!
+a2000108:	a200810c 	andge	r8, r0, #3	; 0x3

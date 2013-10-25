@@ -30,7 +30,7 @@ int main(int argc, char **argv)
 
 	while(1)
 	{
-		r = read(STDIN_FILENO, buf, 10);
+		r = read(STDIN_FILENO, buf, BUFSIZE);
 
 		/* Read 0 bytes hence terminate the program */
 		if(r == 0)
