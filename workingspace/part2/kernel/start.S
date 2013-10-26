@@ -14,12 +14,4 @@ _start:
 	@ requirements on the layout of kernel.c.
 
 	stmfd sp!, {r1-r12, lr}		@Storing the original U-Boot env on the stack.
-
-	@LDR r12, =kernelsp			@Storing the stack pointer before we start with
-								@our kernel to restore the original U-boot env.
-	@STR sp, [r12]
-
-	@LDR r12, =kernellr			@Extra safety!!
-	@STR lr, [r12]
-
 	B	main					@Our Kernel, here we come!! ;)

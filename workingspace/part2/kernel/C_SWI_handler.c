@@ -3,7 +3,7 @@
  *
  * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
  *          Group Member 2: Jiten Mehta <jitenm>
- *		   Group Member 3: Ankit Chheda <achheda>
+ *		    Group Member 3: Ankit Chheda <achheda>
  * Date:    Oct 24, 2013 9:00 AM
  */
 #include <bits/fileno.h>
@@ -37,9 +37,8 @@ int C_SWI_handler(int swino, unsigned* args)
 		case(0x900003):
 			/* Invalid file descriptor */
 			if(!(args[0] == STDIN_FILENO))
-			{
 				return -EBADF;
-			}
+
 			else if(!( (((unsigned int)buf <= 0xa3ededf3) && (((unsigned int)buf - args[2]) >= 0xa0000000)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && (((unsigned int)buf + args[2]) <= 0xa3efffff))))
 			{
@@ -86,25 +85,22 @@ int C_SWI_handler(int swino, unsigned* args)
 					buf[i] = c;
 					putc(buf[i]);
 				}
-//				args[0] = i;	// return number of bytes read
 			}
 			/* Taking the prompt to new line if the buffer is full*/
-			//if(i >= args[2] || buf[i - 1] != '\n')
-				puts("\n");
+			puts("\n");
 			break;
 
-			/* Write syscall */
+		/* Write syscall */
 		case(0x900004):
 			/* Invalid file descriptor */
 			if(!(args[0] == STDOUT_FILENO))
-			{
-				return -EBADF;
-			}
+		{
+			return -EBADF;
+		}
 			else if(!(((unsigned int)buf + args[2] <= 0x00ffffff) \
 						|| (((unsigned int)buf <= 0xa3ededf3) && ((unsigned int)buf - args[2] >= 0xa0000000)) \
 						|| (((unsigned int)buf >= 0xa3edf000) && ((unsigned int)buf + args[2] <= 0xa3efffff))))
 			{
-//				args[0] = -EFAULT;
 				return -EFAULT;
 			}
 			else
@@ -120,17 +116,14 @@ int C_SWI_handler(int swino, unsigned* args)
 						break;
 					}
 				}
-		//		args[0] = i;	// return number of bytes written
 			}
-			//if(i >= args[2] || buf[i - 1] != '\n')
-				puts("\n");
+			puts("\n");
 			break;
 
 		default:
 			/* return invalid SWI_number error */
 			puts("Invalid SWI no.\n");
 			return  -0xBADC0DE;
-//		break;
 	}
 	return i;
 }

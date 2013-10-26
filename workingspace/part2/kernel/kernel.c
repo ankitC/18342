@@ -24,10 +24,6 @@ unsigned int *first_old_instr = 0;
 unsigned int *second_old_instr = 0;
 unsigned* old_SWI_addr = 0;
 
-/* Saving the env of U-Boot */
-unsigned* kernellr = 0;
-unsigned* kernelsp = 0;
-
 int main(int argc, char *argv[]) {
 	/* Finding the original offset in the Vector table */
 	unsigned*  swi_vector = (unsigned int *) SWI_VECTOR_ADDR;
