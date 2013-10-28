@@ -17,6 +17,10 @@
 *.out
 *.app
 
+#binaries
+.bin
+.dep
+
 #Custom ignores
 .DS_Store #for MAC
 *~	#Swapfile ignore
