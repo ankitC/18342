@@ -24,7 +24,7 @@ extern void exit_to_kernel(void);
 int C_SWI_handler(int swino, unsigned* args)
 {
 	char* buf = (char*) args[1];
-	int i = 0;
+	unsigned int i = 0;
 	switch (swino)
 	{
 		/* EXIT syscall */
