@@ -9,34 +9,40 @@
 
 uint32_t global_data;
 
-extern void init(int argc, char** argv);
+extern void init(uint32_t*);
 extern void dispatcher();
 extern int hijack(uint32_t,uint32_t,uint32_t*,uint32_t*,uint32_t*);
 
 unsigned int *first_old_swii = 0;
 unsigned int *second_old_swii = 0;
 unsigned* old_SWI_addr = 0;
-
 unsigned* kernelsp = 0;
 
-/*static uint32_t* prepare_user_stack(int argc, char** argv)
+static uint32_t* prepare_user_stack(int argc, char** argv)
 {
 	uint32_t* stack_addr =(uint32_t*) USR_STACK_BASE;
 	int i = 0;
 	stack_addr--;
 	*stack_addr =(unsigned) ((void*)0);
-
+#ifdef debug
+	printf("usr_stack_ptr = %p \n", stack_addr);
+#endif
 	for(i = argc - 1; i>=0; i--)
 	{
 		stack_addr--;
 		*stack_addr = (uint32_t)argv[i];
+#ifdef debug
+		printf("usr_stack_ptr = %p \n", stack_addr);
+#endif
 	}
 
 	stack_addr--;
 	*stack_addr = (uint32_t)argc;
-
+#ifdef debug
+	printf("usr_stack_ptr = %d \n", *stack_addr);
+#endif
 	return stack_addr;
-}*/
+}
 
 
 int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
@@ -52,10 +58,9 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 					first_old_swii, second_old_swii)) == 0)
 		printf("SWI handler installation failed!!\n");
 
-//	unsigned* user_stack_ptr = prepare_user_stack(argc, argv);
-//	init(user_stack_ptr);
+	unsigned* user_stack_ptr = prepare_user_stack(argc, argv);
+	init(user_stack_ptr);
 
-	init(argc, argv);
 	return 0;
 }
 
