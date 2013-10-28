@@ -8,8 +8,8 @@
 
 #include "kernel.h"
 
-extern unsigned int *first_old_instr;
-extern unsigned int *second_old_instr;
+extern unsigned int *first_old_swii;
+extern unsigned int *second_old_swii;
 extern unsigned* old_SWI_addr;
 
 /*
@@ -18,6 +18,6 @@ extern unsigned* old_SWI_addr;
  */
 void restore_old_SWI(void)
 {
-	*old_SWI_addr =(unsigned) first_old_instr;
-	*(old_SWI_addr + 1) =(unsigned) second_old_instr;
+	*old_SWI_addr =(unsigned) first_old_swii;
+	*(old_SWI_addr + 1) =(unsigned) second_old_swii;
 }

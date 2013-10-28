@@ -14,4 +14,4 @@ _start:
 	@ requirements on the layout of kernel.c.
 
 	stmfd sp!, {r1-r12, lr}		@Storing the original U-Boot env on the stack.
-	B	main					@Our Kernel, here we come!! ;)
+	B	kmain					@Our Kernel, here we come!! ;)
