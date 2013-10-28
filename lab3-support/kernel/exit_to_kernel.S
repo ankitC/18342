@@ -14,13 +14,9 @@
 	.global	exit_to_kernel
 
 exit_to_kernel:
-	LDR r0, [r1]
-	LDR r2, [sp, #14 * 4]			@prepare to restore SPSR
-	MSR spsr, r2					@restore SPSR from r2
-	ADD sp, sp, #4
-	LDMFD sp!, {r1 - r12 , lr}		@unstack user's registers
-
-	ADD sp, sp, #96
-	ldmfd sp!, {r1-r12, lr}
-	mov pc, lr						@Seeya, our kernel!, going to U-Boot
+	ldr r0, [r1]
+	ldr r12, =kernelsp
+	ldr sp, [r12]				@Restore the kernel stack pointer
+	ldmfd sp!, {r1-r12, lr}		@Resoteing the U-Boot env.
+	mov pc, lr					@Seeya, our kernel!, going to U-Boot
 

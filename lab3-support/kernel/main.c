@@ -17,6 +17,8 @@ unsigned int *first_old_swii = 0;
 unsigned int *second_old_swii = 0;
 unsigned* old_SWI_addr = 0;
 
+unsigned* kernelsp = 0;
+
 int kmain(int argc, char** argv, uint32_t table)
 {
 	app_startup(); /* bss is valid after this point */
