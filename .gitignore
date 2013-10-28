@@ -18,8 +18,8 @@
 *.app
 
 #binaries
-.bin
-.dep
+*.bin
+*.dep
 
 #Custom ignores
 .DS_Store #for MAC
