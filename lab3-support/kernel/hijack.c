@@ -1,4 +1,4 @@
-/*hijack.c: Hijacks the handler at provided vector address and
+/* hijack.c: Hijacks the handler at provided vector address and
  *			substitutes the handler at new_addr while backing up
  *			the instructions in first_old_instr and second_old_instr.
  * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
@@ -6,7 +6,6 @@
  *			Group Member 3: Ankit Chheda <achheda>
  * Date:    Oct 27, 2013 9:00 PM
  */
-
 
 #include <exports.h>
 #include "kernel.h"
