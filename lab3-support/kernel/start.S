@@ -18,4 +18,5 @@ _start:
 	LDR r12, =kernelsp			@Storing the stack pointer before we start with
 								@our kernel to restore the original U-boot env.
 	STR sp, [r12]
+	MOV r3, sp
 	B	kmain					@Our Kernel, here we come!! ;)
