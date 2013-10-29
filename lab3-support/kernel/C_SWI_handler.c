@@ -29,8 +29,9 @@ int C_SWI_handler(int swino, unsigned* args)
 	{
 		/* EXIT syscall */
 		case(0x900001):
+			int exit_status = (int) args[0];
 			restore_old_SWI();
-			exit_to_kernel();
+			exit_to_kernel(exit_status);
 			break;
 
 			/* Read Syscall*/
