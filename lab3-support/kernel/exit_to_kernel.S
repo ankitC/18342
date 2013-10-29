@@ -14,9 +14,8 @@
 	.global	exit_to_kernel
 
 exit_to_kernel:
-	@ldr r0, r1				@Storing the return value into r0
 	ldr r12, =kernelsp
-	ldr sp, [r12]				@Restore the kernel stack pointer
+	ldr sp, [r12]					@Restore the kernel stack pointer
 	ldmfd sp!, {r1-r12, lr}			@Resoteing the U-Boot env.
-	mov pc, lr				@Seeya, our kernel!, going to U-Boot
+	mov pc, lr						@Seeya, our kernel!, going to U-Boot
 

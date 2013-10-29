@@ -19,17 +19,18 @@
 
 /* Helper functions */
 extern void restore_old_SWI(void);
-extern void exit_to_kernel(void);
+extern void exit_to_kernel(int status);
 
 int C_SWI_handler(int swino, unsigned* args)
 {
 	char* buf = (char*) args[1];
 	unsigned int i = 0;
+	int exit_status = 0;
 	switch (swino)
 	{
 		/* EXIT syscall */
 		case(0x900001):
-			int exit_status = (int) args[0];
+			exit_status = (int) args[0];
 			restore_old_SWI();
 			exit_to_kernel(exit_status);
 			break;
