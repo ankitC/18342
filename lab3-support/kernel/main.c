@@ -13,6 +13,7 @@ extern void init(uint32_t*);
 extern void SWI_dispatcher();
 extern void IRQ_dispatcher();
 extern int hijack(uint32_t,uint32_t,uint32_t*,uint32_t*,uint32_t*);
+extern void	init_kern_timer();
 
 unsigned int *first_old_swii = 0;
 unsigned int *second_old_swii = 0;
@@ -56,7 +57,9 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 	app_startup(); /* bss is valid after this point */
 	global_data = table;
 	kernelsp = stackp;
-	/* Add your code here */
+
+	init_kern_timer();
+
 	int retval = 0;
 	unsigned swi_dispatcher_addr =(unsigned) &SWI_dispatcher;
 	unsigned  swi_vector = (unsigned) SWI_VECTOR_ADDR;
