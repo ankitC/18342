@@ -9,7 +9,7 @@
 #include <bits/fileno.h>
 #include <bits/errno.h>
 #include <exports.h>
-
+#include <arm/timer.h>
 /* Special characters */
 #define EOT				4
 #define BACKSPACE		8
@@ -21,6 +21,7 @@
 extern void restore_old_SWI_h(void);
 extern void restore_old_IRQ_h(void);
 extern void exit_to_kernel(int status);
+extern unsigned long timer_counter;
 
 int C_SWI_handler(int swino, unsigned* args)
 {
@@ -123,6 +124,19 @@ int C_SWI_handler(int swino, unsigned* args)
 			}
 			puts("\n");
 			break;
+		/* time syscall */
+		case(0x9000006):
+			return(timer_counter * TIMER_RESOLUTION);
+
+		/* Sleep Syscall */
+		case(0x9000007):
+		/* Invalid args or zero, then simply return */
+			if(args[0] <= 0)
+				return 0;
+			/* Wait till the time, rounding-up to the nearest multiple of 10 */
+			uint32_t ticks_to_sleep = timer_counter + (args[0])/TIMER_RESOLUTION + 1;
+			while(timer_counter < ticks_to_sleep);
+			return 1;
 
 		default:
 			/* return invalid SWI_number error */
