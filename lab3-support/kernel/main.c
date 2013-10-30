@@ -10,12 +10,18 @@
 uint32_t global_data;
 
 extern void init(uint32_t*);
-extern void dispatcher();
+extern void SWI_dispatcher();
+extern void IRQ_dispatcher();
 extern int hijack(uint32_t,uint32_t,uint32_t*,uint32_t*,uint32_t*);
 
 unsigned int *first_old_swii = 0;
 unsigned int *second_old_swii = 0;
 unsigned* old_SWI_addr = 0;
+
+unsigned int *first_old_irqi = 0;
+unsigned int *second_old_irqi = 0;
+unsigned* old_IRQ_addr = 0;
+
 unsigned* kernelsp = 0;
 
 static uint32_t* prepare_user_stack(int argc, char** argv)
@@ -52,11 +58,20 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 	kernelsp = stackp;
 	/* Add your code here */
 	int retval = 0;
-	unsigned swi_dispatcher_addr =(unsigned) &dispatcher;
+	unsigned swi_dispatcher_addr =(unsigned) &SWI_dispatcher;
 	unsigned  swi_vector = (unsigned) SWI_VECTOR_ADDR;
+
+	unsigned irq_dispatcher_addr =(unsigned) &IRQ_dispatcher;
+	unsigned irq_vector = (unsigned) IRQ_VECTOR_ADDR;
+
 	if((retval = hijack(swi_vector, swi_dispatcher_addr, old_SWI_addr, \
 					first_old_swii, second_old_swii)) == 0)
 		printf("SWI handler installation failed!!\n");
+
+	if((retval = hijack(irq_vector, irq_dispatcher_addr, old_IRQ_addr, \
+					first_old_irqi, second_old_irqi)) == 0)
+		printf("IRQ handler installation failed!!\n");
+
 
 	unsigned* user_stack_ptr = prepare_user_stack(argc, argv);
 	init(user_stack_ptr);

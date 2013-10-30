@@ -12,12 +12,23 @@ extern unsigned int *first_old_swii;
 extern unsigned int *second_old_swii;
 extern unsigned* old_SWI_addr;
 
+extern unsigned int *first_old_irqi;
+extern unsigned int *second_old_irqi;
+extern unsigned* old_IRQ_addr;
+
+
 /*
  * Restoring the original SWI_Handler
  * so that we don't break anything :D
  */
-void restore_old_SWI(void)
+void restore_old_SWI_h(void)
 {
 	*old_SWI_addr =(unsigned) first_old_swii;
 	*(old_SWI_addr + 1) =(unsigned) second_old_swii;
+}
+
+void restore_old_IRQ_h(void)
+{
+	*old_IRQ_addr =(unsigned) first_old_irqi;
+	*(old_IRQ_addr + 1) =(unsigned) second_old_irqi;
 }
