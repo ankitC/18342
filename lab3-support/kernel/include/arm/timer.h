@@ -36,8 +36,11 @@
 
 #define OSTMR_FREQ            3686400      /* Oscillator frequency in hz */
 
+#define TIMER_RESOLUTION	  10		  /* Min timer resoultion in ms */
+
 #ifndef ASSEMBLER
 
+//extern long timer_counter;
 /* Add your C code here.  Put your group name at the top! */
 
 #endif /* ASSEMBLER */

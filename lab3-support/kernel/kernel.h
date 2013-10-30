@@ -15,4 +15,9 @@
 #define SWI_VECTOR_ADDR 0x08
 #define LDR_PC_PC_minus_4 0xe51ff004 // opcode for ldr pc, [pc, #-4]
 
+#ifndef ASSEMBLER
+//long timer_counter;
+#endif /* ASSEMBLER */
+
+
 #endif
