@@ -18,7 +18,8 @@
 #define CARRAIGE_RETURN	13
 
 /* Helper functions */
-extern void restore_old_SWI(void);
+extern void restore_old_SWI_h(void);
+extern void restore_old_IRQ_h(void);
 extern void exit_to_kernel(int status);
 
 int C_SWI_handler(int swino, unsigned* args)
@@ -31,7 +32,8 @@ int C_SWI_handler(int swino, unsigned* args)
 		/* EXIT syscall */
 		case(0x900001):
 			exit_status = (int) args[0];
-			restore_old_SWI();
+			restore_old_SWI_h();
+			restore_old_IRQ_h();
 			exit_to_kernel(exit_status);
 			break;
 
