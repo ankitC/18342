@@ -1,5 +1,4 @@
-/* C_SWI_handler.c : SWI handler for servicing read, write
- *					and exit syscalls.
+/* C_IRQ_handler.c : IRQ handler for maintaining clock ticks.
  *
  * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
  *          Group Member 2: Jiten Mehta <jitenm>
@@ -8,9 +7,19 @@
  */
 
 #include <exports.h>
+extern unsigned long timer_counter;
 
 void C_IRQ_handler()
 {
-	printf("IRQ Handler Called");
+	//printf("IRQ Handler Called");
+	handle_timer_irq();
+	return;
+}
+
+static void handle_timer_irq(void)
+{
+	timer_counter++;
+	reg_write(OSTMR_OSCR_ADDR, 0x0);
+
 	return;
 }
