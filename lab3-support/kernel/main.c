@@ -24,6 +24,10 @@ extern void prepare_irq_stack();
 static uint32_t* prepare_user_stack(int, char**);
 static void irq_init();
 
+/* IRQ STACK */  //#TODO: malloc?
+
+char* irq_stack;
+
 /* Variables to hold the data of original SWI Handler */
 unsigned int *first_old_swii = 0;
 unsigned int *second_old_swii = 0;
@@ -107,7 +111,8 @@ static void irq_init(void)
 	iclr_mask = ~(0x1 << INT_OSTMR_0);
 	iclr_reg &= iclr_mask;
 	reg_write(INT_ICLR_ADDR, iclr_reg);
-	prepare_irq_stack();
+	irq_stack = (char*) malloc( IRQ_STACK_SIZE * sizeof(char));
+	prepare_irq_stack(irq_stack - IRQ_STACK_SIZE);
 	enable_irqs();
 	return;
 }

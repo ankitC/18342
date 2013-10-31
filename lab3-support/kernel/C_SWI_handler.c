@@ -128,11 +128,11 @@ int C_SWI_handler(int swino, unsigned* args)
 			puts("\n");
 			break;
 		/* time syscall */
-		case(0x9000006):
+		case(0x900006):
 			return(timer_counter * TIMER_RESOLUTION);
 
 		/* Sleep Syscall */
-		case(0x9000007):
+		case(0x900007):
 		/* Invalid args or zero, then simply return */
 			if(args[0] <= 0)
 				return 0;
