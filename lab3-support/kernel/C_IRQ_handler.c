@@ -7,14 +7,9 @@
  */
 
 #include <exports.h>
+#include <arm/timer.h>
+#include <arm/reg.h>
 extern unsigned long timer_counter;
-
-void C_IRQ_handler()
-{
-	//printf("IRQ Handler Called");
-	handle_timer_irq();
-	return;
-}
 
 static void handle_timer_irq(void)
 {
@@ -23,3 +18,12 @@ static void handle_timer_irq(void)
 
 	return;
 }
+
+void C_IRQ_handler()
+{
+	//printf("IRQ Handler Called");
+	handle_timer_irq();
+	return;
+}
+
+

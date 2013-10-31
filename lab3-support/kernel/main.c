@@ -16,6 +16,7 @@ extern void SWI_dispatcher();
 extern void IRQ_dispatcher();
 extern int hijack(uint32_t,uint32_t,uint32_t*,uint32_t*,uint32_t*);
 extern void	init_kern_timer();
+extern void enable_irqs();
 
 /* Variables to hold the data of original SWI Handler */
 unsigned int *first_old_swii = 0;
@@ -64,17 +65,17 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 	global_data = table;
 	kernelsp = stackp;
 
+	int retval = 0;
 	/* Hijacking IRQ handler and starting the timer */
 	unsigned irq_dispatcher_addr =(unsigned) &IRQ_dispatcher;
 	unsigned irq_vector = (unsigned) IRQ_VECTOR_ADDR;
 	if((retval = hijack(irq_vector, irq_dispatcher_addr, old_IRQ_addr, \
 					first_old_irqi, second_old_irqi)) == 0)
 		printf("IRQ handler installation failed!!\n");
-
+	enable_irqs();
 	init_kern_timer();
 
 	/* Hijacking SWI handler */
-	int retval = 0;
 	unsigned swi_dispatcher_addr =(unsigned) &SWI_dispatcher;
 	unsigned  swi_vector = (unsigned) SWI_VECTOR_ADDR;
 
