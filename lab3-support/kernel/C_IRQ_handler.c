@@ -9,6 +9,8 @@
 #include <exports.h>
 #include <arm/timer.h>
 #include <arm/reg.h>
+#include <arm/interrupt.h>
+
 extern unsigned long timer_counter;
 
 static void handle_timer_irq(void)
@@ -21,8 +23,27 @@ static void handle_timer_irq(void)
 
 void C_IRQ_handler()
 {
-	//printf("IRQ Handler Called");
+	uint32_t icpr_reg, osmr0_mask, ossr_reg;
+	icpr_reg = reg_read(INT_ICIP_ADDR);
+
+	/*
+	 *          * if the source is not osmr0 == oscr, bail out
+	 *                   */
+	osmr0_mask = 0x1 << INT_OSTMR_0;
+
+	/* Check if the interrupt was from timer */
+	if(!(icpr_reg & osmr0_mask)) {
+		printf("\n Interrupt from an unknonwn source.\n");
+		return;
+	}
+
 	handle_timer_irq();
+
+	ossr_reg = reg_read(OSTMR_OSSR_ADDR);
+	ossr_reg |= OSTMR_OSSR_M0;
+	reg_write(OSTMR_OSSR_ADDR, ossr_reg);
+
+	//ossr_reg = reg_read(OSTMR_OSSR_ADDR);
 	return;
 }
 

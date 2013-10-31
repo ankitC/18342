@@ -12,7 +12,7 @@
 
 enable_irqs:
 		MRS r12, cpsr
-		ORR r12, r12, #0x40
+		ORR r12, r12, #0x20
 		MSR cpsr, r12
 		MOV pc,lr 
 	

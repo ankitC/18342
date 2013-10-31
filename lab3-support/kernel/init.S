@@ -16,7 +16,7 @@
 
 init:
 	MRS r12, cpsr
- 	ORR r12, r12, #0x20				@ Disabling FIQs
+ 	@ORR r12, r12, #0x20				@ Disabling FIQs
  	BIC r12, r12, #0x03				@ Changing to user_mode
  	MSR cpsr, r12
 
