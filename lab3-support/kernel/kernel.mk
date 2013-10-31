@@ -3,7 +3,7 @@ KSTART = $(KDIR)/start.o
 
 # All core kernel objects go here.  Add objects here if you need to.
 KOBJS := assert.o main.o raise.o hijack.o IRQ_dispatcher.o SWI_dispatcher.o \
-   		 exit_to_kernel.o timer.o enable_irqs.o prepare_irq_stack.o init.o  \
+   		 exit_to_kernel.o timer.o toggle_interrupts.o prepare_irq_stack.o init.o  \
 		 restore_old_handlers.o C_IRQ_handler.o C_SWI_handler.o start.o
 
 KOBJS := $(KOBJS:%=$(KDIR)/%)

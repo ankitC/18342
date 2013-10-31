@@ -21,6 +21,8 @@
 extern void restore_old_SWI_h(void);
 extern void restore_old_IRQ_h(void);
 extern void exit_to_kernel(int status);
+extern void disable_irqs(void);
+
 extern unsigned long timer_counter;
 
 int C_SWI_handler(int swino, unsigned* args)
@@ -34,6 +36,7 @@ int C_SWI_handler(int swino, unsigned* args)
 		case(0x900001):
 			exit_status = (int) args[0];
 			restore_old_SWI_h();
+			disable_irqs();
 			restore_old_IRQ_h();
 			exit_to_kernel(exit_status);
 			break;

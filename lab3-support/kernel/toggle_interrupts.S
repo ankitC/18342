@@ -5,10 +5,11 @@
 @		   Group Member 3: Ankit Chheda <achheda>
 @ Date:    Oct 24, 2013 9:00 AM
 
-.file "enable_irqs"
+.file "toggle_interrputs"
 
 .text
 .global enable_irqs
+.global disable_irqs
 
 enable_irqs:
 		MRS r12, cpsr
@@ -16,3 +17,9 @@ enable_irqs:
 		MSR cpsr, r12
 		MOV pc,lr 
 	
+disable_irqs:
+		MRS r12, cpsr
+		ORR r12, r12, #0x60
+		MSR cpsr, r12
+		MOV pc,lr 
+
