@@ -72,6 +72,8 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 	if((retval = hijack(irq_vector, irq_dispatcher_addr, old_IRQ_addr, \
 					first_old_irqi, second_old_irqi)) == 0)
 		printf("IRQ handler installation failed!!\n");
+
+	/* Enabling IRQs and starting the timer for the kernel*/
 	enable_irqs();
 	init_kern_timer();
 
