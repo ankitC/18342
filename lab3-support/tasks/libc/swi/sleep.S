@@ -16,6 +16,6 @@
 FUNC(sleep)
 sleep:
 	stmfd sp!, {r1-r12,lr}  @ Backing up register
-    swi TIME_SWI
+    swi SLEEP_SWI
  	ldmfd sp!, {r1-r12,lr}  @ Restoring registers
     mov pc, lr

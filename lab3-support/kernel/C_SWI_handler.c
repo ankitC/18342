@@ -137,8 +137,8 @@ int C_SWI_handler(int swino, unsigned* args)
 			if(args[0] <= 0)
 				return 0;
 			/* Wait till the time, rounding-up to the nearest multiple of 10 */
-			uint32_t ticks_to_sleep = timer_counter + (args[0])/TIMER_RESOLUTION + 1;
-			while(timer_counter < ticks_to_sleep);
+			uint32_t ticks_to_sleep = timer_counter + (args[0])/TIMER_RESOLUTION;
+			while(timer_counter <= ticks_to_sleep);
 			return 1;
 
 		default:

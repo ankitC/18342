@@ -112,7 +112,7 @@ static void irq_init(void)
 	iclr_reg &= iclr_mask;
 	reg_write(INT_ICLR_ADDR, iclr_reg);
 	irq_stack = (char*) malloc( IRQ_STACK_SIZE * sizeof(char));
-	prepare_irq_stack(irq_stack - IRQ_STACK_SIZE);
+	prepare_irq_stack(irq_stack + IRQ_STACK_SIZE);
 	enable_irqs();
 	return;
 }

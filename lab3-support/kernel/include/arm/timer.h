@@ -40,7 +40,6 @@
 
 #ifndef ASSEMBLER
 
-//extern long timer_counter;
 /* Add your C code here.  Put your group name at the top! */
 
 #endif /* ASSEMBLER */
