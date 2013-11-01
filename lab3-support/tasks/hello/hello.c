@@ -8,7 +8,7 @@
  * @date   2008-10-29
  */
 #include <unistd.h>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <stdio.h>
 int main(int argc, char** argv)
 {
@@ -20,10 +20,10 @@ int main(int argc, char** argv)
 	//printf(temp);
 	//t = t;
 	write(STDOUT_FILENO, hello, sizeof(hello) - 1);
-	sleep(400);
-	int t = time();
-	printf("Time %d\n", t);
-//	sprintf(temp,"%d,\n",t);
-//	printf(temp);
+//	sleep(400);
+	//int t = time();
+	//printf("Time %d\n", t);
+	//	sprintf(temp,"%d,\n",t);
+	//	printf(temp);
 	return 0;
 }

@@ -11,7 +11,6 @@
 .text
 .global SWI_dispatcher
 .global C_SWI_handler
-.global enable_irqs
 
 SWI_dispatcher:
 	SUB sp, sp, #4					@leave room on stack for SPSR

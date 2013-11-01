@@ -42,7 +42,7 @@ int C_SWI_handler(int swino, unsigned* args)
 			restore_old_SWI_h();
 			disable_irqs();
 			restore_old_IRQ_h();
-			free(irq_stack);
+//			free(irq_stack);
 			exit_to_kernel(exit_status);
 			break;
 
@@ -143,9 +143,9 @@ int C_SWI_handler(int swino, unsigned* args)
 				return 0;
 			/* Wait till the time, rounding-up to the nearest multiple of 10 */
 			uint32_t ticks_to_sleep = timer_counter + (args[0])/TIMER_RESOLUTION;
-			printf("timer_counter = %lu, ticks_to_sleep = %u \n",timer_counter, ticks_to_sleep);
+//			printf("timer_counter = %lu, ticks_to_sleep = %u \n",timer_counter, ticks_to_sleep);
 			while(timer_counter <= ticks_to_sleep);
-			printf("Returning");
+//			printf("Returning");
 			return 1;
 
 		default:
