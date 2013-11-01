@@ -13,15 +13,17 @@
 int main(int argc, char** argv)
 {
 	const char hello[] = "Hello World\r\n";
-	char temp [100];
-	printf("Hello again\n");
-	int t = time();
-	sprintf(temp,"%d,\n",t);
-	printf(temp);
-	t = t;
+	//char temp [100];
+	//printf("Hello again\n");
+	//int t = time();
+	//sprintf(temp,"%d,\n",t);
+	//printf(temp);
+	//t = t;
 	write(STDOUT_FILENO, hello, sizeof(hello) - 1);
-	t = time();
-	sprintf(temp,"%d,\n",t);
-	printf(temp);
+	sleep(400);
+	int t = time();
+	printf("Time %d\n", t);
+//	sprintf(temp,"%d,\n",t);
+//	printf(temp);
 	return 0;
 }
