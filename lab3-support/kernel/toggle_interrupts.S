@@ -13,13 +13,13 @@
 
 enable_irqs:
 		MRS r12, cpsr
-		ORR r12, r12, #0x20
+		BIC r12, r12, #0x80
 		MSR cpsr, r12
 		MOV pc,lr 
 	
 disable_irqs:
 		MRS r12, cpsr
-		ORR r12, r12, #0x60
+		ORR r12, r12, #0xC0
 		MSR cpsr, r12
 		MOV pc,lr 
 

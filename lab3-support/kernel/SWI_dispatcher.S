@@ -11,15 +11,15 @@
 .text
 .global SWI_dispatcher
 .global C_SWI_handler
+.global enable_irqs
 
 SWI_dispatcher:
 	SUB sp, sp, #4					@leave room on stack for SPSR
 	STMFD sp!, {r0 - r12, lr}		@store user's gp registers
-
-	MRS r12, cpsr					@Enabling IRQ interrupts
+	MRS r12, cpsr
 	BIC r12, r12, #0x80
 	MSR cpsr, r12
-
+	@BL enable_irqs
 
 	MRS r2, spsr					@get SPSR into gp registers
 	STR r2, [sp, #14 * 4]			@store SPSR above gp registers for re-entrancy

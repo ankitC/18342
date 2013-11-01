@@ -36,7 +36,7 @@
 
 #define OSTMR_FREQ            3686400      /* Oscillator frequency in hz */
 
-#define TIMER_RESOLUTION	  10		  /* Min timer resoultion in ms */
+#define TIMER_RESOLUTION	  100		  /* Min timer resoultion in ms */
 
 #ifndef ASSEMBLER
 

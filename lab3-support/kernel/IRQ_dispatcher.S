@@ -11,9 +11,13 @@
 .text
 .global IRQ_dispatcher
 .global C_IRQ_handler
+.global enale_irqs
+.global disable_irqs
 
 IRQ_dispatcher:
 		STMFD sp!, {r0 - r12, lr}		@store registers
-		BL C_IRQ_handler				@Our SWI Handler
+		@BL disable_irqs
+		BL C_IRQ_handler
+		@BL enable_irqs					@Our SWI Handler
 		LDMFD sp!, {r0 - r12 , lr}		@restore registers
 		SUBS pc, lr, #4					@Executing the same instruction as the one interrupted
