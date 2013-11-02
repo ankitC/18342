@@ -130,10 +130,11 @@ int C_SWI_handler(int swino, unsigned* args)
 					}
 				}
 			}
-			puts("\n");
+		//	puts("\n");
 			break;
 		/* time syscall */
 		case(0x900006):
+			//printf("%lu\n", timer_counter * TIMER_RESOLUTION);
 			return(timer_counter * TIMER_RESOLUTION);
 
 		/* Sleep Syscall */

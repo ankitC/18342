@@ -15,7 +15,7 @@ extern unsigned long timer_counter;
 
 static void handle_timer_irq(void)
 {
-	printf(" %lu \n",timer_counter);
+//	printf(" %lu \n",timer_counter);
 	timer_counter++;
 	reg_write(OSTMR_OSCR_ADDR, 0x0);
 
