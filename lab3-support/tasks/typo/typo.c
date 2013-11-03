@@ -30,12 +30,18 @@ int main(int argc, char** argv)
 		time();
 		write(STDOUT_FILENO, "\n", 1);
 		unsigned long time_to_type = final_time - orig_time;
-		char *buf = (void *)0;
-		sprintf(buf, "%lu\n", time_to_type);
-		//write(STDOUT_FILENO, buf, 16);
-		puts("hello puts\n");
-		puts(buf);
-		puts("\n");
+		unsigned long x = time_to_type/1000;
+		printf("%lu.", x);
+		x = (time_to_type - ( x * 1000) );
+		if ( x < 100 )
+		{
+			printf("0");
+			if ( x < 10)
+			{
+				printf("0");
+			}
+		}
+		printf("%lus\n", x);
 	}
 	return 0;
 }

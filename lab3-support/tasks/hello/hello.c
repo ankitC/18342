@@ -24,6 +24,7 @@ int main(int argc, char** argv)
 	time();
 	sleep(1000);
 	time();
+	printf("%d\n", 10);
 	//t = time();
 	//printf("%lu\n", t);
 	//int t = time();

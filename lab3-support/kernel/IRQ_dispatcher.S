@@ -20,4 +20,4 @@ IRQ_dispatcher:
 		BL C_IRQ_handler
 		@BL enable_irqs					@Our SWI Handler
 		LDMFD sp!, {r0 - r12 , lr}		@restore registers
-		MOVS pc, lr					@Executing the same instruction as the one interrupted
+		MOVS pc, lr			
