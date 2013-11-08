@@ -42,10 +42,11 @@ unsigned* kernelsp = 0;
 
 int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 {
-	app_startup(); /* bss is valid after this point */
+	//app_startup(); /* bss is valid after this point */
 	global_data = table;
 	kernelsp = stackp;
 
+	printf("Starting to wire in dispatcher.\n");
 	int retval = 0;
 	/* Hijacking IRQ handler and starting the timer */
 	unsigned irq_dispatcher_addr =(unsigned) &IRQ_dispatcher;
@@ -54,22 +55,24 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 					first_old_irqi, second_old_irqi)) == 0)
 		printf("IRQ handler installation failed!!\n");
 
+	printf("Wired in the dispatcher for IRQs\n");
+
 	/* Enabling IRQs and starting the timer for the kernel*/
 	irq_init();
 	init_kern_timer();
-
+	printf("Timers Init done.\n");
 	/* Hijacking SWI handler */
 	unsigned swi_dispatcher_addr =(unsigned) &SWI_dispatcher;
 	unsigned  swi_vector = (unsigned) SWI_VECTOR_ADDR;
-
+	printf("Hijacking SWI Handler\n");
 	if((retval = hijack(swi_vector, swi_dispatcher_addr, old_SWI_addr, \
 					first_old_swii, second_old_swii)) == 0)
-		printf("SWI handler installation failed!!\n");
-
+	printf("SWI handler installation failed!!\n");
+	printf("SWI handler Hijacked\n");
 	/* Preparing the user stack and switching to userspace */
 	unsigned* user_stack_ptr = prepare_user_stack(argc, argv);
+	printf("Init stack for userspace...Done!\n");
 	init(user_stack_ptr);
-
 	return 0;
 }
 

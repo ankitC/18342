@@ -26,7 +26,7 @@ extern unsigned long timer_counter;
 
 void C_IRQ_handler()
 {
-	uint32_t icpr_reg, osmr0_mask;
+	uint32_t icpr_reg, osmr0_mask, ossr_reg;
 	uint32_t clocks_till_interrupt = 0;
 	icpr_reg = reg_read(INT_ICIP_ADDR);
 
@@ -43,9 +43,9 @@ void C_IRQ_handler()
 	clocks_till_interrupt += (OSTMR_FREQ*TIMER_RESOLUTION)/1000;
 	reg_write(OSTMR_OSMR_ADDR(0), clocks_till_interrupt);
 
-//	ossr_reg = reg_read(OSTMR_OSSR_ADDR);
-//	ossr_reg |= OSTMR_OSSR_M0;
-//	reg_write(OSTMR_OSSR_ADDR, ossr_reg);
+	ossr_reg = reg_read(OSTMR_OSSR_ADDR);
+	ossr_reg |= OSTMR_OSSR_M0;
+	reg_write(OSTMR_OSSR_ADDR, ossr_reg);
 
 	//ossr_reg = reg_read(OSTMR_OSSR_ADDR);
 	return;
