@@ -14,11 +14,14 @@
 
 IRQ_dispatcher:
 		STMFD sp!, {r0 - r12, lr}		@store registers
+
 		BL C_IRQ_handler
 
-		MRS r12, cpsr
+		MRS r12, cpsr					@enable interrupts
 		BIC r12, r12, #0x80
 		MSR cpsr, r12
 
 		LDMFD sp!, {r0 - r12 , lr}		@restore registers
-		SUBS pc, lr, #4
+
+		SUBS pc, lr, #4					@lr points to PC + 4, so go
+										@to the next instr in userspace

@@ -19,7 +19,9 @@ init:
  	BIC r12, r12, #0x03				@ Changing to user_mode
  	MSR cpsr, r12
 
-	mov sp, r0
+	mov sp, r0						@ Userspace SP point to stk ptr
+									@ which is the argument to init.
+
 	mov lr, pc						@ Pointing lr to swi EXIT_SWI
 	LDR pc, =USR_MAIN_ADDR
 

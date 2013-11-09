@@ -16,7 +16,7 @@ extern unsigned int second_old_irqi;
 
 
 /*
- * Restoring the original SWI_Handler
+ * Restoring the original SWI_Handler and IRQ_handler
  * so that we don't break anything :D
  */
 void restore_old_handlers(void)
@@ -30,6 +30,7 @@ void restore_old_handlers(void)
 	uint32_t*  old_SWI_container = (uint32_t*)( SWI_VECTOR_ADDR + offset + 0x08);
 	uint32_t* old_addr = (uint32_t*) *old_SWI_container;
 
+	/* Restoring SWI Handler */
 	*old_addr = first_old_swii;
 	*(old_addr + 1) = second_old_swii;
 
@@ -38,9 +39,9 @@ void restore_old_handlers(void)
 	swi_loader = *swi_vector;
 	offset = swi_loader & (0x0FFF);
 	old_SWI_container = (uint32_t*)(IRQ_VECTOR_ADDR + offset + 0x08);
-
-
 	old_addr = (uint32_t*) *old_SWI_container;
+
+	/* Restoring IRQ Handler */
 	*old_addr = first_old_irqi;
 	*(old_addr + 1) = second_old_irqi;
 }

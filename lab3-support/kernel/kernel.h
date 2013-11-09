@@ -17,7 +17,6 @@
 #define IRQ_STACK_SIZE 512  /* IRQ Stack SIZE in bytes */
 
 #ifndef ASSEMBLER
-//long timer_counter;
 #endif /* ASSEMBLER */
 
 

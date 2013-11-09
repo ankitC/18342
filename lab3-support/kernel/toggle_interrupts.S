@@ -1,4 +1,4 @@
-@ enable_IRQs.S: Enables IRQs since the handler is now in place
+@ toggle_interrupts.S: Enables and disables IRQs.
 @
 @ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
 @          Group Member 2: Jiten Mehta <jitenm>
@@ -13,13 +13,13 @@
 
 enable_irqs:
 		MRS r12, cpsr
-		BIC r12, r12, #0x80
+		BIC r12, r12, #0x80			@Unmask IRQs
 		MSR cpsr, r12
-		MOV pc,lr 
-	
+		MOV pc,lr
+
 disable_irqs:
 		MRS r12, cpsr
-		ORR r12, r12, #0xC0
+		ORR r12, r12, #0xC0			@Mask IRQs
 		MSR cpsr, r12
-		MOV pc,lr 
+		MOV pc,lr
 

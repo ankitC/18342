@@ -16,7 +16,7 @@ SWI_dispatcher:
 	SUB sp, sp, #4					@leave room on stack for SPSR
 	STMFD sp!, {r0 - r12, lr}		@store user's gp registers
 
-	LDR r12, =global_data
+	LDR r12, =global_data			@Restoring r8 for lib funcs
 	LDR r8, [r12]
 
 	MRS r12, cpsr

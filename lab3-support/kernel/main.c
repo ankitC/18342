@@ -24,19 +24,16 @@ extern void prepare_irq_stack();
 static uint32_t* prepare_user_stack(int, char**);
 static void irq_init();
 
-/* IRQ STACK */  //#TODO: malloc?
-
+/* IRQ STACK */
 char* irq_stack;
 
 /* Variables to hold the data of original SWI Handler */
 unsigned int first_old_swii;
 unsigned int second_old_swii;
-unsigned* old_SWI_addr = 0;
 
 /* Variables to hold the data of original IRQ Handler */
 unsigned int first_old_irqi;
 unsigned int second_old_irqi;
-unsigned* old_IRQ_addr = 0;
 
 unsigned* kernelsp = 0;
 
@@ -50,8 +47,13 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 	printf("Starting to wire in dispatcher.\n");
 #endif
 	int retval = 0;
+	unsigned* old_SWI_addr = 0;
+	unsigned* old_IRQ_addr = 0;
+
 	unsigned swi_dispatcher_addr =(unsigned) &SWI_dispatcher;
 	unsigned  swi_vector = (unsigned) SWI_VECTOR_ADDR;
+
+	/* Hijacking SWI handler */
 #ifdef debug
 	printf("Hijacking SWI Handler\n");
 #endif
@@ -80,15 +82,19 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 #ifdef debug
 	printf("Timers Init done.\n");
 #endif
-	/* Hijacking SWI handler */
 /* Preparing the user stack and switching to userspace */
 	unsigned* user_stack_ptr = prepare_user_stack(argc, argv);
 #ifdef debug
 	printf("Init stack for userspace...Done!\n");
 #endif
+
+	/* Init the userspace program */
 	init(user_stack_ptr);
+
+	/* CODE never reaches here */
 	return 0;
 }
+
 
 /* Preparing user Stack */
 static uint32_t* prepare_user_stack(int argc, char** argv)
@@ -100,6 +106,8 @@ static uint32_t* prepare_user_stack(int argc, char** argv)
 #ifdef debug
 	printf("usr_stack_ptr = %p \n", stack_addr);
 #endif
+
+	/* Full descending stack */
 	for(i = argc - 1; i>=0; i--)
 	{
 		stack_addr--;
@@ -117,9 +125,12 @@ static uint32_t* prepare_user_stack(int argc, char** argv)
 	return stack_addr;
 }
 
+/* Initializing the IRQs */
 static void irq_init(void)
 {
 	uint32_t icmr_mask, iclr_reg, iclr_mask;
+
+	/* Init the ICMR, unmask the interrupt for our OSTMR */
 	icmr_mask = (0x1 << INT_OSTMR_0);
 #ifdef debug
 	printf("ICMR Mask: %x\n", icmr_mask);
@@ -133,8 +144,12 @@ static void irq_init(void)
 	printf("ICLR Mask: %x\n", iclr_reg);
 #endif
 	reg_write(INT_ICLR_ADDR, iclr_reg);
+
+	/* Preparing the IRQ stack */
 	irq_stack = (char*) malloc(IRQ_STACK_SIZE * sizeof(char));
 	prepare_irq_stack(irq_stack + IRQ_STACK_SIZE);
+
+	/* Enabling the IRQs */
 	enable_irqs();
 	return;
 }
