@@ -14,7 +14,7 @@
 	.global errno
 	.global	read
 read:
-	
+
 	stmfd sp!, {r1-r12,lr}  @ Backing up registers
 	swi READ_SWI
 	cmp r0, #0		@ Check the return value of SWI

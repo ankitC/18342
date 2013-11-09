@@ -14,29 +14,30 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define MAX_LINE_LENGTH 150
+#define MAX_LINE_LENGTH 120
 
 int main(int argc, char** argv)
 {
+	char input[MAX_LINE_LENGTH];
+	unsigned long orig_time, final_time, time_to_type;
+	int r;
+	unsigned long x;
+
 	while(1)
 	{
-		write(STDOUT_FILENO, "> " , 2);
-		unsigned long orig_time = time();
-		char input[MAX_LINE_LENGTH];
-		int r = read(STDIN_FILENO, input , MAX_LINE_LENGTH);
-		unsigned long final_time = time();
-		write(STDOUT_FILENO, input ,r);
-		write(STDOUT_FILENO, "\n", 1);
-		time();
-		write(STDOUT_FILENO, "\n", 1);
-		unsigned long time_to_type = final_time - orig_time;
-		unsigned long x = time_to_type/1000;
-		printf("%lu.", x);
-		x = (time_to_type - ( x * 1000) );
-		if ( x < 100 )
+		write(STDOUT_FILENO, "> ", 2);
+		orig_time = time();
+		r = read(STDIN_FILENO, input, MAX_LINE_LENGTH);
+		final_time = time();
+		write(STDOUT_FILENO, input, r);
+		time_to_type = final_time - orig_time;
+		x = time_to_type / 1000;
+		printf("\n%lu.", x);
+		x = time_to_type - (x * 1000);
+		if (x < 100)
 		{
 			printf("0");
-			if ( x < 10)
+			if (x < 10)
 			{
 				printf("0");
 			}
