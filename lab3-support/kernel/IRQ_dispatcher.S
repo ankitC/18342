@@ -11,13 +11,14 @@
 .text
 .global IRQ_dispatcher
 .global C_IRQ_handler
-.global enale_irqs
-.global disable_irqs
 
 IRQ_dispatcher:
 		STMFD sp!, {r0 - r12, lr}		@store registers
-		@BL disable_irqs
 		BL C_IRQ_handler
-		@BL enable_irqs					@Our SWI Handler
+
+		MRS r12, cpsr
+		BIC r12, r12, #0x80
+		MSR cpsr, r12
+
 		LDMFD sp!, {r0 - r12 , lr}		@restore registers
-		MOVS pc, lr			
+		SUBS pc, lr, #4
