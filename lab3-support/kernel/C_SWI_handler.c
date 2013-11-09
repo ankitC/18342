@@ -18,11 +18,9 @@
 #define CARRAIGE_RETURN	13
 
 /* Helper functions */
-extern void restore_old_SWI_h(void);
-extern void restore_old_IRQ_h(void);
+extern void restore_old_handlers(void);
 extern void exit_to_kernel(int status);
 extern void disable_irqs(void);
-extern void enable_irqs(void);
 
 extern char* irq_stack;
 extern volatile unsigned long timer_counter;
@@ -32,17 +30,15 @@ int C_SWI_handler(int swino, unsigned* args)
 	char* buf = (char*) args[1];
 	unsigned int i = 0;
 	int exit_status = 0;
-//	enable_irqs();
 	switch (swino)
 	{
 		/* EXIT syscall */
 		case(0x900001):
 			printf("Exiting\n");
 			exit_status = (int) args[0];
-			restore_old_SWI_h();
 			disable_irqs();
-			restore_old_IRQ_h();
-//			free(irq_stack);
+			restore_old_handlers();
+			free(irq_stack);
 			exit_to_kernel(exit_status);
 			break;
 
@@ -100,7 +96,6 @@ int C_SWI_handler(int swino, unsigned* args)
 				}
 			}
 			/* Taking the prompt to new line if the buffer is full*/
-			puts("\n");
 			break;
 
 		/* Write syscall */
@@ -130,7 +125,6 @@ int C_SWI_handler(int swino, unsigned* args)
 					}
 				}
 			}
-		//	puts("\n");
 			break;
 		/* time syscall */
 		case(0x900006):
@@ -145,14 +139,15 @@ int C_SWI_handler(int swino, unsigned* args)
 			/* Wait till the time, rounding-up to the nearest multiple of 10 */
 			uint32_t ticks_to_sleep = timer_counter + (args[0])/TIMER_RESOLUTION;
 //			printf("timer_counter = %lu, ticks_to_sleep = %u \n",timer_counter, ticks_to_sleep);
-			while(timer_counter <= ticks_to_sleep);
+			while(timer_counter < ticks_to_sleep);
 //			printf("Returning");
 			return 1;
 
 		default:
 			/* return invalid SWI_number error */
+			printf("SWI No:%x\n", swino);
 			puts("Invalid SWI no.\n");
-			return  -0xBADC0DE;
+			return  0xBADC0DE;
 	}
 	return i;
 }

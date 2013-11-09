@@ -15,19 +15,22 @@
 SWI_dispatcher:
 	SUB sp, sp, #4					@leave room on stack for SPSR
 	STMFD sp!, {r0 - r12, lr}		@store user's gp registers
+
 	LDR r12, =global_data
 	LDR r8, [r12]
+
 	MRS r12, cpsr
 	BIC r12, r12, #0x80
 	MSR cpsr, r12
-	@BL enable_irqs
 
 	MRS r2, spsr					@get SPSR into gp registers
 	STR r2, [sp, #14 * 4]			@store SPSR above gp registers for re-entrancy
 	MOV r1, sp						@pointer to parameters on stack
 	LDR r0, [lr, #-4]				@extract the SWI number
 	BIC r0, r0, #0xff000000			@get SWI # by bit-masking
+
 	BL C_SWI_handler				@Our SWI Handler
+
 	LDR r2, [sp, #14 * 4]			@prepare to restore SPSR
 	MSR spsr, r2					@restore SPSR from r2
 	ADD sp, sp, #4
