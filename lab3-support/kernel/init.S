@@ -16,15 +16,11 @@
 
 init:
 	MRS r12, cpsr
- 	@ORR r12, r12, #0x20				@ Disabling FIQs
  	BIC r12, r12, #0x03				@ Changing to user_mode
  	MSR cpsr, r12
 
-@	LDR sp, =USR_STACK_BASE			@ Setting up the userspace stack
-@	STMFD sp!, {r0-r1}				@ Pushing arguments on Userspace stack
-
 	mov sp, r0
-	mov lr, pc
+	mov lr, pc						@ Pointing lr to swi EXIT_SWI
 	LDR pc, =USR_MAIN_ADDR
 
  	swi EXIT_SWI					@exit with the status returned by userspace

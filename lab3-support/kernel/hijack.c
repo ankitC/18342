@@ -14,25 +14,35 @@ int hijack(uint32_t vector_addr, uint32_t new_addr, uint32_t* old_addr, \
 		uint32_t* first_old_instr, uint32_t* second_old_instr)
 {
 
-	unsigned*  swi_vector = (unsigned int *) vector_addr;
-	unsigned  swi_loader = *swi_vector;
-	unsigned  offset = swi_loader & (0x0FFF);
-
+	uint32_t*  swi_vector = (uint32_t *) vector_addr;
+	uint32_t  swi_loader = *swi_vector;
+	uint32_t  offset = swi_loader & (0x0FFF);
+	
+	printf("Going into Hijack\n");
 	/* Address of the old handler */
-	unsigned*  old_SWI_container = (unsigned*)(vector_addr + offset + 0x08);
-	old_addr = (unsigned*) *old_SWI_container;
-
+	uint32_t*  old_SWI_container = (uint32_t*)(vector_addr + offset + 0x08);
+	old_addr = (uint32_t*) *old_SWI_container;
+	printf("SWI_vector:%p\n",swi_vector);
+	printf("SWi_loader:%x\n",swi_loader);
+	printf("vector_addr:%x\n",vector_addr);
+	printf("Offset:%x\n",offset);
+	printf("old_SWI_container:%p\n",old_SWI_container);
+	printf("Old_addr:%p\n",old_addr);
+	printf("Accessing mem\n");
 	/* Extracting the first 2 instructions */
 	*first_old_instr =  *(old_addr);
+	printf("1\n");
 	*second_old_instr = *(old_addr + 1);
-
+	printf("2\n");
 	/* Preparing instructions to substitute */
-	unsigned int first_new_instr = (unsigned int) LDR_PC_PC_minus_4;
-	unsigned int second_new_instr = new_addr;
-
+	uint32_t  first_new_instr = (uint32_t) LDR_PC_PC_minus_4;
+	uint32_t  second_new_instr = new_addr;
+	printf("Loading addresses\n");
 	/* Wiring in our handler */
 	*old_addr = first_new_instr;
+	printf("3\n");
 	*(old_addr + 1) = second_new_instr;
-
+	
+	printf("Returning from hijack\n");
 	return 1;
 }
