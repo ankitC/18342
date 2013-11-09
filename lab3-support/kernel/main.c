@@ -104,7 +104,9 @@ static uint32_t* prepare_user_stack(int argc, char** argv)
 	{
 		stack_addr--;
 		*stack_addr = (uint32_t)argv[i];
+#ifdef debug
 		printf("usr_stack_ptr = %p \n", stack_addr);
+#endif
 	}
 
 	stack_addr--;
@@ -119,14 +121,17 @@ static void irq_init(void)
 {
 	uint32_t icmr_mask, iclr_reg, iclr_mask;
 	icmr_mask = (0x1 << INT_OSTMR_0);
+#ifdef debug
 	printf("ICMR Mask: %x\n", icmr_mask);
+#endif
 	reg_write(INT_ICMR_ADDR, icmr_mask);
-
 	iclr_reg = reg_read(INT_ICLR_ADDR);
 	iclr_mask = ~(0x1 << INT_OSTMR_0);
 	iclr_reg &= iclr_mask;
 
+#ifdef debug
 	printf("ICLR Mask: %x\n", iclr_reg);
+#endif
 	reg_write(INT_ICLR_ADDR, iclr_reg);
 	irq_stack = (char*) malloc(IRQ_STACK_SIZE * sizeof(char));
 	prepare_irq_stack(irq_stack + IRQ_STACK_SIZE);

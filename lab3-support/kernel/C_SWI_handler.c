@@ -34,7 +34,6 @@ int C_SWI_handler(int swino, unsigned* args)
 	{
 		/* EXIT syscall */
 		case(0x900001):
-			printf("Exiting\n");
 			exit_status = (int) args[0];
 			disable_irqs();
 			restore_old_handlers();
@@ -138,9 +137,7 @@ int C_SWI_handler(int swino, unsigned* args)
 				return 0;
 			/* Wait till the time, rounding-up to the nearest multiple of 10 */
 			uint32_t ticks_to_sleep = timer_counter + (args[0])/TIMER_RESOLUTION;
-//			printf("timer_counter = %lu, ticks_to_sleep = %u \n",timer_counter, ticks_to_sleep);
 			while(timer_counter < ticks_to_sleep);
-//			printf("Returning");
 			return 1;
 
 		default:
