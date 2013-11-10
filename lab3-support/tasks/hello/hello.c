@@ -13,23 +13,10 @@
 #include <stdio.h>
 int main(int argc, char** argv)
 {
+	int i = 0; 
 	const char hello[] = "Hello World\r\n";
-	//unsigned long t = time();
-
-	//time();
 	write(STDOUT_FILENO, hello, sizeof(hello) - 1);
-	/*sleep(1000);
-	t = t;
-	time();
-	sleep(1000);
-	time();*/
-	//int i = 0;
-	//for(i = 0; i <15 ; i++)
-	while(1)
-	{
-		sleep(1000);
-		printf("Time:%lu\n", time());
-	}
-
+	for(i = 0 ; i < argc ; i++)
+	printf("Args:%s\n",argv[i]);
 	return 0;
 }

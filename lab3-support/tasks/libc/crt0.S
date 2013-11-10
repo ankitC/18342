@@ -14,6 +14,7 @@
 .globl errno
 .global _start
 _start:
-		ldmfd sp!, {r0, r1}
+		ldmfd sp!, {r0}
+		mov r1, sp
 		bl main
 		b exit	@Calling the exit syscall
