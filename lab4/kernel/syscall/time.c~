@@ -16,7 +16,7 @@ extern volatile unsigned long timer_counter;
 
 unsigned long time_syscall(void)
 {
-	return (timer_counter * OS_TIMER_RESOLUTION);
+	return (timer_counter * TIMER_RESOLUTION);
 }
 
 /** @brief Waits in a tight loop for atleast the given number of milliseconds.
@@ -32,6 +32,6 @@ void sleep_syscall(unsigned long millis  __attribute__((unused)))
 		//return;
 
 	/* Wait till the time, rounding-up to the nearest multiple of 10 */
-	uint32_t ticks_to_sleep = timer_counter + (millis / OS_TIMER_RESOLUTION);
+	uint32_t ticks_to_sleep = timer_counter + (millis / TIMER_RESOLUTION);
 	while(timer_counter < ticks_to_sleep);
 }

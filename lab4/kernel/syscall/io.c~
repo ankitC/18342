@@ -32,9 +32,9 @@
 #define HEAP_END		0xa3efffff
 
 /* Read count bytes (or less) from fd into the buffer buf. */
-ssize_t read_syscall(int fd __attribute__((unused)), void *buff __attribute__((unused)), size_t count __attribute__((unused)))
+ssize_t read_syscall(int fd __attribute__((unused)), void *bufa __attribute__((unused)), size_t count __attribute__((unused)))
 {
-	char* buf = (char*) buff;
+	char* buf = (char*) bufa;
 	unsigned int i = 0;
 
 	/* Invalid file descriptor */
@@ -93,9 +93,8 @@ ssize_t read_syscall(int fd __attribute__((unused)), void *buff __attribute__((u
 }
 
 /* Write count bytes to fd from the buffer buf. */
-ssize_t write_syscall(int fd  __attribute__((unused)), const void *buff  __attribute__((unused)), size_t count  __attribute__((unused)))
+ssize_t write_syscall(int fd  __attribute__((unused)), const void *buf  __attribute__((unused)), size_t count  __attribute__((unused)))
 {
-	char* buf = (char*) buff;
 	unsigned int i = 0;
 
 	/* Invalid file descriptor */
