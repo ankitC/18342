@@ -1,14 +1,20 @@
-/** @file crt0.S
- *
- * @brief Execution startup routine
- *
- * @author Mike Kasick <mkasick@andrew.cmu.edu>
- * @date   Sun, 07 Oct 2007 01:51:29 -0400
- */
+@ crt0.S: Execution startup routine
+@
+@ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
+@          Group Member 2: Jiten Mehta <jitenm>
+@		   Group Member 3: Ankit Chheda <achheda>
+@ Date:    Oct 10 2013, 10:00 AM
 
-#include <asm.h>
+#include <bits/swi.h>
+#include <bits/errno.h>
 
-	.file "crt0.S"
+.file   "crt0.S"
+.text
+.global exit
+.globl errno
+.global _start
+_start:
+		ldmfd sp!, {r0}
+		mov r1, sp
+		bl main
 
-FUNC(_start)
-	@ needs code.  Put your names at the top.

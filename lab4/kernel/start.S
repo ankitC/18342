@@ -1,27 +1,23 @@
-/**
- * @file  start.S
- *
- * @brief Kernel startup routine
- *
- * @author Mike Kasick <mkasick@andrew.cmu.edu>
- * @date   Tue, 23 Oct 2007 11:20:33 -0400
- *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date   2008-07-06
- */
+@ start.S: Kernel startup routine
+@
+@ Author: Mike Kasick <mkasick@andrew.cmu.edu>
+@ Date:   Tue, 23 Oct 2007 11:20:33 -0400
 
-#include <asm.h>
+	.file	"start.S"
+	.text
 
-	.file   "start.S"
+	.global	_start
+_start:
+	@ Branch immediately to main without altering the execution environment.
+	@ This indirection is needed to guarantee that the program entry point is
+	@ LOAD_ADDR (probably 0xa3000000) without placing strict
+	@ requirements on the layout of kernel.c.
 
-FUNC(_start)
-	/*
-	 * Branch immediately to main without altering the execution environment.
-	 * This indirection is needed to guarantee that the program entry point is
-	 * LOAD_ADDR (probably 0xa3000000) without placing strict
-	 * requirements on the layout of kernel.c.  Bit first, provide main with the
-	 * jump table address as one of its arguments.
-	 */
-	mov     r2, r8
-	b       kmain
+	stmfd sp!, {r1-r12, lr}		@Storing the original U-Boot env on the stack.
 
+	LDR r12, =kernelsp			@Storing the stack pointer before we start with
+								@our kernel to restore the original U-boot env.
+	STR sp, [r12]
+	MOV r2, r8
+	MOV r3, sp
+	B	kmain					@Our Kernel, here we come!! ;)
