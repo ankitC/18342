@@ -9,6 +9,7 @@
 #include <types.h>
 #include <arm/timer.h>
 #include <arm/reg.h>
+#include <config.h>
 
 volatile unsigned long timer_counter = 0;
 

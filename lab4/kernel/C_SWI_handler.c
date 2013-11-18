@@ -29,11 +29,11 @@ void C_SWI_handler(int swino, unsigned* args)
 
 		/* Read Syscall*/
 		case(READ_SWI):
-			args[0] = read_syscall(args[0], args[1], args[2]);
+			args[0] = read_syscall(args[0], (void*)args[1], args[2]);
 
 		/* Write Syscall */
 		case(WRITE_SWI):
-			args[0] =  write_syscall(args[0], args[1], args[2]);
+			args[0] =  write_syscall(args[0], (void*)args[1], args[2]);
 
 		/* Time Syscall */
 		case(TIME_SWI):
