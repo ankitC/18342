@@ -1,14 +1,31 @@
-/** @file time.S
- *
- * @brief time sycall wrapper
- *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-10-31
- */
+@file time.S
+
+@ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
+@          Group Member 2: Jiten Mehta <jitenm>
+@		   Group Member 3: Ankit Chheda <achheda>
+@ Date:    Nov 14, 2013 9:00 AM
 
 #include <asm.h>
 
 	.file "mutex_create.S"
+	.text
 
-FUNC(mutex_create)
-	@ Add code here.  Put your name at the top.
+	.global errno
+	.global mutex_create
+
+mutex_create:
+	stmfd sp!, {r1-r12,lr}  @ Backing up registers
+	swi MUTEX_CREATE
+	cmp r0, #0		@ Check the return value of SWI
+	bge ret			@ if no error, then return
+
+	@ otherwise, set errno accordingly
+	mov r1, #-1
+	mul r1, r0, r1
+	ldr r3, =errno	@ r3 points to errno
+	str r1, [r3]	@ set errno
+	mov r0, #-1		@ return -1
+
+ret:
+	ldmfd sp!, {r1-r12,lr}  @ Restoring registers
+	mov pc,lr
