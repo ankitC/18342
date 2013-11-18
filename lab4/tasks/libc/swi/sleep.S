@@ -7,8 +7,15 @@
  */
 
 #include <asm.h>
+#include <bits/swi.h>
 
 	.file "sleep.S"
+	.text
+	.global sleep
 
 FUNC(sleep)
-	@ Add code here.  Put your names at the top.
+sleep:
+	stmfd sp!, {r1-r12,lr}  @ Backing up register
+    swi SLEEP_SWI
+ 	ldmfd sp!, {r1-r12,lr}  @ Restoring registers
+    mov pc, lr

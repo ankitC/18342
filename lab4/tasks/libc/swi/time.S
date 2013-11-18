@@ -7,8 +7,15 @@
  */
 
 #include <asm.h>
-
+#include <bits/swi.h>
 	.file "time.S"
 
+	.text
+	.global	time
 FUNC(time)
-	@ Add code here.  Put your name at the top.
+
+time:
+	stmfd sp!, {r1-r12,lr}  @ Backing up register
+    swi TIME_SWI
+ 	ldmfd sp!, {r1-r12,lr}  @ Restoring registers
+    mov pc, lr
