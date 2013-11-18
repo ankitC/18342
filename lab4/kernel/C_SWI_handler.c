@@ -30,21 +30,23 @@ void C_SWI_handler(int swino, unsigned* args)
 		/* Read Syscall*/
 		case(READ_SWI):
 			args[0] = read_syscall(args[0], (void*)args[1], args[2]);
+			break;
 
 		/* Write Syscall */
 		case(WRITE_SWI):
 			args[0] =  write_syscall(args[0], (void*)args[1], args[2]);
-
+			break;
 		/* Time Syscall */
 		case(TIME_SWI):
 			args[0] = time_syscall();
-
+			break;
 		/* Sleep Syscall */
 		case(SLEEP_SWI):
 			sleep_syscall(args[0]);
-
+			break;
 		default:
 			invalid_syscall(swino);
+			break;
 	}
 }
 
