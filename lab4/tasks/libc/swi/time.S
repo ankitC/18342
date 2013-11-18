@@ -1,17 +1,17 @@
-/** @file time.S
- *
- * @brief time sycall wrapper
- *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-10-31
- */
+@ time.S: time syscall wrapper
+@
+@ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
+@          Group Member 2: Jiten Mehta <jitenm>
+@		   Group Member 3: Ankit Chheda <achheda>
+@ Date:    Oct 14, 2013 9:00 AM
 
 #include <asm.h>
 #include <bits/swi.h>
-	.file "time.S"
 
+	.file "time.S"
 	.text
 	.global	time
+
 FUNC(time)
 
 time:
