@@ -50,7 +50,7 @@ void C_SWI_handler(int swino, unsigned* args)
 
 		/* Task Create Syscall */
 		case(CREATE_SWI):
-			args[0] = task_create((task_t*)args[0], args[1])
+			args[0] = task_create((task_t*)args[0], args[1]);
 			break;
 
 		/* Mutex Create Syscall */

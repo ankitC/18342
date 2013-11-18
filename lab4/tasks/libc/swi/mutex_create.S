@@ -1,4 +1,4 @@
-@file time.S
+@ mutex_create.S: mutex_create syscall wrapper
 
 @ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
 @          Group Member 2: Jiten Mehta <jitenm>
@@ -6,12 +6,16 @@
 @ Date:    Nov 14, 2013 9:00 AM
 
 #include <asm.h>
+#include <bits/swi.h>
+#include <bits/errno.h>
 
 	.file "mutex_create.S"
 	.text
 
 	.global errno
 	.global mutex_create
+
+FUNC(mutex_create)
 
 mutex_create:
 	stmfd sp!, {r1-r12,lr}  @ Backing up registers

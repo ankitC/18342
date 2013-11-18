@@ -1,10 +1,13 @@
-@file event_wait.S
+@ event_wait.S: event_wait syscall wrapper
+@
 @ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
 @          Group Member 2: Jiten Mehta <jitenm>
 @		   Group Member 3: Ankit Chheda <achheda>
 @ Date:    Nov 14, 2013 9:00 AM
 
 #include <asm.h>
+#include <bits/swi.h>
+#include <bits/errno.h>
 
 	.file "event_wait.S"
 	.text
@@ -12,8 +15,9 @@
 	.global errno
 	.global event_wait
 
-event_wait:
+FUNC(event_wait)
 
+event_wait:
 	stmfd sp!, {r1-r12, lr}	@backing up registers
 	swi EVENT_WAIT
 	cmp r0, #0		@ Check the return value of SWI
