@@ -16,8 +16,6 @@
 	.global event_wait
 
 FUNC(event_wait)
-
-event_wait:
 	stmfd sp!, {r1-r12, lr}	@backing up registers
 	swi EVENT_WAIT
 	cmp r0, #0		@ Check the return value of SWI

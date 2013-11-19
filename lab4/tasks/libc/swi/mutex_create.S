@@ -16,8 +16,6 @@
 	.global mutex_create
 
 FUNC(mutex_create)
-
-mutex_create:
 	stmfd sp!, {r1-r12,lr}  @ Backing up registers
 	swi MUTEX_CREATE
 	cmp r0, #0		@ Check the return value of SWI
