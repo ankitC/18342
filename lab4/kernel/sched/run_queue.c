@@ -121,7 +121,9 @@ tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
 uint8_t highest_prio(void)
 {
 	int OSTCBY = 0 , OSTCBX = 0;
-	int i = 0;
+	OSTCBY =  prio_unmap_table[group_run_bits];
+	OSTCBX = prio_unmap_table[OSTCBY];
+	/*
 	for( i = 0 ; i < 8 ; i++)
 	{	//Finding the first set bit in group run bits
 		if(group_run_bits >> 1)
@@ -131,7 +133,6 @@ uint8_t highest_prio(void)
 		}
 		group_run_bits = group_run_bits >> 1;
 	}
-
 	for( i = 0 ; i < 8 ; i++)
 	{	//finding the first set bit in run list
 		if( run_bits[OSTCBY] >> 1)
@@ -142,6 +143,7 @@ uint8_t highest_prio(void)
 
 	}
 	//final priority
+	*/
 	int prio = (OSTCBY << 3) + OSTCBX;
 	return prio; 
 }
