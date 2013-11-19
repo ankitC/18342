@@ -13,12 +13,11 @@
 #include <asm.h>
 #include <arm/psr.h>
 #include <kernel_helper.h>
-//extern void irq_handler(void);
 
 /*
  * Code to take an IRQ.
  */
- .global irq_handler
+.global irq_wrapper
 FUNC(irq_wrapper)
 	/* lr starts off pointing at next instruction + 4 -- fix this. */
 	sub      lr, lr, #4

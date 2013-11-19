@@ -6,7 +6,6 @@
  * @date 2008-11-21
  */
  
-
 #include <types.h>
 #include <assert.h>
 

@@ -9,6 +9,8 @@
 #ifndef _ASSERT_H_
 #define _ASSERT_H_
 
+#define null ((void*)0)
+
 #ifdef NDEBUG
 
 #define assert(e) ((void)0)
