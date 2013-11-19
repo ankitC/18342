@@ -25,7 +25,6 @@
 
 #define START_ADD 0xa0000000
 #define BOUND 0xa3000000
-#define null (void*)0
 
 void swap(task_t, task_t);
 void sort(task_t*, int);

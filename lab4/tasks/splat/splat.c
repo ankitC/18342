@@ -15,6 +15,10 @@
 
 int main(int argc, char** argv)
 {
+	/* unused arguments */
+	argc = argc;
+	argv = argv;
+
 	while(1)
 	{
 		write(STDOUT_FILENO, "\r|", 2);
