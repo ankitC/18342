@@ -49,7 +49,6 @@ struct sched_context
 };
 typedef volatile struct sched_context sched_context_t;
 
-
 struct tcb
 {
 	uint8_t          native_prio;        /**< The native priority of the task without escalation */
@@ -66,3 +65,4 @@ typedef volatile struct tcb tcb_t;
 
 
 #endif /* TASK_H */
+
