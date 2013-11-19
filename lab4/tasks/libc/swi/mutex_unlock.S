@@ -16,8 +16,6 @@
 	.global	mutex_unlock
 
 FUNC(mutex_unlock)
-
-mutex_unlock:
 	stmfd sp!, {r1-r12,lr}  @ Backing up registers
 	swi MUTEX_UNLOCK
 	cmp r0, #0		@ Check the return value of SWI

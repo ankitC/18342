@@ -16,8 +16,6 @@
 	.global task_create
 
 FUNC(task_create)
-
-task_create:
 	stmfd sp!, {r1-r12,lr}	@ Backing up the registers
 	swi CREATE_SWI
 

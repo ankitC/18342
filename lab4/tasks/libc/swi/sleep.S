@@ -13,8 +13,6 @@
 	.global sleep
 
 FUNC(sleep)
-
-sleep:
 	stmfd sp!, {r1-r12,lr}  @ Backing up register
     swi SLEEP_SWI
  	ldmfd sp!, {r1-r12,lr}  @ Restoring registers

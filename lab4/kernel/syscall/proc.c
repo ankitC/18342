@@ -21,33 +21,45 @@
 #include <arm/exception.h>
 #include <arm/physmem.h>
 #include <device.h>
+#include <assert.h>
 
 #define START_ADD 0xa0000000
 #define BOUND 0xa3000000
-#define null (void*)0
+
+void swap(task_t, task_t);
+void sort(task_t*, int);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	//return 1;  remove this line after adding your code 
-	int i,j = 0;
-	if(num_tasks > 64)
-		return -EINVAL;//TODO set EINVAL
+	unsigned int i,j = 0;
 
-	for(i = 0 ; (unsigned)i < num_tasks ; i++)
+	/* check for total number of tasks. return error if greater than 64 */
+	if(num_tasks > 62)
+		return -EINVAL;
+
+	for(i = 0 ; i < num_tasks ; i++)
 	{
+		/* check if function pointer is NULL */
 		if(tasks[i].lambda == null)
-			return -EINVAL;//TODO Function is null
+			return -EINVAL;
 
-		for(j=0 ; (unsigned)j < num_tasks ; j++)
-		{
+		/* check if stack pointers of two tasks are same */
+		for(j=0 ; j < num_tasks ; j++)
 			if(tasks[i].stack_pos == tasks[j].stack_pos && i !=j)
-				return -EINVAL;//TODO Function has same stack position as some other task
-		}
+				return -EINVAL;
 
+		/* check if stack pointer lies outside the valid address space */
 		if(!(valid_addr(tasks[i].stack_pos, sizeof(tasks[i]), START_ADD, BOUND)))
-				return -EFAULT;//TODO Invalid Memory location EFAULT
+				return -EFAULT;
 	}
-	return 1; //TODO, put to avoid warning
+
+	// TODO: do schedulability test and then allocate_tasks
+	
+	sort(tasks, num_tasks);
+	allocate_tasks(&tasks, num_tasks);
+
+	
+	assert(0); /* should never reach here */
 }
 
 int event_wait(unsigned int dev  __attribute__((unused)))
@@ -63,3 +75,27 @@ void invalid_syscall(unsigned int call_num  __attribute__((unused)))
 	while(1);
 	//return 0xBADC0DE;
 }
+
+void sort(task_t* temp, int size)
+{
+	int i = 0, j = 0;
+	for (i = 0 ;i < size ; i ++)
+	{
+		for ( j = 0; j < size ; j++) //TODO can it be < size -i?
+		{
+			if( temp[i].T > temp[j].T)
+				swap(temp[i], temp[j]);
+				
+		}
+
+	}
+
+}
+
+void swap(task_t a, task_t b)
+{
+	task_t t = a;
+	a = b;
+	b = t;
+}
+

@@ -65,6 +65,8 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].context.r6 = (uint32_t)tasks[i]->stack_pos;
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = null;
+		//Adding each task to the run queue
+		runqueue_add(&system_tcb[i], i);
 	}
 	assert(tasks[i] == null);
 		//panic("Tasks still pending to be allcoated.\n");	
@@ -79,4 +81,6 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	system_tcb[SLEEP_TASK_PRIO].context.r6 = 0xa000001f;
 	system_tcb[SLEEP_TASK_PRIO].holds_lock = 0;
 	system_tcb[SLEEP_TASK_PRIO].sleep_queue = null;
+	//Calling runqueue_add for idle task
+	runqueue_add(&system_tcb[SLEEP_TASK_PRIO], SLEEP_TASK_PRIO);
 }
