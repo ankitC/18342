@@ -47,11 +47,10 @@ int mutex_create(void)
 		{
 			gtMutex[i].bAvailable = FALSE;
 			return i; // fix this to return the correct value
-
 		}
 	}
 	//Returned only if we run out of mutexes
-	return ENOMEM;
+	return -ENOMEM;
 }
 
 int mutex_lock(int mutex  __attribute__((unused)))
@@ -61,26 +60,28 @@ int mutex_lock(int mutex  __attribute__((unused)))
 
 	/* Error checks */
 	if(gtMutex[mutex].bAvailable == TRUE || mutex >= OS_NUM_MUTEX || mutex < 0)
-		return EINVAL;
+		return -EINVAL;
 
 	/* If you already own the mutex, it will cause a deadlock*/
 	if(cur == gtMutex[mutex].pHolding_Tcb)
-		return EDEADLOCK;
+		return -EDEADLOCK;
+
 #ifdef DEBUG
 	printf("Trying to allocated mutex to %u.\n", cur->native_prio);
 #endif
+
 	/* If someone is already holding the mutex and its not yourself */
 	if(gtMutex[mutex].pHolding_Tcb!= null)
 	{
 		/* Remove the current from run queue and add it to the sleep queue */
 		if(cur != runqueue_remove(cur->cur_prio))
 			printf("Couldn't remove current during mutex lock.\n");
-		
+
 		cur->sleep_queue = null;
-		
+
 		if(gtMutex[mutex].pSleep_queue == null)
 			gtMutex[mutex].pSleep_queue = cur;
-			
+
 		else/* Find the last element on the sleep queue.*/
 		{
 			while(next->sleep_queue != null)
@@ -99,10 +100,12 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	gtMutex[mutex].pHolding_Tcb = cur;
 	gtMutex[mutex].bLock = TRUE;
 	cur->holds_lock++;
+
 #ifdef DEBUG
 	printf("Mutex allocated to task %u.\n", cur->native_prio);
 #endif
-	return 0; // fix this to return the correct value
+
+	return 0;
 }
 
 int mutex_unlock(int mutex  __attribute__((unused)))
@@ -111,11 +114,11 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	tcb_t *head = gtMutex[mutex].pSleep_queue;
 
 	if(gtMutex[mutex].bAvailable == TRUE || mutex >= OS_NUM_MUTEX || mutex < 0)
-		return EINVAL;
+		return -EINVAL;
 
-	/* If you do not hold the mutex but cal an unlock on it, then Invalid!!*/
+	/* If you do not hold the mutex but call an unlock on it, then Invalid!!*/
 	if(cur != gtMutex[mutex].pHolding_Tcb)
-		return EPERM;
+		return -EPERM;
 
 	cur->holds_lock--;
 	gtMutex[mutex].pHolding_Tcb = null;
@@ -128,9 +131,10 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 		head->sleep_queue=null;
 		runqueue_add(head, head->cur_prio);
 	}
+
 #ifdef DEBUG
 	printf("Mutex deallocated from task %u.\n", cur->native_prio);
 #endif
-	return 0; // fix this to return the correct value
-}
 
+	return 0;
+}

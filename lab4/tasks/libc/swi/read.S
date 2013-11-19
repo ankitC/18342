@@ -1,4 +1,4 @@
-@ read.S: read sycall wrapper
+@ read.S: read syscall wrapper
 @
 @ Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
 @          Group Member 2: Jiten Mehta <jitenm>
@@ -13,6 +13,7 @@
 
 	.global errno
 	.global	read
+
 read:
 
 	stmfd sp!, {r1-r12,lr}  @ Backing up registers
