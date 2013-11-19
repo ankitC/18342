@@ -11,7 +11,9 @@
  */
 
 	.file "ctx_switch_asm.S"
-
+	.global "launch_task"
+	.global "ctx_switch_full"
+	.global "ctx_switch_half"
 #include <asm.h>
 #include <arm/psr.h>
 
