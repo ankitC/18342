@@ -67,6 +67,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = null;
 
+		/* Initialize the sleep queue and next match for all devices */
 		dev_init();
 
 		/* Adding each task to the corresponding device sleep queue */
@@ -78,6 +79,11 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 				devices[j].sleep_queue = tasks[i];
 			}
 		}
+
+		/**
+		 * Zero because this is the initialization of the tasks so you want to
+		 * add all the tasks on all the devices to the run queue
+		 */
 		dev_update(0);
 	}
 
@@ -95,6 +101,6 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	system_tcb[SLEEP_TASK_PRIO].holds_lock = 0;
 	system_tcb[SLEEP_TASK_PRIO].sleep_queue = null;
 
-	/* Calling runqueue_add for idle task */
+	/* Adding idle task to the run queue */
 	runqueue_add(&system_tcb[SLEEP_TASK_PRIO], SLEEP_TASK_PRIO);
 }

@@ -81,21 +81,22 @@ void dev_wait(unsigned int dev __attribute__((unused)))
 void dev_update(unsigned long millis __attribute__((unused)))
 {
 	int i = 0;
-	/*Choosing the device with corresponding match value, and running the sleep
-	 * queue*/
+
+	/**
+	 * Matching the current time with match value of all the devices
+	 * and add the tasks of the devices whose value matched to the run queue
+	 */
 	for(i = 0; i < NUM_DEVICES; i++)
 	{
 		if(devices[i].next_match == millis)
 		{
 			tcb_t *temp = null;
+			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null; temp = temp->sleep_queue)
-			{
 				runqueue_add(temp, temp->cur_prio);
-			}
-			devices[i].next_match += dev_freq[i];
 
+			/* Update the next_match value of the device */
+			devices[i].next_match += dev_freq[i];
 		}
 	}
-
 }
-
