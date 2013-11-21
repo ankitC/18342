@@ -108,7 +108,7 @@ tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
 	/*Clearing the bits from the group run bits only if there is no other
 	  task set in the same group*/
 	  if(!(run_bits[prio >> 3] & 0x255 ))
-		group_run_bits &=  ~(1 << (prio >> 3);
+		group_run_bits &=  ~(1 << (prio >> 3));
 
 	return (tcb_t *)temp; // returning the tcb of given priority
 }
