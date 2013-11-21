@@ -64,7 +64,15 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 
 int event_wait(unsigned int dev  __attribute__((unused)))
 {
-	return 1; /* remove this line after adding your code */	
+	/* Return invalid if the device does not exist */
+	if(dev >= NUM_DEVICES)
+		return -EINVAL;
+
+	dev_wait(dev);
+	ctx_switch_full(&system_tcb[highest_prio()].context,
+								&get_cur_tcb()->context);
+
+	return 0; /* remove this line after adding your code */	
 }
 
 /* An invalid syscall causes the kernel to exit. */
