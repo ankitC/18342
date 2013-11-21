@@ -44,7 +44,18 @@ FUNC(launch_task)
 /* r0 points to the target context, r1 to the current context. */
 /* add your code to perform a full context switch */
 FUNC(ctx_switch_full)
-
+	 stmia r1, {r4, r5, r6, r7, r8, r9, r10, r11, sp, lr}
+	 ldmia r0, {r4, r5, r6, r7, r8, r9, r10, r11, sp, pc}
 
 /*add your code to perform a half context switch */	
 FUNC(ctx_switch_half)
+	ldr r4, [r0]
+   	ldr r5, [r0, #4]
+    ldr r6, [r0, #8]
+    ldr r7, [r0, #12]
+    ldr r8, [r0, #16]
+	ldr r9, [r0, #20]
+	ldr r10, [r0, #24]
+    ldr r11, [r0, #28]   
+    ldr sp, [r0, #32]
+    ldr pc, [r0, #36]
