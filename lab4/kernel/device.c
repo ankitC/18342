@@ -15,6 +15,7 @@
 #include <arm/reg.h>
 #include <arm/psr.h>
 #include <arm/exception.h>
+#include <assert.h>
 
 /**
  * @brief Fake device maintainence structure.
@@ -45,8 +46,16 @@ static dev_t devices[NUM_DEVICES];
  */
 void dev_init(void)
 {
-   /* the following line is to get rid of the warning and should not be needed */	
-   devices[0]=devices[0];
+    /**
+	 * Initializing sleep queue to NULL and next match to the
+	 * corresponding device frequency
+	 */
+	int i = 0;
+	for(i = 0; i < NUM_DEVICES; i++)
+	{
+		devices[i].sleep_queue = null;
+		devices[i].next_match = 0;
+	}
 }
 
 
@@ -71,6 +80,23 @@ void dev_wait(unsigned int dev __attribute__((unused)))
  */
 void dev_update(unsigned long millis __attribute__((unused)))
 {
-	
-}
+	int i = 0;
 
+	/**
+	 * Matching the current time with match value of all the devices
+	 * and add the tasks of the devices whose value matched to the run queue
+	 */
+	for(i = 0; i < NUM_DEVICES; i++)
+	{
+		if(devices[i].next_match == millis)
+		{
+			tcb_t *temp = null;
+			/* Add the task to the run queue according to its priority */
+			for(temp = devices[i].sleep_queue; temp != null; temp = temp->sleep_queue)
+				runqueue_add(temp, temp->cur_prio);
+
+			/* Update the next_match value of the device */
+			devices[i].next_match += dev_freq[i];
+		}
+	}
+}

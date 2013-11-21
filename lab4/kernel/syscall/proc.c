@@ -85,7 +85,7 @@ void sort(task_t* temp, int size)
 		{
 			if( temp[i].T > temp[j].T)
 				swap(temp[i], temp[j]);
-				
+
 		}
 
 	}
