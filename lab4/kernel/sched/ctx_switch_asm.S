@@ -14,9 +14,6 @@
 #include <arm/psr.h>
 
 	.file "ctx_switch_asm.S"
-	.global "launch_task"
-	.global "ctx_switch_full"
-	.global "ctx_switch_half"
 
 /**
  * @brief Special exit routine from the scheduler that launches a task for the
