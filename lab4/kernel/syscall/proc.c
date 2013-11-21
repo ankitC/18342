@@ -69,8 +69,7 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 		return -EINVAL;
 
 	dev_wait(dev);
-	ctx_switch_full(&system_tcb[highest_prio()].context,
-								&get_cur_tcb()->context);
+	dispatch_sleep();
 
 	return 0; /* remove this line after adding your code */	
 }

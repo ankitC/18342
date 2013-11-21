@@ -41,7 +41,19 @@ void dispatch_init(tcb_t* idle __attribute__((unused)))
  */
 void dispatch_save(void)
 {
+	uint8_t next_highest_prio;
+    tcb_t *next_tcb, *prev_tcb;
 	
+	/* Add the task back to the runqueue */    
+    runqueue_add(cur_tcb, cur_tcb->cur_prio);
+
+    /* Take the next highest priority task and remove it from the queue */
+    next_highest_prio = highest_prio();
+    next_tcb = runqueue_remove(next_highest_prio);
+
+    prev_tcb = cur_tcb;
+    cur_tcb = next_tcb;
+ 	ctx_switch_full(&(next_tcb->context),&(prev_tcb->context));
 }
 
 /**
@@ -52,7 +64,15 @@ void dispatch_save(void)
  */
 void dispatch_nosave(void)
 {
+	uint8_t next_highest_prio;
+    tcb_t *next_tcb;
 
+     /* Take the next highest priority task and remove it from the queue */
+    next_highest_prio = highest_prio();
+    next_tcb = runqueue_remove(next_highest_prio);
+    cur_tcb = next_tcb;
+
+    ctx_switch_half(&(next_tcb->context));
 }
 
 
@@ -64,6 +84,16 @@ void dispatch_nosave(void)
  */
 void dispatch_sleep(void)
 {
+	uint8_t next_highest_prio;
+    tcb_t *next_tcb, *prev_tcb;
+	
+	/* Take the next highest priority task and remove it from the queue */
+    next_highest_prio = highest_prio();
+    next_tcb = runqueue_remove(next_highest_prio);
+
+    prev_tcb = cur_tcb;
+    cur_tcb = next_tcb;
+ 	ctx_switch_full(&(next_tcb->context),&(prev_tcb->context));
 	
 }
 
