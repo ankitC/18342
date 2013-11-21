@@ -54,7 +54,7 @@ void dev_init(void)
 	for(i = 0; i < NUM_DEVICES; i++)
 	{
 		devices[i].sleep_queue = null;
-		devices[i].next_match = 0;
+		devices[i].next_match = dev_freq[i];
 	}
 }
 
