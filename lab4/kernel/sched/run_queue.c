@@ -126,5 +126,5 @@ uint8_t highest_prio(void)
 	 *	final priority
 	 */
 	int prio = (OSTCBY << 3) + OSTCBX;
-	return prio; 
+	return prio;
 }

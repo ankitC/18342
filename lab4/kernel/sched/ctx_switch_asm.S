@@ -10,12 +10,13 @@
  * @date   2008-11-21
  */
 
+#include <asm.h>
+#include <arm/psr.h>
+
 	.file "ctx_switch_asm.S"
 	.global "launch_task"
 	.global "ctx_switch_full"
 	.global "ctx_switch_half"
-#include <asm.h>
-#include <arm/psr.h>
 
 /**
  * @brief Special exit routine from the scheduler that launches a task for the
