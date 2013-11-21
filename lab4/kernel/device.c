@@ -67,16 +67,20 @@ void dev_init(void)
  */
 void dev_wait(unsigned int dev __attribute__((unused)))
 {
-	
+	tcb_t* present = get_cur_tcb();
+
+	/* Adding to the head of sleep queue of the device */
+	present->sleep_queue = devices[dev].sleep_queue;
+	devices[dev].sleep_queue = present;
 }
 
 
 /**
- * @brief Signals the occurrence of an event on all applicable devices. 
- * This function should be called on timer interrupts to determine that 
- * the interrupt corresponds to the event frequency of a device. If the 
- * interrupt corresponded to the interrupt frequency of a device, this 
- * function should ensure that the task is made ready to run 
+ * @brief Signals the occurrence of an event on all applicable devices.
+ * This function should be called on timer interrupts to determine that
+ * the interrupt corresponds to the event frequency of a device. If the
+ * interrupt corresponded to the interrupt frequency of a device, this
+ * function should ensure that the task is made ready to run.
  */
 void dev_update(unsigned long millis __attribute__((unused)))
 {
@@ -92,9 +96,11 @@ void dev_update(unsigned long millis __attribute__((unused)))
 		{
 			tcb_t *temp = null;
 			/* Add the task to the run queue according to its priority */
-			for(temp = devices[i].sleep_queue; temp != null; temp = temp->sleep_queue)
+			for(temp = devices[i].sleep_queue; temp != null;
+									temp = temp->sleep_queue)
 				runqueue_add(temp, temp->cur_prio);
 
+			devices[i].sleep_queue = null;
 			/* Update the next_match value of the device */
 			devices[i].next_match += dev_freq[i];
 		}

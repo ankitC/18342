@@ -79,13 +79,12 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 				devices[j].sleep_queue = tasks[i];
 			}
 		}
-
+	}
 		/**
 		 * Zero because this is the initialization of the tasks so you want to
 		 * add all the tasks on all the devices to the run queue
 		 */
 		dev_update(0);
-	}
 
 	assert(tasks[i] == null);
 	//panic("Tasks still pending to be allcoated.\n");	
@@ -95,6 +94,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	system_tcb[SLEEP_TASK_PRIO].cur_prio = SLEEP_TASK_PRIO;
 	system_tcb[SLEEP_TASK_PRIO].context.r5 = 0;
 	system_tcb[SLEEP_TASK_PRIO].context.r4 = (uint32_t) &idle;
+
 	//TODO: Stack Pointer for idle task will be?
 	//Design Decision.
 	system_tcb[SLEEP_TASK_PRIO].context.r6 = 0xa000001f;
