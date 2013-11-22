@@ -27,7 +27,7 @@ tcb_t system_tcb[OS_MAX_TASKS]; /* allocate memory for system TCBs */
 void sched_init(task_t* main_task  __attribute__((unused)))
 {
 	/* Initialize the run queue */
-	runqueue_init();
+	//runqueue_init();
 	dispatch_init(&system_tcb[IDLE_PRIO]);
 }
 
@@ -37,8 +37,9 @@ void sched_init(task_t* main_task  __attribute__((unused)))
  
 static void __attribute__((unused)) idle(void)
 {
-	 enable_interrupts();
-	 while(1);
+	printf("I=%u\n", highest_prio());
+	enable_interrupts();
+	while(1);
 }
 
 /**
@@ -60,6 +61,8 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	task_t* temp_tasks = *tasks;
 	unsigned int i = 0;
 	
+	runqueue_init();
+	//printf("A=%u\n", highest_prio());
 	for(i = 1; i <= num_tasks; i++)
 	{
 		//assert(temp_tasks[i-1] != null);
@@ -73,10 +76,11 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].context.sp = system_tcb[i].kstack_high;
 		system_tcb[i].context.lr = &launch_task;
 		system_tcb[i].holds_lock = 0;
-		
+
 		system_tcb[i].sleep_queue = null;
-		
+
 		runqueue_add(&system_tcb[i], i);
+		//printf("A%d=%u\n", i, highest_prio());
 	}
 
 

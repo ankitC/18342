@@ -35,7 +35,8 @@ static __attribute__((unused)) tcb_t* cur_tcb; /* use this if needed */
 void dispatch_init(tcb_t* idle __attribute__((unused)))
 {
 	tcb_t* present = get_cur_tcb();
-	present = idle;	
+	present = idle;
+	//printf("DI=%u\n", highest_prio());
 	enable_interrupts();
 }
 
@@ -52,8 +53,8 @@ void dispatch_save(void)
 {
 	uint8_t next_highest_prio;
     tcb_t *next_tcb, *prev_tcb;
-	
-	/* Add the task back to the runqueue */    
+
+	/* Add the task back to the runqueue */
     runqueue_add(cur_tcb, cur_tcb->cur_prio);
 
     /* Take the next highest priority task and remove it from the queue */
@@ -62,10 +63,12 @@ void dispatch_save(void)
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
+	disable_interrupts();
+	printf("SB=%u\n", highest_prio());
  	ctx_switch_full((sched_context_t*) &(next_tcb->context),
  		(sched_context_t*) &(prev_tcb->context));
+	printf("SA=%u\n", highest_prio());
  	enable_interrupts();
- 	 printf("S");
 }
 
 /**
@@ -82,14 +85,13 @@ void dispatch_nosave(void)
      /* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
     next_tcb = runqueue_remove(next_highest_prio);
-    
+
     cur_tcb = next_tcb;
- 
- 	enable_interrupts();
- 	printf("H");
+
+ 	disable_interrupts();
+
+	printf("NB=%u\n", highest_prio());
     ctx_switch_half((sched_context_t*) &(next_tcb->context));
-   
-    
 }
 
 
@@ -103,15 +105,18 @@ void dispatch_sleep(void)
 {
 	uint8_t next_highest_prio;
     tcb_t *next_tcb, *prev_tcb;
-	
+
 	/* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
     next_tcb = runqueue_remove(next_highest_prio);
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
+	disable_interrupts();
+	printf("LB=%u\n", highest_prio());
  	ctx_switch_full((sched_context_t*) &(next_tcb->context),
  		(sched_context_t*) &(prev_tcb->context));
+	printf("LA=%u\n", highest_prio());
 	enable_interrupts();
 }
 
@@ -120,7 +125,7 @@ void dispatch_sleep(void)
  */
 uint8_t get_cur_prio(void)
 {
-	return cur_tcb->cur_prio; //fix this; dummy return to prevent compiler warning
+	return cur_tcb->cur_prio;
 }
 
 /**
@@ -128,5 +133,5 @@ uint8_t get_cur_prio(void)
  */
 tcb_t* get_cur_tcb(void)
 {
-	return (tcb_t *) cur_tcb; //fix this; dummy return to prevent compiler warning
+	return cur_tcb;
 }
