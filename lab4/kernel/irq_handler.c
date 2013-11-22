@@ -34,6 +34,7 @@ void irq_handler(void)
 
 	timer_counter++;
 
+	printf("-");
 	/* Updating the match register for the counter */
 	clocks_till_interrupt = reg_read(OSTMR_OSMR_ADDR(0));
 	clocks_till_interrupt += (OSTMR_FREQ*OS_TIMER_RESOLUTION)/1000;

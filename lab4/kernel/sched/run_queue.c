@@ -61,12 +61,8 @@ void runqueue_init(void)
 {
 	int i = 0;
 	group_run_bits = 0;
-
 	for( i = 0 ; i < OS_MAX_TASKS/8 ; i++)
-	{
 		run_bits[i] = 0;
-	}
-
 }
 
 /**
@@ -100,19 +96,22 @@ void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute
  */
 tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
 {
-	//Removing the task from the run queue
+	/* Removing the task from the run queue */
 	tcb_t* temp = run_list[prio];
 	run_list[prio] = null;
 
-	//Clearing the bits from the run bits
+	/* Clearing the bits from the run bits */
 	run_bits[prio >> 3] &= ~(1 << (prio & 0x07));
 
-	/*Clearing the bits from the group run bits only if there is no other
-	  task set in the same group*/
+	/**
+	 * Clearing the bits from the group run bits only if there is no other
+	 * task set in the same group
+	 */
 	if(!(run_bits[prio >> 3] & 0x255 ))
-		group_run_bits &=  ~(1 << (prio >> 3));
+		group_run_bits &= ~(1 << (prio >> 3));
 
-	return (tcb_t *)temp; // returning the tcb of given priority
+	/* Returning the tcb of given priority */
+	return (tcb_t *)temp;
 }
 
 /**

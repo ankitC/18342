@@ -34,9 +34,8 @@ static __attribute__((unused)) tcb_t* cur_tcb; /* use this if needed */
  */
 void dispatch_init(tcb_t* idle __attribute__((unused)))
 {
-		
-}
 
+}
 
 /**
  * @brief Context switch to the highest priority task while saving off the 
@@ -61,10 +60,10 @@ void dispatch_save(void)
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
 	disable_interrupts();
-	//printf("SB=%u\n", highest_prio());
+	printf("SB=%u\n", highest_prio());
  	ctx_switch_full((sched_context_t*) &(next_tcb->context),
  		(sched_context_t*) &(prev_tcb->context));
-	//printf("SA=%u\n", highest_prio());
+	printf("SA=%u\n", highest_prio());
  	enable_interrupts();
 }
 
@@ -81,13 +80,12 @@ void dispatch_nosave(void)
 
      /* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
-    printf("NS=%u\n", highest_prio());
     next_tcb = runqueue_remove(next_highest_prio);
-    printf("1=%u\n", next_tcb->native_prio);
+    //printf("1=%u\n", next_tcb->cur_prio);
     cur_tcb = next_tcb;
+    printf("NS=%u\n", highest_prio());
     ctx_switch_half((sched_context_t*) &(next_tcb->context));
 }
-
 
 /**
  * @brief Context switch to the highest priority task that is not this task -- 

@@ -26,16 +26,15 @@ tcb_t system_tcb[OS_MAX_TASKS]; /* allocate memory for system TCBs */
 
 void sched_init(task_t* main_task  __attribute__((unused)))
 {
-	
+
 }
 
 /**
  * @brief This is the idle task that the system runs when no other task is runnable
  */
- 
 static void __attribute__((unused)) idle(void)
 {
-	printf("INDIA\n");
+	printf("I\n");
 	enable_interrupts();
 	while(1);
 }
@@ -58,10 +57,10 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 
 	task_t* temp_tasks = *tasks;
 	unsigned int i = 0;
-	
+
 	/* Initilize the run_queue and add the allocated tasks to the runqueue */
 	runqueue_init();
-	
+
 	for(i = 1; i <= num_tasks; i++)
 	{
 		//assert(temp_tasks[i-1] != null);
@@ -75,12 +74,10 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].context.sp = system_tcb[i].kstack_high;
 		system_tcb[i].context.lr = &launch_task;
 		system_tcb[i].holds_lock = 0;
-
 		system_tcb[i].sleep_queue = null;
 
 		runqueue_add(&system_tcb[i], i);
 	}
-
 
 	/* Initializing the idle task */
 	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
@@ -94,7 +91,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	system_tcb[IDLE_PRIO].holds_lock = 0;
 	system_tcb[IDLE_PRIO].sleep_queue = null;
 	system_tcb[IDLE_PRIO].context.lr = &idle;
-	
+
 	/* Adding idle task to the run queue */
 	runqueue_add(&system_tcb[IDLE_PRIO], IDLE_PRIO);
 }

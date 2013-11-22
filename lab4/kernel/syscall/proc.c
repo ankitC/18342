@@ -51,22 +51,22 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	}
 
 	// TODO: do schedulability test and then allocate_tasks
-	
+
 	sort(tasks, num_tasks);
-	
+
 	/* Initialize the sleep queue and next match for all devices */
 	dev_init();
 
 	/* Initialize all the mutices */
 	mutex_init();
 
-
+	/* Allocate all the tasks */
 	allocate_tasks(&tasks, num_tasks);
 
-	printf("HP=%u\n", highest_prio());
-	
+	//printf("HP=%u\n", highest_prio());
+
 	enable_interrupts();
-	
+
 	dispatch_nosave();
 
 	assert(0); /* should never reach here */
@@ -79,9 +79,7 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 		return -EINVAL;
 
 	dev_wait(dev);
-
 	dispatch_sleep();
-
 	return 0;
 }
 

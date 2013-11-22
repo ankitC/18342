@@ -61,7 +61,6 @@ void dev_init(void)
 	}
 }
 
-
 /**
  * @brief Puts a task to sleep on the sleep queue until the next
  * event is signalled for the device.
@@ -76,7 +75,6 @@ void dev_wait(unsigned int dev __attribute__((unused)))
 	present->sleep_queue = devices[dev].sleep_queue;
 	devices[dev].sleep_queue = present;
 }
-
 
 /**
  * @brief Signals the occurrence of an event on all applicable devices.
@@ -98,11 +96,14 @@ void dev_update(unsigned long millis __attribute__((unused)))
 		if(devices[i].next_match == millis)
 		{
 			tcb_t *temp = null;
-			//printf("D:%dF\n",i);
+			printf("De:%d\n", i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)
+			{
 				runqueue_add(temp, temp->cur_prio);
+				printf("DP:%02x\n", highest_prio());
+			}
 
 			/* Update the sleep queue and next_match value of the device */
 			devices[i].sleep_queue = null;
