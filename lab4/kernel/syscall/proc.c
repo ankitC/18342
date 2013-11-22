@@ -2,11 +2,11 @@
  * 
  * @brief Implementation of `process' syscalls
  *
- * @author Mike Kasick <mkasick@andrew.cmu.edu>
- * @date   Sun, 14 Oct 2007 00:07:38 -0400
+ * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *		    Group Member 3: Ankit Chheda <achheda>
  *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-11-12
+ * @date:   Nov 20, 2013 9:00 PM
  */
 
 #include <exports.h>
@@ -15,16 +15,13 @@
 #include <kernel.h>
 #include <syscall.h>
 #include <sched.h>
-
+#include <lock.h>
 #include <arm/reg.h>
 #include <arm/psr.h>
 #include <arm/exception.h>
 #include <arm/physmem.h>
 #include <device.h>
 #include <assert.h>
-
-#define START_ADD 0xa0000000
-#define BOUND 0xa3000000
 
 void swap(task_t, task_t);
 void sort(task_t*, int);
@@ -37,27 +34,36 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	if(num_tasks > 62)
 		return -EINVAL;
 
-	for(i = 0 ; i < num_tasks ; i++)
+	for(i = 0 ; i < num_tasks; i++)
 	{
 		/* check if function pointer is NULL */
 		if(tasks[i].lambda == null)
 			return -EINVAL;
 
 		/* check if stack pointers of two tasks are same */
-		for(j=0 ; j < num_tasks ; j++)
+		for(j = 0 ; j < num_tasks; j++)
 			if(tasks[i].stack_pos == tasks[j].stack_pos && i !=j)
 				return -EINVAL;
 
 		/* check if stack pointer lies outside the valid address space */
-		if(!(valid_addr(tasks[i].stack_pos, sizeof(tasks[i]), START_ADD, BOUND)))
+		if(!(valid_addr(tasks[i].stack_pos, sizeof(tasks[i]), USR_START_ADDR, USR_END_ADDR)))
 				return -EFAULT;
 	}
 
 	// TODO: do schedulability test and then allocate_tasks
 	
 	sort(tasks, num_tasks);
+	
+	/* Initialize the sleep queue and next match for all devices */
+	dev_init();
+
+	/* Initialize all the mutices */
+	mutex_init();
+
 	allocate_tasks(&tasks, num_tasks);
 
+	sched_init((task_t*) 0);
+dispatch_nosave();	
 	
 	assert(0); /* should never reach here */
 }
@@ -69,9 +75,10 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 		return -EINVAL;
 
 	dev_wait(dev);
+
 	dispatch_sleep();
 
-	return 0; /* remove this line after adding your code */	
+	return 0;
 }
 
 /* An invalid syscall causes the kernel to exit. */
@@ -80,23 +87,15 @@ void invalid_syscall(unsigned int call_num  __attribute__((unused)))
 	printf("Kernel panic: invalid syscall -- 0x%08x\n", call_num);
 	disable_interrupts();
 	while(1);
-	//return 0xBADC0DE;
 }
 
 void sort(task_t* temp, int size)
 {
 	int i = 0, j = 0;
 	for (i = 0 ;i < size ; i ++)
-	{
 		for ( j = 0; j < size ; j++) //TODO can it be < size -i?
-		{
 			if( temp[i].T > temp[j].T)
 				swap(temp[i], temp[j]);
-
-		}
-
-	}
-
 }
 
 void swap(task_t a, task_t b)
@@ -105,4 +104,3 @@ void swap(task_t a, task_t b)
 	a = b;
 	b = t;
 }
-

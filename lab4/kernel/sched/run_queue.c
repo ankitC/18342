@@ -2,8 +2,11 @@
  * 
  * @brief Run queue maintainence routines.
  *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-11-21
+ * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *		    Group Member 3: Ankit Chheda <achheda>
+ *
+ * @date:   Nov 20, 2013 9:00 PM
  */
 
 #include <types.h>
@@ -12,8 +15,6 @@
 #include <kernel.h>
 #include <sched.h>
 #include "sched_i.h"
-
-
 
 static tcb_t* run_list[OS_MAX_TASKS]  __attribute__((unused));
 
@@ -78,13 +79,13 @@ void runqueue_init(void)
  */
 void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute__((unused)))
 {
-	//Adding the task to the run list
+	/* Adding the task to the run list */
 	run_list[prio] = tcb;
 
-	//Setting group run bits
+	/* Setting group run bits */
 	group_run_bits |= prio >> 3;
 
-	//Setting up the run bits
+	/* Setting up the run bits */
 	run_bits[prio >> 3] = prio & 0x07;
 }
 
@@ -122,9 +123,8 @@ uint8_t highest_prio(void)
 	int OSTCBY = 0 , OSTCBX = 0;
 	OSTCBY =  prio_unmap_table[group_run_bits];
 	OSTCBX = prio_unmap_table[OSTCBY];
-	/*
-	 *	final priority
-	 */
+	
+	/* final priority */
 	int prio = (OSTCBY << 3) + OSTCBX;
 	return prio;
 }

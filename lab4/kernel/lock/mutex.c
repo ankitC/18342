@@ -3,10 +3,11 @@
  *
  * @brief Implements mutices.
  *
- * @author Harry Q Bovik < PUT YOUR NAMES HERE
+ * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *		    Group Member 3: Ankit Chheda <achheda>
  *
- * 
- * @date  
+ * @date:   Nov 20, 2013 9:00 PM
  */
 
 #define DEBUG_MUTEX
@@ -93,8 +94,9 @@ int mutex_lock(int mutex  __attribute__((unused)))
 		#ifdef DEBUG
 		printf("Mutex unavail for %u. Task %u holds it.\n", cur->native_prio, gtMutex[mutex].pHolding_Tcb->native_prio);	
 		#endif
-			//@TODO: Schedule the next task and put the current to sleep.
-			//dispatch_sleep();
+
+		/* Schedule the next task and put the current to sleep. */
+		dispatch_sleep();
 	}
 
 	gtMutex[mutex].pHolding_Tcb = cur;
@@ -135,6 +137,13 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 #ifdef DEBUG
 	printf("Mutex deallocated from task %u.\n", cur->native_prio);
 #endif
+
+	/* 
+	 * After the mutex is unlocked, check if any higher priority task
+	 * was blocked by the current task.
+	 */	
+	if(get_cur_tcb()->cur_prio < highest_prio())
+		dispatch_save();
 
 	return 0;
 }

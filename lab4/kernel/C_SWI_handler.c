@@ -13,21 +13,10 @@
 #include <syscall.h>
 #include <lock.h>
 
-/* Helper functions */
-//extern void restore_old_handlers(void);
-//extern void exit_to_kernel(int status);
-//extern void disable_irqs(void);
-
-//extern char* irq_stack;
-
 void C_SWI_handler(int swino, unsigned* args)
 {
 	switch(swino)
 	{
-		/* Exit Syscall */
-		//case(EXIT_SWI):
-			//service_exit(args);
-
 		/* Read Syscall*/
 		case(READ_SWI):
 			args[0] = read_syscall(args[0], (void*)args[1], args[2]);
@@ -78,14 +67,3 @@ void C_SWI_handler(int swino, unsigned* args)
 			invalid_syscall(swino);
 	}
 }
-
-/*
-void service_exit(unsigned* args)
-{
-	int exit_status = (int) args[0];
-	disable_irqs();
-	restore_old_handlers();
-	free(irq_stack);
-	exit_to_kernel(exit_status);
-}
-*/

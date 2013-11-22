@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <task.h>
 #include <unistd.h>
+//#include <lock.h>
 
 
 void panic(const char* str)

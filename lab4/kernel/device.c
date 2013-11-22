@@ -2,13 +2,16 @@
  * @file device.c
  *
  * @brief Implements simulated devices.
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-12-01
+ * 
+ * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *		    Group Member 3: Ankit Chheda <achheda>
+ *
+ * @date:   Nov 18, 2013 9:00 PM
  */
 
 #include <types.h>
 #include <assert.h>
-
 #include <task.h>
 #include <sched.h>
 #include <device.h>
@@ -95,13 +98,14 @@ void dev_update(unsigned long millis __attribute__((unused)))
 		if(devices[i].next_match == millis)
 		{
 			tcb_t *temp = null;
+			printf("D:%dF\n",i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)
 				runqueue_add(temp, temp->cur_prio);
 
+			/* Update the sleep queue and next_match value of the device */
 			devices[i].sleep_queue = null;
-			/* Update the next_match value of the device */
 			devices[i].next_match += dev_freq[i];
 		}
 	}

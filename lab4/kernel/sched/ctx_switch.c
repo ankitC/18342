@@ -2,8 +2,11 @@
  * 
  * @brief C wrappers around assembly context switch routines.
  *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-11-21
+ * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *		    Group Member 3: Ankit Chheda <achheda>
+ *
+ * @date:   Nov 18, 2013 9:00 PM
  */
  
 #include <types.h>
@@ -11,6 +14,10 @@
 
 #include <config.h>
 #include <kernel.h>
+#include <arm/exception.h>
+#include <arm/psr.h>
+#include <inline.h>
+
 #include "sched_i.h"
 
 #ifdef DEBUG_MUTEX
@@ -27,7 +34,9 @@ static __attribute__((unused)) tcb_t* cur_tcb; /* use this if needed */
  */
 void dispatch_init(tcb_t* idle __attribute__((unused)))
 {
-	
+	tcb_t* present = get_cur_tcb();
+	present = idle;	
+	enable_interrupts();
 }
 
 
@@ -53,7 +62,10 @@ void dispatch_save(void)
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
- 	ctx_switch_full(&(next_tcb->context),&(prev_tcb->context));
+ 	ctx_switch_full((sched_context_t*) &(next_tcb->context),
+ 		(sched_context_t*) &(prev_tcb->context));
+ 	enable_interrupts();
+ 	 printf("S");
 }
 
 /**
@@ -70,9 +82,14 @@ void dispatch_nosave(void)
      /* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
     next_tcb = runqueue_remove(next_highest_prio);
+    
     cur_tcb = next_tcb;
-
-    ctx_switch_half(&(next_tcb->context));
+ 
+ 	enable_interrupts();
+ 	printf("H");
+    ctx_switch_half((sched_context_t*) &(next_tcb->context));
+   
+    
 }
 
 
@@ -93,8 +110,9 @@ void dispatch_sleep(void)
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
- 	ctx_switch_full(&(next_tcb->context),&(prev_tcb->context));
-	
+ 	ctx_switch_full((sched_context_t*) &(next_tcb->context),
+ 		(sched_context_t*) &(prev_tcb->context));
+	enable_interrupts();
 }
 
 /**

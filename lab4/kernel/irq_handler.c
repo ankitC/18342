@@ -1,4 +1,4 @@
-/* C_IRQ_handler.c : IRQ handler for maintaining clock ticks.
+/* irq_handler.c : IRQ handler for maintaining clock ticks.
  *
  * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
  *          Group Member 2: Jiten Mehta <jitenm>
@@ -12,6 +12,8 @@
 #include <arm/interrupt.h>
 #include <kernel_helper.h>
 #include <config.h>
+#include <device.h>
+#include <sched.h>
 
 extern unsigned long timer_counter; 
 
@@ -42,8 +44,15 @@ void irq_handler(void)
 	ossr_reg |= OSTMR_OSSR_M0;
 	reg_write(OSTMR_OSSR_ADDR, ossr_reg);
 
+	/*
+	 * Check the devices for their firing and add the
+	 * corresponding tasks to the run queue.
+	 */
+	dev_update(timer_counter * OS_TIMER_RESOLUTION);
+
+	/* Context switch to the highest priority task in the run queue */
+	dispatch_save();
+
 	ossr_reg = reg_read(OSTMR_OSSR_ADDR);
 	return;
 }
-
-

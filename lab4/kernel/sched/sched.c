@@ -2,8 +2,11 @@
  * 
  * @brief Top level implementation of the scheduler.
  *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-11-20
+ * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *		    Group Member 3: Ankit Chheda <achheda>
+ *
+ * @date:   Nov 19, 2013 9:00 PM
  */
 
 #include <types.h>
@@ -19,13 +22,13 @@
 #include <arm/physmem.h>
 #include <device.h>
 
-#define SLEEP_TASK_PRIO OS_MAX_TASKS - 1
-
 tcb_t system_tcb[OS_MAX_TASKS]; /* allocate memory for system TCBs */
 
 void sched_init(task_t* main_task  __attribute__((unused)))
 {
-	
+	/* Initialize the run queue */
+	runqueue_init();
+	dispatch_init(&system_tcb[IDLE_PRIO]);
 }
 
 /**
@@ -57,9 +60,6 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	task_t* temp_tasks = *tasks;
 	unsigned int i = 0;
 	
-	/* Initialize the sleep queue and next match for all devices */
-	dev_init();
-	
 	for(i = 1; i <= num_tasks; i++)
 	{
 		//assert(temp_tasks[i-1] != null);
@@ -70,25 +70,29 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].context.r5 = (uint32_t)temp_tasks[i-1].data;
 		system_tcb[i].context.r4 = (uint32_t)temp_tasks[i-1].lambda;
 		system_tcb[i].context.r6 = (uint32_t)temp_tasks[i-1].stack_pos;
+		system_tcb[i].context.sp = system_tcb[i].kstack_high;
+		system_tcb[i].context.lr = &launch_task;
 		system_tcb[i].holds_lock = 0;
+		
 		system_tcb[i].sleep_queue = null;
-
-		runqueue_add(&system_tcb[i-1], i);
+		
+		runqueue_add(&system_tcb[i], i);
 	}
 
 
 	/* Initializing the idle task */
-	system_tcb[SLEEP_TASK_PRIO].native_prio = SLEEP_TASK_PRIO;
-	system_tcb[SLEEP_TASK_PRIO].cur_prio = SLEEP_TASK_PRIO;
-	system_tcb[SLEEP_TASK_PRIO].context.r5 = 0;
-	system_tcb[SLEEP_TASK_PRIO].context.r4 = (uint32_t) &idle;
+	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
+	system_tcb[IDLE_PRIO].cur_prio = IDLE_PRIO;
+	system_tcb[IDLE_PRIO].context.r5 = 0;
+	system_tcb[IDLE_PRIO].context.r4 = (uint32_t) &idle;
 
 	//TODO: Stack Pointer for idle task will be?
 	//Design Decision.
-	system_tcb[SLEEP_TASK_PRIO].context.r6 = 0xa000001f;
-	system_tcb[SLEEP_TASK_PRIO].holds_lock = 0;
-	system_tcb[SLEEP_TASK_PRIO].sleep_queue = null;
-
+	system_tcb[IDLE_PRIO].context.r6 = 0xa000001f;
+	system_tcb[IDLE_PRIO].context.sp = system_tcb[IDLE_PRIO].kstack_high;
+	system_tcb[IDLE_PRIO].holds_lock = 0;
+	system_tcb[IDLE_PRIO].sleep_queue = null;
+	
 	/* Adding idle task to the run queue */
-	runqueue_add(&system_tcb[SLEEP_TASK_PRIO], SLEEP_TASK_PRIO);
+	runqueue_add(&system_tcb[IDLE_PRIO], IDLE_PRIO);
 }
