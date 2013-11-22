@@ -83,7 +83,7 @@ void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute
 	run_list[prio] = tcb;
 
 	/* Setting group run bits */
-	group_run_bits |= prio >> 3;
+	group_run_bits |= (1 << (prio >> 3));
 
 	/* Setting up the run bits */
 	run_bits[prio >> 3] |= (1 << (prio & 0x07));
@@ -112,8 +112,6 @@ tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
 	if(!(run_bits[prio >> 3] & 0x255 ))
 		group_run_bits &=  ~(1 << (prio >> 3));
 
-	printf("RP=%02u\n", highest_prio());
-	//printf("R:P=%u G=%u R=%u\n", prio, group_run_bits, run_bits[prio>>3]);
 	return (tcb_t *)temp; // returning the tcb of given priority
 }
 
@@ -127,7 +125,6 @@ uint8_t highest_prio(void)
 	OSTCBY = prio_unmap_table[group_run_bits];
 	OSTCBX = prio_unmap_table[run_bits[OSTCBY]];
 
-	printf("r=%u x=%d y=%d\n", run_bits[OSTCBY], OSTCBX, OSTCBY);
 	/* final priority */
 	int prio = (OSTCBY << 3) + OSTCBX;
 	return prio;

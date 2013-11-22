@@ -60,11 +60,13 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	/* Initialize all the mutices */
 	mutex_init();
 
-	//runqueue_init();
+
 	allocate_tasks(&tasks, num_tasks);
 
 	printf("HP=%u\n", highest_prio());
-	sched_init((task_t*) 0);
+	
+	enable_interrupts();
+	
 	dispatch_nosave();
 
 	assert(0); /* should never reach here */

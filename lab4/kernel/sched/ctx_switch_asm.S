@@ -49,8 +49,5 @@ FUNC(ctx_switch_half)
 	ldr r4, [r0]
    	ldr r5, [r0, #4]
     ldr r6, [r0, #8]
-        
-    ldr r8, =global_data
-	
     ldr sp, [r0, #32]
     ldr pc, [r0, #36]

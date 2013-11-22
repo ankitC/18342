@@ -98,7 +98,7 @@ void dev_update(unsigned long millis __attribute__((unused)))
 		if(devices[i].next_match == millis)
 		{
 			tcb_t *temp = null;
-			printf("D:%dF\n",i);
+			//printf("D:%dF\n",i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)

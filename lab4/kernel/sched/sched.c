@@ -26,9 +26,7 @@ tcb_t system_tcb[OS_MAX_TASKS]; /* allocate memory for system TCBs */
 
 void sched_init(task_t* main_task  __attribute__((unused)))
 {
-	/* Initialize the run queue */
-	//runqueue_init();
-	dispatch_init(&system_tcb[IDLE_PRIO]);
+	
 }
 
 /**
@@ -37,7 +35,7 @@ void sched_init(task_t* main_task  __attribute__((unused)))
  
 static void __attribute__((unused)) idle(void)
 {
-	printf("I=%u\n", highest_prio());
+	printf("INDIA\n");
 	enable_interrupts();
 	while(1);
 }
@@ -61,8 +59,9 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	task_t* temp_tasks = *tasks;
 	unsigned int i = 0;
 	
+	/* Initilize the run_queue and add the allocated tasks to the runqueue */
 	runqueue_init();
-	//printf("A=%u\n", highest_prio());
+	
 	for(i = 1; i <= num_tasks; i++)
 	{
 		//assert(temp_tasks[i-1] != null);
@@ -80,7 +79,6 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].sleep_queue = null;
 
 		runqueue_add(&system_tcb[i], i);
-		//printf("A%d=%u\n", i, highest_prio());
 	}
 
 
@@ -88,14 +86,14 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
 	system_tcb[IDLE_PRIO].cur_prio = IDLE_PRIO;
 	system_tcb[IDLE_PRIO].context.r5 = 0;
-	system_tcb[IDLE_PRIO].context.r4 = (uint32_t) &idle;
+	system_tcb[IDLE_PRIO].context.r4 = (uint32_t)&idle;
 
-	//TODO: Stack Pointer for idle task will be?
-	//Design Decision.
-	system_tcb[IDLE_PRIO].context.r6 = 0xa000001f;
+	/* Don't need stack pointer in userspace for idle task */
+	system_tcb[IDLE_PRIO].context.r6 = (unsigned)0xa2000000;
 	system_tcb[IDLE_PRIO].context.sp = system_tcb[IDLE_PRIO].kstack_high;
 	system_tcb[IDLE_PRIO].holds_lock = 0;
 	system_tcb[IDLE_PRIO].sleep_queue = null;
+	system_tcb[IDLE_PRIO].context.lr = &idle;
 	
 	/* Adding idle task to the run queue */
 	runqueue_add(&system_tcb[IDLE_PRIO], IDLE_PRIO);
