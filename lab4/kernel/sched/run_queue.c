@@ -81,12 +81,9 @@ void runqueue_init(void)
  */
 void runqueue_add(tcb_t* tcb , uint8_t prio)
 {
-	printf("a1 %u\n",prio);
 
 	/* Adding the task to the run list */
 	run_list[prio] = tcb;
-	printf("AP%u\n", tcb->cur_prio);
-	printf("APR%u\n", run_list[prio]->cur_prio);
 	/* Setting group run bits */
 	group_run_bits |= (1 << (prio >> 3));
 
@@ -105,17 +102,10 @@ void runqueue_add(tcb_t* tcb , uint8_t prio)
  */
 tcb_t* runqueue_remove(uint8_t prio)
 {
-	int i = 0;
 	/* Removing the task from the run queue */
-	printf("RR %u\n", prio);
 	//tcb_t* temp = run_list[prio];
 	tcb_t* temp = &system_tcb[prio];
-	printf("r1 %u\n",system_tcb[prio].cur_prio);
-	printf("rtemp %u\n",temp->cur_prio);
-	for( i = 0 ; i < OS_MAX_TASKS ; i++)
-	{
-		printf("%u",system_tcb[i].cur_prio);
-	}
+	
 	if(prio == IDLE_PRIO)
 		return temp;
 
@@ -134,7 +124,6 @@ tcb_t* runqueue_remove(uint8_t prio)
 	/* Returning the tcb of given priority */
 	//printf("R:%02x H:%02x\n", prio, highest_prio());
 	
-	printf("r2 %u\n",temp->cur_prio);
 	return (tcb_t *)temp;
 }
 

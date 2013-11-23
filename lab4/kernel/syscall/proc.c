@@ -77,12 +77,6 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 	/* Return invalid if the device does not exist */
 	if(dev >= NUM_DEVICES)
 		return -EINVAL;
-	int i = 0;
-	printf("BW:");
-	for( i = 0 ; i < OS_MAX_TASKS ; i++)
-	{
-		printf("%u",system_tcb[i].cur_prio);
-	}
 	//dev_wait(dev);
 	disable_interrupts();
 	//dispatch_sleep();
@@ -110,11 +104,3 @@ void sort(task_t* temp, int size)
 				temp[j] = t;
 			}
 }
-/*
-void swap(task_t a, task_t b)
-{
-	task_t t = a;
-	a = b;
-	b = t;
-}
-*/

@@ -17,8 +17,6 @@ extern tcb_t system_tcb[];
 
 void C_SWI_handler(int swino, unsigned* args)
 {
-	printf("CSH%u\n", &system_tcb[2].cur_prio);
-	printf("CSH%u SWI: %x\n", system_tcb[2].cur_prio, swino);
 	switch(swino)
 	{
 		/* Read Syscall*/

@@ -98,13 +98,11 @@ void dev_update(unsigned long millis __attribute__((unused)))
 	{
 		if(devices[i].next_match == millis)
 		{
-
-			printf("De:%d\n", i);
+			printf("DF%u", i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)
 			{
-				printf("P%d\n", temp->cur_prio);
 				runqueue_add(temp, temp->cur_prio);
 
 				if(prev!=null)

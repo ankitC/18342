@@ -24,7 +24,7 @@
 #include <exports.h>
 #endif
 
-static __attribute__((unused)) tcb_t* cur_tcb; /* use this if needed */
+static tcb_t* cur_tcb; /* use this if needed */
 
 /**
  * @brief Initialize the current TCB and priority.
@@ -32,10 +32,10 @@ static __attribute__((unused)) tcb_t* cur_tcb; /* use this if needed */
  * Set the initialization thread's priority to IDLE so that anything
  * will preempt it when dispatching the first task.
  */
-void dispatch_init(tcb_t* idle __attribute__((unused)))
-{
+//void dispatch_init(tcb_t*)
+//{
 
-}
+//}
 
 /**
  * @brief Context switch to the highest priority task while saving off the 
@@ -84,15 +84,12 @@ void dispatch_nosave(void)
 
      /* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
-    printf("NS=%u\n", highest_prio());
     next_tcb = runqueue_remove(next_highest_prio);
 
     if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
     cur_tcb = next_tcb;
-	printf("NS=%u\n", system_tcb[2].cur_prio);
-//    printf("NS=%u\n", highest_prio());
     ctx_switch_half((sched_context_t*) &(next_tcb->context));
 }
 
@@ -106,21 +103,9 @@ void dispatch_sleep(void)
 {
 	uint8_t next_highest_prio;
     tcb_t *next_tcb, *prev_tcb;
-	int i = 0;
-	printf("DSP %u\n",get_cur_prio());
-	for( i = 0 ; i < OS_MAX_TASKS ; i++)
-	{
-		printf("%u",system_tcb[i].cur_prio);
-	}
 	/* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
-	printf("DSH %u\n",next_highest_prio);
     next_tcb = runqueue_remove(next_highest_prio);
-
-	for( i = 0 ; i < OS_MAX_TASKS ; i++)
-	{
-		printf("%u",system_tcb[i].cur_prio);
-	}
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
@@ -128,10 +113,8 @@ void dispatch_sleep(void)
     if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
-	printf("BSL=%u\n", get_cur_tcb()->cur_prio );
  	ctx_switch_full((sched_context_t*) &(next_tcb->context),
  		(sched_context_t*) &(prev_tcb->context));
- 	printf("BSA=%u\n", get_cur_tcb()->cur_prio);
 }
 
 /**
