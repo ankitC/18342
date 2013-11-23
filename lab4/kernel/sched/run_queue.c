@@ -75,6 +75,8 @@ void runqueue_init(void)
  */
 void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute__((unused)))
 {
+	printf("a1 %u\n",prio);
+
 	/* Adding the task to the run list */
 	run_list[prio] = tcb;
 
@@ -98,7 +100,11 @@ tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
 {
 	/* Removing the task from the run queue */
 	tcb_t* temp = run_list[prio];
-	run_list[prio] = null;
+	printf("r1 %u\n",run_list[prio]->cur_prio);
+	if(prio == IDLE_PRIO)
+		return temp;
+
+	//run_list[prio] = null;
 
 	/* Clearing the bits from the run bits */
 	run_bits[prio >> 3] &= ~(1 << (prio & 0x07));
@@ -111,6 +117,9 @@ tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
 		group_run_bits &= ~(1 << (prio >> 3));
 
 	/* Returning the tcb of given priority */
+	//printf("R:%02x H:%02x\n", prio, highest_prio());
+	
+	printf("r2 %u\n",temp->cur_prio);
 	return (tcb_t *)temp;
 }
 

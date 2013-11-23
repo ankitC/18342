@@ -34,7 +34,7 @@ void sched_init(task_t* main_task  __attribute__((unused)))
  */
 static void __attribute__((unused)) idle(void)
 {
-	printf("I\n");
+	//printf("I\n");
 	enable_interrupts();
 	while(1);
 }
@@ -83,10 +83,11 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
 	system_tcb[IDLE_PRIO].cur_prio = IDLE_PRIO;
 	system_tcb[IDLE_PRIO].context.r5 = 0;
-	system_tcb[IDLE_PRIO].context.r4 = (uint32_t)&idle;
+	system_tcb[IDLE_PRIO].context.r4 = (uint32_t)null;
+	system_tcb[IDLE_PRIO].context.r8 = global_data;
 
 	/* Don't need stack pointer in userspace for idle task */
-	system_tcb[IDLE_PRIO].context.r6 = (unsigned)0xa2000000;
+	system_tcb[IDLE_PRIO].context.r6 = (unsigned)null;
 	system_tcb[IDLE_PRIO].context.sp = system_tcb[IDLE_PRIO].kstack_high;
 	system_tcb[IDLE_PRIO].holds_lock = 0;
 	system_tcb[IDLE_PRIO].sleep_queue = null;

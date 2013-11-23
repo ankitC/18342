@@ -14,6 +14,9 @@
 #include <config.h>
 #include <device.h>
 #include <sched.h>
+#include <inline.h>
+#include <arm/psr.h>
+#include <arm/exception.h>
 
 extern unsigned long timer_counter; 
 
@@ -34,7 +37,7 @@ void irq_handler(void)
 
 	timer_counter++;
 
-	printf("-");
+	//printf("-");
 	/* Updating the match register for the counter */
 	clocks_till_interrupt = reg_read(OSTMR_OSMR_ADDR(0));
 	clocks_till_interrupt += (OSTMR_FREQ*OS_TIMER_RESOLUTION)/1000;
@@ -50,9 +53,6 @@ void irq_handler(void)
 	 * corresponding tasks to the run queue.
 	 */
 	dev_update(timer_counter * OS_TIMER_RESOLUTION);
-
-	/* Context switch to the highest priority task in the run queue */
-	dispatch_save();
 
 	ossr_reg = reg_read(OSTMR_OSSR_ADDR);
 	return;

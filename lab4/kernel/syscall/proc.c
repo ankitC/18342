@@ -64,9 +64,7 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	allocate_tasks(&tasks, num_tasks);
 
 	//printf("HP=%u\n", highest_prio());
-
-	enable_interrupts();
-
+	disable_interrupts();
 	dispatch_nosave();
 
 	assert(0); /* should never reach here */
@@ -77,8 +75,8 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 	/* Return invalid if the device does not exist */
 	if(dev >= NUM_DEVICES)
 		return -EINVAL;
-
 	dev_wait(dev);
+	disable_interrupts();
 	dispatch_sleep();
 	return 0;
 }
@@ -95,7 +93,7 @@ void sort(task_t* temp, int size)
 {
 	int i = 0, j = 0;
 	for (i = 0 ;i < size ; i ++)
-		for ( j = 0; j < size ; j++) //TODO can it be < size -i?
+		for ( j = 0; j < size ; j++) 
 			if( temp[i].T > temp[j].T)
 				swap(temp[i], temp[j]);
 }

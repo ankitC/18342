@@ -86,7 +86,10 @@ void dev_wait(unsigned int dev __attribute__((unused)))
 void dev_update(unsigned long millis __attribute__((unused)))
 {
 	int i = 0;
-
+	int flag = 0;
+	tcb_t* prev = null;
+	tcb_t *temp = null;
+	
 	/**
 	 * Matching the current time with match value of all the devices
 	 * and add the tasks of the devices whose value matched to the run queue
@@ -95,19 +98,33 @@ void dev_update(unsigned long millis __attribute__((unused)))
 	{
 		if(devices[i].next_match == millis)
 		{
-			tcb_t *temp = null;
-			printf("De:%d\n", i);
+			
+	//		printf("De:%d\n", i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)
 			{
+				printf("P%d\n", temp->cur_prio);
 				runqueue_add(temp, temp->cur_prio);
-				printf("DP:%02x\n", highest_prio());
+				
+				if(prev!=null)
+					prev->sleep_queue = null;
+				
+				prev = temp;
+				
+				flag++;
 			}
 
 			/* Update the sleep queue and next_match value of the device */
 			devices[i].sleep_queue = null;
 			devices[i].next_match += dev_freq[i];
 		}
+	}
+//	printf("F:%d\n",flag);
+	if(flag > 0)
+	{
+		/* Context switch to the highest priority task in the run queue */
+		disable_interrupts();
+		dispatch_save();
 	}
 }

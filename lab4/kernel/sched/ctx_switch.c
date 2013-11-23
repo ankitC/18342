@@ -49,9 +49,10 @@ void dispatch_save(void)
 {
 	uint8_t next_highest_prio;
     tcb_t *next_tcb, *prev_tcb;
+    tcb_t *current = get_cur_tcb(); 
 
 	/* Add the task back to the runqueue */
-    runqueue_add(cur_tcb, cur_tcb->cur_prio);
+    runqueue_add(current, current->cur_prio);
 
     /* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
@@ -59,12 +60,15 @@ void dispatch_save(void)
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
-	disable_interrupts();
-	printf("SB=%u\n", highest_prio());
+	//printf("ps%u\n",prev_tcb->cur_prio);
+	
+	if(next_tcb->cur_prio == IDLE_PRIO)
+    	runqueue_add(next_tcb, IDLE_PRIO);
+
+//	printf("SB=%u\n", highest_prio());
  	ctx_switch_full((sched_context_t*) &(next_tcb->context),
  		(sched_context_t*) &(prev_tcb->context));
-	printf("SA=%u\n", highest_prio());
- 	enable_interrupts();
+//	printf("SA=%u\n", highest_prio());
 }
 
 /**
@@ -81,9 +85,12 @@ void dispatch_nosave(void)
      /* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
     next_tcb = runqueue_remove(next_highest_prio);
-    //printf("1=%u\n", next_tcb->cur_prio);
+    
+    if(next_tcb->cur_prio == IDLE_PRIO)
+    	runqueue_add(next_tcb, IDLE_PRIO);
+
     cur_tcb = next_tcb;
-    printf("NS=%u\n", highest_prio());
+//    printf("NS=%u\n", highest_prio());
     ctx_switch_half((sched_context_t*) &(next_tcb->context));
 }
 
@@ -104,12 +111,15 @@ void dispatch_sleep(void)
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
-	disable_interrupts();
-	printf("LB=%u\n", highest_prio());
+	//printf("p%u\n",prev_tcb->cur_prio);
+    
+    if(next_tcb->cur_prio == IDLE_PRIO)
+    	runqueue_add(next_tcb, IDLE_PRIO);
+
+	printf("BSL=%u\n", get_cur_tcb()->cur_prio );
  	ctx_switch_full((sched_context_t*) &(next_tcb->context),
  		(sched_context_t*) &(prev_tcb->context));
-	printf("LA=%u\n", highest_prio());
-	enable_interrupts();
+ 	printf("BSA=%u\n", get_cur_tcb()->cur_prio);
 }
 
 /**
