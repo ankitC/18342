@@ -89,7 +89,7 @@ void dev_update(unsigned long millis __attribute__((unused)))
 	int flag = 0;
 	tcb_t* prev = null;
 	tcb_t *temp = null;
-	
+
 	/**
 	 * Matching the current time with match value of all the devices
 	 * and add the tasks of the devices whose value matched to the run queue
@@ -98,20 +98,20 @@ void dev_update(unsigned long millis __attribute__((unused)))
 	{
 		if(devices[i].next_match == millis)
 		{
-			
-	//		printf("De:%d\n", i);
+
+			printf("De:%d\n", i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)
 			{
 				printf("P%d\n", temp->cur_prio);
 				runqueue_add(temp, temp->cur_prio);
-				
+
 				if(prev!=null)
 					prev->sleep_queue = null;
-				
+
 				prev = temp;
-				
+
 				flag++;
 			}
 

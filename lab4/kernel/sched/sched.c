@@ -36,7 +36,10 @@ static void __attribute__((unused)) idle(void)
 {
 	//printf("I\n");
 	enable_interrupts();
-	while(1);
+	while(1)
+	{
+	//	printf("I\n");
+	}
 }
 
 /**
@@ -52,7 +55,7 @@ static void __attribute__((unused)) idle(void)
  * @param tasks  A list of scheduled task descriptors.
  * @param size   The number of tasks is the list.
  */
-void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
+void allocate_tasks(task_t** tasks, size_t num_tasks)
 {
 
 	task_t* temp_tasks = *tasks;
@@ -83,7 +86,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
 	system_tcb[IDLE_PRIO].cur_prio = IDLE_PRIO;
 	system_tcb[IDLE_PRIO].context.r5 = 0;
-	system_tcb[IDLE_PRIO].context.r4 = (uint32_t)null;
+	system_tcb[IDLE_PRIO].context.r4 = (uint32_t)&idle;
 	system_tcb[IDLE_PRIO].context.r8 = global_data;
 
 	/* Don't need stack pointer in userspace for idle task */

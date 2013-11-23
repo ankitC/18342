@@ -84,8 +84,9 @@ void dispatch_nosave(void)
 
      /* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
+    printf("NS=%u\n", highest_prio());
     next_tcb = runqueue_remove(next_highest_prio);
-    
+
     if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
@@ -104,14 +105,24 @@ void dispatch_sleep(void)
 {
 	uint8_t next_highest_prio;
     tcb_t *next_tcb, *prev_tcb;
-
+	int i = 0;
+	printf("DSP %u\n",get_cur_prio());
+	for( i = 0 ; i < OS_MAX_TASKS ; i++)
+	{
+		printf("%u",system_tcb[i].cur_prio);
+	}
 	/* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
+	printf("DSH %u\n",next_highest_prio);
     next_tcb = runqueue_remove(next_highest_prio);
+
+	for( i = 0 ; i < OS_MAX_TASKS ; i++)
+	{
+		printf("%u",system_tcb[i].cur_prio);
+	}
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
-	//printf("p%u\n",prev_tcb->cur_prio);
     
     if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);

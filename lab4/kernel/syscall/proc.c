@@ -23,6 +23,8 @@
 #include <device.h>
 #include <assert.h>
 
+extern tcb_t system_tcb[];
+
 void swap(task_t, task_t);
 void sort(task_t*, int);
 
@@ -75,6 +77,12 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 	/* Return invalid if the device does not exist */
 	if(dev >= NUM_DEVICES)
 		return -EINVAL;
+	int i = 0;
+	printf("BW:");
+	for( i = 0 ; i < OS_MAX_TASKS ; i++)
+	{
+		printf("%u",system_tcb[i].cur_prio);
+	}
 	dev_wait(dev);
 	disable_interrupts();
 	dispatch_sleep();
@@ -93,14 +101,20 @@ void sort(task_t* temp, int size)
 {
 	int i = 0, j = 0;
 	for (i = 0 ;i < size ; i ++)
-		for ( j = 0; j < size ; j++) 
+		for ( j = i+1; j < size ; j++) 
 			if( temp[i].T > temp[j].T)
-				swap(temp[i], temp[j]);
+			{
+				//swap(temp[i], temp[j]);
+				task_t t = temp[i];
+				temp[i] = temp[j];
+				temp[j] = t;
+			}
 }
-
+/*
 void swap(task_t a, task_t b)
 {
 	task_t t = a;
 	a = b;
 	b = t;
 }
+*/
