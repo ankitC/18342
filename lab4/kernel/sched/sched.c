@@ -71,9 +71,9 @@ void allocate_tasks(task_t** tasks, size_t num_tasks)
 
 		system_tcb[i].native_prio = i;
 		system_tcb[i].cur_prio = i;
-		system_tcb[i].context.r5 = (uint32_t)temp_tasks[i-1].data;
-		system_tcb[i].context.r4 = (uint32_t)temp_tasks[i-1].lambda;
-		system_tcb[i].context.r6 = (uint32_t)temp_tasks[i-1].stack_pos;
+		system_tcb[i].context.r5 = (uint32_t)temp_tasks[i - 1].data;
+		system_tcb[i].context.r4 = (uint32_t)temp_tasks[i - 1].lambda;
+		system_tcb[i].context.r6 = (uint32_t)temp_tasks[i - 1].stack_pos;
 		system_tcb[i].context.sp = system_tcb[i].kstack_high;
 		system_tcb[i].context.lr = &launch_task;
 		system_tcb[i].holds_lock = 0;

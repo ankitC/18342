@@ -67,10 +67,10 @@ void dev_init(void)
  *
  * @param dev  Device number.
  */
-void dev_wait(unsigned int dev __attribute__((unused)))
+void dev_wait(unsigned int dev)
 {
 	tcb_t* present = get_cur_tcb();
-
+	printf("DW%u P%u\n", dev, present->cur_prio);
 	/* Adding to the head of sleep queue of the device */
 	present->sleep_queue = devices[dev].sleep_queue;
 	devices[dev].sleep_queue = present;
@@ -83,7 +83,7 @@ void dev_wait(unsigned int dev __attribute__((unused)))
  * interrupt corresponded to the interrupt frequency of a device, this
  * function should ensure that the task is made ready to run.
  */
-void dev_update(unsigned long millis __attribute__((unused)))
+void dev_update(unsigned long millis)
 {
 	int i = 0;
 	int flag = 0;
@@ -98,13 +98,13 @@ void dev_update(unsigned long millis __attribute__((unused)))
 	{
 		if(devices[i].next_match == millis)
 		{
-			printf("DF%u", i);
+			printf("DF%u ", i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)
 			{
 				runqueue_add(temp, temp->cur_prio);
-
+				printf("DPA%u ", temp->cur_prio);
 				if(prev!=null)
 					prev->sleep_queue = null;
 
@@ -113,12 +113,13 @@ void dev_update(unsigned long millis __attribute__((unused)))
 				flag++;
 			}
 
+			printf("\n");
 			/* Update the sleep queue and next_match value of the device */
 			devices[i].sleep_queue = null;
 			devices[i].next_match += dev_freq[i];
 		}
 	}
-//	printf("F:%d\n",flag);
+	printf("F:%d\n",flag);
 	if(flag > 0)
 	{
 		/* Context switch to the highest priority task in the run queue */

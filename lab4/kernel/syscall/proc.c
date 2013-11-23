@@ -77,9 +77,9 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 	/* Return invalid if the device does not exist */
 	if(dev >= NUM_DEVICES)
 		return -EINVAL;
-	//dev_wait(dev);
+	dev_wait(dev);
 	disable_interrupts();
-	//dispatch_sleep();
+	dispatch_sleep();
 	return 0;
 }
 

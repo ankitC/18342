@@ -38,6 +38,7 @@ void fun2(void* str)
 			panic("Dev 1 failed");
 	}
 }
+
 void fun3(void* str)
 {
 	while(1)
@@ -47,6 +48,17 @@ void fun3(void* str)
 			panic("Dev 2 failed");
 	}
 }
+
+void fun4(void* str)
+{
+	while(1)
+	{
+		putchar((int)str);
+		if (event_wait(3) < 0)
+			panic("Dev 3 failed");
+	}
+}
+
 int main(int argc, char** argv)
 {
 	task_t tasks[4];
@@ -69,9 +81,9 @@ int main(int argc, char** argv)
 	tasks[2].C = 1;
 	tasks[2].T = PERIOD_DEV2;
 
-	tasks[3].lambda = fun2;
+	tasks[3].lambda = fun4;
 	tasks[3].data = (void*)'%';
-	tasks[3].stack_pos = (void*)0xa1005000;
+	tasks[3].stack_pos = (void*)0xa1050000;
 	tasks[3].C = 1;
 	tasks[3].T = PERIOD_DEV3;
 
