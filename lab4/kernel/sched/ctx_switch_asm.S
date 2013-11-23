@@ -51,3 +51,4 @@ FUNC(ctx_switch_half)
     ldr r6, [r0, #8]
     ldr sp, [r0, #32]
     ldr pc, [r0, #36]
+

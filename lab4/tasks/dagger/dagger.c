@@ -21,11 +21,15 @@ void panic(const char* str)
 
 void fun1(void* str)
 {
+	unsigned char *ptr = 2734701769;
+	printf("***%x\n", *ptr);
 	while(1)
 	{
+		printf("+++%x\n", *ptr);
 		putchar((int)str);
 		if (event_wait(0) < 0)
 			panic("Dev 0 failed");
+		printf("---%x\n", *ptr);
 	}
 }
 

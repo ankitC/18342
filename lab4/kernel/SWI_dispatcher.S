@@ -6,6 +6,8 @@
 @		   Group Member 3: Ankit Chheda <achheda>
 @ Date:    Oct 24, 2013 9:00 AM
 
+#include <arm/psr.h>
+
 .file "dispatcher"
 
 .text
@@ -21,7 +23,7 @@ SWI_dispatcher:
 	LDR r8, [r12]
 
 	MRS r2, spsr					@get SPSR into gp registers
-	STR r2, [sp, #8 * 4]			@store SPSR above gp registers for re-entrancy
+	STR r2, [sp, #7 * 4]			@store SPSR above gp registers for re-entrancy
 
 	MRS r12, cpsr
 	BIC r12, r12, #0x80
@@ -33,7 +35,11 @@ SWI_dispatcher:
 
 	BL C_SWI_handler				@Our SWI Handler
 
-	LDR r2, [sp, #8 * 4]			@prepare to restore SPSR
+	MRS r2, cpsr
+	ORR r2, #PSR_IRQ
+	MSR cpsr, r2
+
+	LDR r2, [sp, #7 * 4]			@prepare to restore SPSR
 	MSR spsr, r2					@restore SPSR from r2
 	@ADD sp, sp, #4
 	LDMFD sp!, {r0 - r3, r8, ip, lr}	@unstack user's registers

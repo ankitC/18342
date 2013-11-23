@@ -91,6 +91,7 @@ void dispatch_nosave(void)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
     cur_tcb = next_tcb;
+	printf("NS=%u\n", system_tcb[2].cur_prio);
 //    printf("NS=%u\n", highest_prio());
     ctx_switch_half((sched_context_t*) &(next_tcb->context));
 }

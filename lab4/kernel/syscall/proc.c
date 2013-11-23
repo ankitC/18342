@@ -83,9 +83,9 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 	{
 		printf("%u",system_tcb[i].cur_prio);
 	}
-	dev_wait(dev);
+	//dev_wait(dev);
 	disable_interrupts();
-	dispatch_sleep();
+	//dispatch_sleep();
 	return 0;
 }
 
