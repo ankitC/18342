@@ -34,12 +34,8 @@ void sched_init(task_t* main_task  __attribute__((unused)))
  */
 static void __attribute__((unused)) idle(void)
 {
-	//printf("I\n");
 	enable_interrupts();
-	while(1)
-	{
-	//	printf("I\n");
-	}
+	while(1);
 }
 
 /**

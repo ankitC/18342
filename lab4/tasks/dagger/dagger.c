@@ -21,8 +21,11 @@ void panic(const char* str)
 
 void fun1(void* str)
 {
+	//putchar((int)str);
+	
 	while(1)
-	{
+	{	
+		
 		putchar((int)str);
 		if (event_wait(0) < 0)
 			panic("Dev 0 failed");
@@ -31,8 +34,11 @@ void fun1(void* str)
 
 void fun2(void* str)
 {
+	
+
 	while(1)
 	{
+		
 		putchar((int)str);
 		if (event_wait(1) < 0)
 			panic("Dev 1 failed");
@@ -41,6 +47,8 @@ void fun2(void* str)
 
 void fun3(void* str)
 {
+	//putchar((int)str);
+	
 	while(1)
 	{
 		putchar((int)str);
@@ -51,8 +59,12 @@ void fun3(void* str)
 
 void fun4(void* str)
 {
+
+	//putchar((int)str);
+	
 	while(1)
 	{
+		//putchar((int)str);
 		putchar((int)str);
 		if (event_wait(3) < 0)
 			panic("Dev 3 failed");
@@ -87,7 +99,7 @@ int main(int argc, char** argv)
 	tasks[3].C = 1;
 	tasks[3].T = PERIOD_DEV3;
 
-	task_create(tasks, 3);
+	task_create(tasks, 4);
 	argc = argc; /* remove compiler warning */
 	argv[0] = argv[0]; /* remove compiler warning */
 
