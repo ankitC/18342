@@ -54,13 +54,14 @@ int mutex_create(void)
 	return -ENOMEM;
 }
 
-int mutex_lock(int mutex  __attribute__((unused)))
+int mutex_lock(int mutex)
 {
 	tcb_t *cur = get_cur_tcb();
 	tcb_t *next = gtMutex[mutex].pSleep_queue;
 
 	/* Error checks */
-	if(gtMutex[mutex].bAvailable == TRUE || mutex >= OS_NUM_MUTEX || mutex < 0)
+	if((gtMutex[mutex].bAvailable == TRUE) || (mutex >= OS_NUM_MUTEX) ||
+			(mutex < 0))
 		return -EINVAL;
 
 	/* If you already own the mutex, it will cause a deadlock*/
@@ -68,16 +69,16 @@ int mutex_lock(int mutex  __attribute__((unused)))
 		return -EDEADLOCK;
 
 #ifdef DEBUG
-	printf("Trying to allocated mutex to %u.\n", cur->native_prio);
+	printf("Trying to allocated mutex %d to %u.\n", mutex, cur->native_prio);
 #endif
 
 	/* If someone is already holding the mutex and its not yourself */
 	if(gtMutex[mutex].pHolding_Tcb!= null)
 	{
 		/* Remove the current from run queue and add it to the sleep queue */
-		if(cur != runqueue_remove(cur->cur_prio))
+/*		if(cur != runqueue_remove(cur->cur_prio))
 			printf("Couldn't remove current during mutex lock.\n");
-
+*/
 		cur->sleep_queue = null;
 
 		if(gtMutex[mutex].pSleep_queue == null)
@@ -92,7 +93,8 @@ int mutex_lock(int mutex  __attribute__((unused)))
 		}
 
 		#ifdef DEBUG
-		printf("Mutex unavail for %u. Task %u holds it.\n", cur->native_prio, gtMutex[mutex].pHolding_Tcb->native_prio);	
+		printf("Mutex unavail %d for %u. Task %u holds it.\n", mutex, \
+				cur->native_prio, gtMutex[mutex].pHolding_Tcb->native_prio);
 		#endif
 
 		/* Schedule the next task and put the current to sleep. */
@@ -104,13 +106,13 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	cur->holds_lock++;
 
 #ifdef DEBUG
-	printf("Mutex allocated to task %u.\n", cur->native_prio);
+	printf("Mutex %d allocated to task %u.\n", mutex, cur->native_prio);
 #endif
 
 	return 0;
 }
 
-int mutex_unlock(int mutex  __attribute__((unused)))
+int mutex_unlock(int mutex)
 {
 	tcb_t *cur = get_cur_tcb();
 	tcb_t *head = gtMutex[mutex].pSleep_queue;
@@ -125,7 +127,6 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	cur->holds_lock--;
 	gtMutex[mutex].pHolding_Tcb = null;
 	gtMutex[mutex].bLock = FALSE;
-	//head = gtMutex[mutex].pSleep_queue;
 
 	if(head != null)
 	{
@@ -135,13 +136,13 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	}
 
 #ifdef DEBUG
-	printf("Mutex deallocated from task %u.\n", cur->native_prio);
+	printf("Mutex %d deallocated from task %u.\n", mutex, cur->native_prio);
 #endif
 
-	/* 
+	/*
 	 * After the mutex is unlocked, check if any higher priority task
 	 * was blocked by the current task.
-	 */	
+	 */
 	if(get_cur_tcb()->cur_prio < highest_prio())
 		dispatch_save();
 

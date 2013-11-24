@@ -109,13 +109,13 @@ void dispatch_sleep(void)
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
-    
+
     if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
  	ctx_switch_full((volatile sched_context_t*) &(next_tcb->context),
  		(volatile sched_context_t*) &(prev_tcb->context));
-}
+	}
 
 /**
  * @brief Returns the priority value of the current task.

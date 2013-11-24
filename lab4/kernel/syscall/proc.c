@@ -23,10 +23,7 @@
 #include <device.h>
 #include <assert.h>
 
-extern tcb_t system_tcb[];
-
-void swap(task_t, task_t);
-void sort(task_t*, int);
+static void sort(task_t*, int);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
@@ -35,7 +32,7 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	/* check for total number of tasks. return error if greater than 64 */
 	if(num_tasks > 62)
 		return -EINVAL;
-
+	
 	for(i = 0 ; i < num_tasks; i++)
 	{
 		/* check if function pointer is NULL */
@@ -53,15 +50,8 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	}
 
 	// TODO: do schedulability test and then allocate_tasks
-
 	sort(tasks, num_tasks);
-
-	/* Initialize the sleep queue and next match for all devices */
-	dev_init();
-
-	/* Initialize all the mutices */
-	mutex_init();
-
+	
 	/* Allocate all the tasks */
 	allocate_tasks(&tasks, num_tasks);
 
@@ -91,14 +81,13 @@ void invalid_syscall(unsigned int call_num  __attribute__((unused)))
 	while(1);
 }
 
-void sort(task_t* temp, int size)
+static void sort(task_t* temp, int size)
 {
 	int i = 0, j = 0;
 	for (i = 0 ;i < size ; i ++)
 		for ( j = i+1; j < size ; j++) 
 			if( temp[i].T > temp[j].T)
 			{
-				//swap(temp[i], temp[j]);
 				task_t t = temp[i];
 				temp[i] = temp[j];
 				temp[j] = t;

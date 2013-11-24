@@ -21,8 +21,6 @@ void panic(const char* str)
 
 void fun1(void* str)
 {
-	//putchar((int)str);
-	
 	while(1)
 	{	
 		
@@ -34,8 +32,6 @@ void fun1(void* str)
 
 void fun2(void* str)
 {
-	
-
 	while(1)
 	{
 		

@@ -12,6 +12,7 @@
 #include <exports.h>
 #include <syscall.h>
 #include <lock.h>
+#include <arm/exception.h>
 
 extern tcb_t system_tcb[];
 
@@ -46,11 +47,13 @@ void C_SWI_handler(int swino, unsigned* args)
 
 		/* Mutex Create Syscall */
 		case(MUTEX_CREATE):
+			disable_interrupts();
 			args[0] = mutex_create();
 			break;
 
 		/* Mutex Lock Syscall */
 		case(MUTEX_LOCK):
+			disable_interrupts();
 			args[0] = mutex_lock(args[0]);
 			break;
 

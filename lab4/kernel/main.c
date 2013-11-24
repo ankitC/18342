@@ -16,6 +16,8 @@
 #include <arm/timer.h>
 #include <arm/reg.h>
 #include <kernel_helper.h>
+#include <lock.h>
+#include <device.h>
 
 /* Variable to hold global data */
 uint32_t global_data;
@@ -88,12 +90,18 @@ int kmain(int argc, char** argv, uint32_t table, uint32_t* stackp)
 	printf("Wired in the dispatcher for IRQs\n");
 #endif
 
+	/* Initialize all the mutices */
+	mutex_init();
+
+	/* Initialize the sleep queue and next match for all devices */
+	dev_init();
+
 	/* Enabling IRQs and starting the timer for the kernel*/
 	irq_init();
 	init_kern_timer();
 
 #ifdef debug
-	printf("Timers Init done.\n");
+	printf("Timer init done.\n");
 #endif
 
 	/* Preparing the user stack and switching to userspace */
