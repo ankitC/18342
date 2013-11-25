@@ -2,7 +2,7 @@
  * @file device.c
  *
  * @brief Implements simulated devices.
- * 
+ *
  * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
  *          Group Member 2: Jiten Mehta <jitenm>
  *		    Group Member 3: Ankit Chheda <achheda>
@@ -70,7 +70,7 @@ void dev_init(void)
 void dev_wait(unsigned int dev)
 {
 	tcb_t* present = get_cur_tcb();
-	//printf("DW%u P%u\n", dev, present->cur_prio);
+
 	/* Adding to the head of sleep queue of the device */
 	present->sleep_queue = devices[dev].sleep_queue;
 	devices[dev].sleep_queue = present;
@@ -83,6 +83,7 @@ void dev_wait(unsigned int dev)
  * interrupt corresponded to the interrupt frequency of a device, this
  * function should ensure that the task is made ready to run.
  */
+
 void dev_update(unsigned long millis)
 {
 	int i = 0;
@@ -104,7 +105,7 @@ void dev_update(unsigned long millis)
 									temp = temp->sleep_queue)
 			{
 				runqueue_add(temp, temp->cur_prio);
-			
+
 				if(prev!=null)
 					prev->sleep_queue = null;
 
@@ -118,7 +119,6 @@ void dev_update(unsigned long millis)
 			devices[i].next_match += dev_freq[i];
 		}
 	}
-//	printf("F:%d\n",flag);
 	if(flag > 0)
 	{
 		/* Context switch to the highest priority task in the run queue */

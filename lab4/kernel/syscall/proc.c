@@ -34,7 +34,7 @@ int task_create(task_t* tasks, size_t num_tasks)
 		return -EINVAL;
 
 	/* check if task pointer lies outside the valid address space */
-	if(!(valid_addr((void *)tasks, 1, USR_START_ADDR, USR_END_ADDR)))
+	if(!(valid_addr((void *)tasks, sizeof(task_t)*num_tasks, USR_START_ADDR, USR_END_ADDR)))
 				return -EFAULT;
 
 	for(i = 0 ; i < num_tasks; i++)
