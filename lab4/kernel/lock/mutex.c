@@ -18,7 +18,7 @@
 #include <arm/exception.h>
 #include <exports.h>
 
-//#define DEBUG 0
+//#define DEBUG
 
 #define null (void*) 0
 

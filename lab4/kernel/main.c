@@ -1,5 +1,5 @@
 /** @file main.c
- * 
+ *
  * @brief Kernel main function.
  *
  * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
@@ -18,6 +18,8 @@
 #include <kernel_helper.h>
 #include <lock.h>
 #include <device.h>
+
+//#define debug
 
 /* Variable to hold global data */
 uint32_t global_data;
@@ -142,7 +144,6 @@ static uint32_t* prepare_user_stack(int argc, char** argv)
 #endif
 
 	}
-
 	stack_addr--;
 	*stack_addr = (uint32_t)argc;
 

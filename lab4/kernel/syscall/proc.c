@@ -1,5 +1,5 @@
 /** @file proc.c
- * 
+ *
  * @brief Implementation of `process' syscalls
  *
  * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
@@ -37,7 +37,6 @@ int task_create(task_t* tasks, size_t num_tasks)
 	if(!(valid_addr((void *)tasks, 1, USR_START_ADDR, USR_END_ADDR)))
 				return -EFAULT;
 
-
 	for(i = 0 ; i < num_tasks; i++)
 	{
 		/* check if function pointer is NULL */
@@ -49,19 +48,18 @@ int task_create(task_t* tasks, size_t num_tasks)
 			if(tasks[i].stack_pos == tasks[j].stack_pos && i !=j)
 				return -EINVAL;
 
-		
 		/* check if stack pointer lies outside the valid address space */
 		if(!(valid_addr(tasks[i].stack_pos, (size_t)OS_USTACK_SIZE, USR_START_ADDR, USR_END_ADDR)))
 				return -EFAULT;
 	}
 
-	// TODO: do schedulability test and then allocate_tasks
+	/* Sort the tasks according to their priority */
 	sort(tasks, num_tasks);
-	
+
 	/* Allocate all the tasks */
 	allocate_tasks(&tasks, num_tasks);
 
-	//printf("HP=%u\n", highest_prio());
+	/* Context switch to the highest priority task */
 	disable_interrupts();
 	dispatch_nosave();
 
@@ -73,6 +71,8 @@ int event_wait(unsigned int dev)
 	/* Return invalid if the device does not exist */
 	if(dev >= NUM_DEVICES)
 		return -EINVAL;
+
+	/* Add the task to the sleep queue of the device and context switch */
 	dev_wait(dev);
 	disable_interrupts();
 	dispatch_sleep();
@@ -80,18 +80,19 @@ int event_wait(unsigned int dev)
 }
 
 /* An invalid syscall causes the kernel to exit. */
-void invalid_syscall(unsigned int call_num  __attribute__((unused)))
+void invalid_syscall(unsigned int call_num)
 {
 	printf("Kernel panic: invalid syscall -- 0x%08x\n", call_num);
 	disable_interrupts();
 	while(1);
 }
 
+/* Sort the tasks in ascending order of their time period */
 static void sort(task_t* temp, int size)
 {
 	int i = 0, j = 0;
 	for (i = 0 ;i < size ; i ++)
-		for ( j = i+1; j < size ; j++) 
+		for ( j = i+1; j < size ; j++)
 			if( temp[i].T > temp[j].T)
 			{
 				task_t t = temp[i];

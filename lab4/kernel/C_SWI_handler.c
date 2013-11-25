@@ -14,8 +14,6 @@
 #include <lock.h>
 #include <arm/exception.h>
 
-extern tcb_t system_tcb[];
-
 void C_SWI_handler(int swino, unsigned* args)
 {
 	switch(swino)
