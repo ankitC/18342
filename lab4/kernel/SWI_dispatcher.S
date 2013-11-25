@@ -44,7 +44,8 @@ SWI_dispatcher:
 
 	
 	MRS r2, cpsr
-	ORR r2, #PSR_IRQ					@disabling interrupts for atomic restoration of registers
+	ORR r2, #PSR_IRQ					@disabling interrupts for 
+										@atomic restoration of registers	
 	MSR cpsr, r2
 
 	LDMFD sp, {sp,lr}^
