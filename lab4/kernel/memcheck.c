@@ -34,4 +34,3 @@ int valid_addr(const void* start, size_t count, uintptr_t base, uintptr_t bound)
 	
 	return 1;
 }
-
