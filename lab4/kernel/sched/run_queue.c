@@ -1,5 +1,5 @@
 /** @file run_queue.c
- * 
+ *
  * @brief Run queue maintainence routines.
  *
  * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
@@ -11,7 +11,6 @@
 
 #include <types.h>
 #include <assert.h>
-
 #include <kernel.h>
 #include <sched.h>
 #include "sched_i.h"
@@ -81,17 +80,15 @@ void runqueue_init(void)
  */
 void runqueue_add(tcb_t* tcb , uint8_t prio)
 {
-
 	/* Adding the task to the run list */
 	run_list[prio] = tcb;
+
 	/* Setting group run bits */
 	group_run_bits |= (1 << (prio >> 3));
 
 	/* Setting up the run bits */
 	run_bits[prio >> 3] |= (1 << (prio & 0x07));
-	//printf("A:P=%u G=%u R=%u\n", prio, group_run_bits, run_bits[prio>>3]);
 }
-
 
 /**
  * @brief Empty the run queue of the given priority.
@@ -105,7 +102,7 @@ tcb_t* runqueue_remove(uint8_t prio)
 	/* Removing the task from the run queue */
 	//tcb_t* temp = run_list[prio];
 	tcb_t* temp = &system_tcb[prio];
-	
+
 	if(prio == IDLE_PRIO)
 		return temp;
 
@@ -122,8 +119,6 @@ tcb_t* runqueue_remove(uint8_t prio)
 		group_run_bits &= ~(1 << (prio >> 3));
 
 	/* Returning the tcb of given priority */
-	//printf("R:%02x H:%02x\n", prio, highest_prio());
-	
 	return (tcb_t *)temp;
 }
 

@@ -11,22 +11,23 @@
 
 #include <types.h>
 #include <assert.h>
-
 #include <kernel.h>
 #include <config.h>
-#include "sched_i.h"
-
 #include <arm/reg.h>
 #include <arm/psr.h>
 #include <arm/exception.h>
 #include <arm/physmem.h>
 #include <device.h>
+#include "sched_i.h"
 
 tcb_t system_tcb[OS_MAX_TASKS]; /* allocate memory for system TCBs */
 
+/**
+ * @brief Initialize the scheduler.
+ */
 void sched_init(task_t* main_task  __attribute__((unused)))
 {
-
+	/* This function is not used */
 }
 
 /**

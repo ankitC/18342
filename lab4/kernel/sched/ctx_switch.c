@@ -1,5 +1,5 @@
 /** @file ctx_switch.c
- * 
+ *
  * @brief C wrappers around assembly context switch routines.
  *
  * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
@@ -8,21 +8,16 @@
  *
  * @date:   Nov 18, 2013 9:00 PM
  */
- 
+
 #include <types.h>
 #include <assert.h>
-
 #include <config.h>
 #include <kernel.h>
 #include <arm/exception.h>
 #include <arm/psr.h>
 #include <inline.h>
-
-#include "sched_i.h"
-
-#ifdef DEBUG_MUTEX
 #include <exports.h>
-#endif
+#include "sched_i.h"
 
 static tcb_t* cur_tcb; /* use this if needed */
 
@@ -32,10 +27,11 @@ static tcb_t* cur_tcb; /* use this if needed */
  * Set the initialization thread's priority to IDLE so that anything
  * will preempt it when dispatching the first task.
  */
-//void dispatch_init(tcb_t*)
-//{
 
-//}
+void dispatch_init(tcb_t* idle  __attribute__((unused)))
+{
+	/* This function is not used */
+}
 
 /**
  * @brief Context switch to the highest priority task while saving off the 
