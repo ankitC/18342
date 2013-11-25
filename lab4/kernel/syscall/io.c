@@ -2,37 +2,25 @@
  *
  * @brief Kernel I/O syscall implementations
  *
- * @author Mike Kasick <mkasick@andrew.cmu.edu>
- * @date   Sun, 14 Oct 2007 00:07:38 -0400
+ * @author Arjun Ankleshwaria <aanklesh>
+ *         Jiten Mehta <jitenm>
+ *         Ankit Chheda <achheda>
  *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date   2008-11-16
+ * @date   17 Nov 2013  5:00 pm
  */
 
 #include <types.h>
+#include <config.h>
 #include <bits/errno.h>
 #include <bits/fileno.h>
 #include <arm/physmem.h>
 #include <syscall.h>
 #include <exports.h>
 #include <kernel.h>
-
-/* Special characters */
-#define EOT				0x04
-#define BACKSPACE		0x08
-#define DELETE			0x7f
-#define NEW_LINE		0x0a
-#define CARRAIGE_RETURN	0x0d
-
-/* Special addresses */
-#define ROM_END			0x00ffffff
-#define SUP_STACK_END	0xa3ededf3
-#define RAM_START		0xa0000000
-#define HEAP_START		0xa3edf000
-#define HEAP_END		0xa3efffff
+#include <chars.h>
 
 /* Read count bytes (or less) from fd into the buffer buf. */
-ssize_t read_syscall(int fd __attribute__((unused)), void *buff __attribute__((unused)), size_t count __attribute__((unused)))
+ssize_t read_syscall(int fd, void *buff, size_t count)
 {
 	char* buf = (char*) buff;
 	unsigned int i = 0;
@@ -42,8 +30,10 @@ ssize_t read_syscall(int fd __attribute__((unused)), void *buff __attribute__((u
 		return -EBADF;
 
 	/* check for buffer address out of range */
-	else if(!( (((unsigned int)buf <= SUP_STACK_END) && (((unsigned int)buf - count) >= RAM_START)) \
-				|| (((unsigned int)buf >= HEAP_START) && (((unsigned int)buf + count) <= HEAP_END))))
+	else if(!( (((unsigned int)buf <= SVC_STACK_END) && \
+					(((unsigned int)buf - count) >= OS_RAM_START)) \
+				|| (((unsigned int)buf >= OS_HEAP_START) && \
+					(((unsigned int)buf + count) <= OS_HEAP_END))))
 		return -EFAULT;
 
 	else
@@ -93,7 +83,7 @@ ssize_t read_syscall(int fd __attribute__((unused)), void *buff __attribute__((u
 }
 
 /* Write count bytes to fd from the buffer buf. */
-ssize_t write_syscall(int fd  __attribute__((unused)), const void *buff  __attribute__((unused)), size_t count  __attribute__((unused)))
+ssize_t write_syscall(int fd, const void *buff, size_t count)
 {
 	char* buf = (char*) buff;
 	unsigned int i = 0;
@@ -103,9 +93,11 @@ ssize_t write_syscall(int fd  __attribute__((unused)), const void *buff  __attri
 		return -EBADF;
 
 	/* check for buffer address out of range */
-	else if(!(((unsigned int)buf + count <= ROM_END) \
-				|| (((unsigned int)buf <= SUP_STACK_END) && ((unsigned int)buf - count >= RAM_START)) \
-				|| (((unsigned int)buf >= HEAP_START) && ((unsigned int)buf + count <= HEAP_END))))
+	else if(!(((unsigned int)buf + count <= OS_ROM_END) \
+				|| (((unsigned int)buf <= SVC_STACK_END) \
+					      && ((unsigned int)buf - count >= OS_RAM_START)) \
+				|| (((unsigned int)buf >= OS_HEAP_START) \
+					      && ((unsigned int)buf + count <= OS_HEAP_END))))
 		return -EFAULT;
 
 	else
