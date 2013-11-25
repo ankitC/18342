@@ -31,8 +31,6 @@ uint32_t global_data;
 static uint32_t* prepare_user_stack(int, char**);
 static void irq_init();
 
-/* IRQ Stack */
-char* irq_stack;
 
 /* Variables to hold the data of original SWI Handler */
 unsigned int first_old_swii;
