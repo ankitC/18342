@@ -19,19 +19,13 @@
 #include <lock.h>
 #include <device.h>
 
+#include <extern_helper.h>
+
 //#define debug
 
 /* Variable to hold global data */
 uint32_t global_data;
 
-/* External functions */
-extern void init(uint32_t*);
-extern void SWI_dispatcher();
-extern void IRQ_dispatcher();
-extern void	init_kern_timer();
-extern void prepare_irq_stack();
-extern void irq_wrapper();
-extern int hijack(uint32_t, uint32_t, uint32_t*, uint32_t*, uint32_t*);
 
 /* Static helper functions */
 static uint32_t* prepare_user_stack(int, char**);
