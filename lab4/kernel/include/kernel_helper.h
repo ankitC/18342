@@ -1,4 +1,4 @@
-/* kernel.h : Helper constants give us flexibility in case the
+/* kernel_helper.h : Helper constants give us flexibility in case the
  *			  parameters change.
  *
  * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>

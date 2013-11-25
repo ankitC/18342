@@ -1,3 +1,10 @@
+/* extern_helper.h : Helper file for book-keeping global functions.
+ *
+ * Authors: Group Member 1: Arjun Ankleshwaria <aanklesh>
+ *          Group Member 2: Jiten Mehta <jitenm>
+ *		    Group Member 3: Ankit Chheda <achheda>
+ * Date:    Nov 24, 2013 9:00 AM
+ */
 #define _EXTERN_H_
 #ifdef _EXTERN_H_
 
