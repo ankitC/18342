@@ -171,10 +171,6 @@ static void irq_init(void)
 
 	reg_write(INT_ICLR_ADDR, iclr_reg);
 
-	/* Preparing the IRQ stack */
-	irq_stack = (char*) malloc(IRQ_STACK_SIZE * sizeof(char));
-	prepare_irq_stack(irq_stack + IRQ_STACK_SIZE);
-
 	/* Enabling the IRQs */
 	enable_interrupts();
 
