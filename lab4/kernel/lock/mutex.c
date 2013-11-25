@@ -10,7 +10,7 @@
  * @date:   Nov 20, 2013 9:00 PM
  */
 
-#define DEBUG_MUTEX
+#define DEBUG_MUTEX 0
 
 #include <lock.h>
 #include <task.h>
@@ -20,7 +20,7 @@
 #include <arm/exception.h>
 #ifdef DEBUG_MUTEX
 #include <exports.h> // temp
-#define DEBUG
+//#define DEBUG 0
 #endif
 
 #define null (void*) 0
