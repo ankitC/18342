@@ -21,3 +21,5 @@ _start:
 	MOV r2, r8
 	MOV r3, sp
 	B	kmain					@Our Kernel, here we come!! ;)
+
+loop: B loop
