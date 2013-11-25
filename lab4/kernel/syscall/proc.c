@@ -25,14 +25,19 @@
 
 static void sort(task_t*, int);
 
-int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
+int task_create(task_t* tasks, size_t num_tasks)
 {
 	unsigned int i,j = 0;
 
 	/* check for total number of tasks. return error if greater than 64 */
 	if(num_tasks > 62)
 		return -EINVAL;
-	
+
+	/* check if task pointer lies outside the valid address space */
+	if(!(valid_addr((void *)tasks, 1, USR_START_ADDR, USR_END_ADDR)))
+				return -EFAULT;
+
+
 	for(i = 0 ; i < num_tasks; i++)
 	{
 		/* check if function pointer is NULL */
@@ -44,8 +49,9 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 			if(tasks[i].stack_pos == tasks[j].stack_pos && i !=j)
 				return -EINVAL;
 
+		
 		/* check if stack pointer lies outside the valid address space */
-		if(!(valid_addr(tasks[i].stack_pos, sizeof(tasks[i]), USR_START_ADDR, USR_END_ADDR)))
+		if(!(valid_addr(tasks[i].stack_pos, (size_t)OS_USTACK_SIZE, USR_START_ADDR, USR_END_ADDR)))
 				return -EFAULT;
 	}
 
