@@ -142,7 +142,10 @@ int mutex_unlock(int mutex)
 	 * was blocked by the current task.
 	 */
 	if(get_cur_tcb()->cur_prio < highest_prio())
+	{
+		disable_interrupts();
 		dispatch_save();
+	}
 
 	return 0;
 }
