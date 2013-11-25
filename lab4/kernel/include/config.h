@@ -21,6 +21,7 @@
 
 #define OS_KSTACK_SIZE        4096
 #define OS_USTACK_ALIGN       1024
+#define OS_USTACK_SIZE		  16
 
 /* OS_MAX_TASKS must be atleast 8 and must be atmost 64 */
 #define IDLE_PRIO             63
@@ -29,5 +30,7 @@
 
 /* OS_NUM_MUTEX must be at lease 32 */
 #define OS_NUM_MUTEX	32
+
+
 
 #endif /* _CONFIG_H_ */
