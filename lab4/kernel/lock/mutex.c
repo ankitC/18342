@@ -18,9 +18,9 @@
 #include <arm/exception.h>
 #include <exports.h>
 
-//#define DEBUG
-
 #define null (void*) 0
+
+//#define DEBUG
 
 mutex_t gtMutex[OS_NUM_MUTEX];
 

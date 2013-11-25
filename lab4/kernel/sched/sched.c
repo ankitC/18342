@@ -1,5 +1,5 @@
 /** @file sched.c
- * 
+ *
  * @brief Top level implementation of the scheduler.
  *
  * @author: Group Member 1: Arjun Ankleshwaria <aanklesh>
@@ -31,7 +31,8 @@ void sched_init(task_t* main_task  __attribute__((unused)))
 }
 
 /**
- * @brief This is the idle task that the system runs when no other task is runnable
+ * @brief This is the idle task that the system runs
+ * when no other task is runnable
  */
 static void idle(void)
 {
@@ -54,7 +55,6 @@ static void idle(void)
  */
 void allocate_tasks(task_t** tasks, size_t num_tasks)
 {
-
 	task_t* temp_tasks = *tasks;
 	unsigned int i = 0;
 
@@ -63,9 +63,6 @@ void allocate_tasks(task_t** tasks, size_t num_tasks)
 
 	for(i = 1; i <= num_tasks; i++)
 	{
-		//assert(temp_tasks[i-1] != null);
-		//panic("Null task detected during allocation.\n");
-
 		system_tcb[i].native_prio = i;
 		system_tcb[i].cur_prio = i;
 		system_tcb[i].context.r5 = (uint32_t)temp_tasks[i - 1].data;

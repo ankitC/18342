@@ -6,8 +6,11 @@
  * no co-processor registers and that the caller is in SVC mode. Furthermore,
  * the SPSR is considered a spare/scratch register and hence, is not saved.
  *
- * @author Kartik Subramanian
- * @date   2008-11-21
+ * @author Arjun Ankleshwaria <aanklesh>
+ *         Ankit Chheda <achheda>
+ *         Jiten Mehta <jitenm>
+ *
+ * @date   Nov. 17, 2013  7:00 pm
  */
 
 #include <asm.h>
@@ -35,16 +38,17 @@ FUNC(launch_task)
 	msr     cpsr_c, #(PSR_MODE_USR)
 	mov     sp, r6
 	mov     r6, #0
-	ldr     lr, =0xdeadbeef   /* Causes a crash instead of calling the reset vector */
+	ldr     lr, =0xdeadbeef /* Causes a crash instead of calling reset vector */
 	mov     pc, r4
 
 /* r0 points to the target context, r1 to the current context. */
-/* add your code to perform a full context switch */
+/* store context of current task and load context of target task */
 FUNC(ctx_switch_full)
 	 stmia r1, {r4, r5, r6, r7, r8, r9, r10, r11, sp, lr}
 	 ldmia r0, {r4, r5, r6, r7, r8, r9, r10, r11, sp, pc}
 
-/*add your code to perform a half context switch */	
+/* r0 points to the target context */
+/* load context of target task */
 FUNC(ctx_switch_half)
 	ldr r4, [r0]
    	ldr r5, [r0, #4]

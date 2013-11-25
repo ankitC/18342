@@ -99,18 +99,15 @@ void dev_update(unsigned long millis)
 	{
 		if(devices[i].next_match == millis)
 		{
-		//	printf("DF%u ", i);
 			/* Add the task to the run queue according to its priority */
 			for(temp = devices[i].sleep_queue; temp != null;
 									temp = temp->sleep_queue)
 			{
 				runqueue_add(temp, temp->cur_prio);
-
 				if(prev!=null)
 					prev->sleep_queue = null;
 
 				prev = temp;
-
 				flag++;
 			}
 

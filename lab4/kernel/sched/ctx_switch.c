@@ -19,7 +19,7 @@
 #include <exports.h>
 #include "sched_i.h"
 
-static tcb_t* cur_tcb; /* use this if needed */
+static tcb_t* cur_tcb;
 
 /**
  * @brief Initialize the current TCB and priority.
@@ -27,25 +27,24 @@ static tcb_t* cur_tcb; /* use this if needed */
  * Set the initialization thread's priority to IDLE so that anything
  * will preempt it when dispatching the first task.
  */
-
 void dispatch_init(tcb_t* idle  __attribute__((unused)))
 {
 	/* This function is not used */
 }
 
 /**
- * @brief Context switch to the highest priority task while saving off the 
+ * @brief Context switch to the highest priority task while saving off the
  * current task state.
  *
  * This function needs to be externally synchronized.
- * We could be switching from the idle task.  The priority searcher has been tuned
- * to return IDLE_PRIO for a completely empty run_queue case.
+ * We could be switching from the idle task.  The priority searcher has been
+ * tuned to return IDLE_PRIO for a completely empty run_queue case.
  */
 void dispatch_save(void)
 {
 	uint8_t next_highest_prio;
     tcb_t *next_tcb, *prev_tcb;
-    tcb_t *current = get_cur_tcb(); 
+    tcb_t *current = get_cur_tcb();
 
 	/* Add the task back to the runqueue */
     runqueue_add(current, current->cur_prio);
@@ -56,19 +55,16 @@ void dispatch_save(void)
 
     prev_tcb = cur_tcb;
     cur_tcb = next_tcb;
-	//printf("ps%u\n",prev_tcb->cur_prio);
-	
+
 	if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
-//	printf("SB=%u\n", highest_prio());
  	ctx_switch_full((volatile sched_context_t*) &(next_tcb->context),
  		(volatile sched_context_t*) &(prev_tcb->context));
-//	printf("SA=%u\n", highest_prio());
 }
 
 /**
- * @brief Context switch to the highest priority task that is not this task -- 
+ * @brief Context switch to the highest priority task that is not this task --
  * don't save the current task state.
  *
  * There is always an idle task to switch to.
@@ -90,7 +86,7 @@ void dispatch_nosave(void)
 }
 
 /**
- * @brief Context switch to the highest priority task that is not this task -- 
+ * @brief Context switch to the highest priority task that is not this task --
  * and save the current task but don't mark is runnable.
  *
  * There is always an idle task to switch to.
@@ -99,6 +95,7 @@ void dispatch_sleep(void)
 {
 	uint8_t next_highest_prio;
     tcb_t *next_tcb, *prev_tcb;
+
 	/* Take the next highest priority task and remove it from the queue */
     next_highest_prio = highest_prio();
     next_tcb = runqueue_remove(next_highest_prio);
