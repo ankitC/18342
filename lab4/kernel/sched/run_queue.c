@@ -15,7 +15,7 @@
 #include <sched.h>
 #include "sched_i.h"
 
-static tcb_t* run_list[OS_MAX_TASKS];
+static tcb_t* run_list[OS_MAX_TASKS]  __attribute__((unused));
 
 /* A high bit in this bitmap means that the task whose priority is
  * equal to the bit number of the high bit is runnable.
@@ -61,13 +61,7 @@ void runqueue_init(void)
 	int i = 0;
 	group_run_bits = 0;
 	for( i = 0 ; i < OS_MAX_TASKS/8 ; i++)
-	{
 		run_bits[i] = 0;
-	}
-	for( i = 0 ; i < OS_MAX_TASKS ; i++)
-	{
-		run_list[i] = null;
-	}
 }
 
 /**
@@ -78,11 +72,8 @@ void runqueue_init(void)
  * only requirement is that the run queue for that priority is empty.  This
  * function needs to be externally synchronized.
  */
-void runqueue_add(tcb_t* tcb , uint8_t prio)
+void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio)
 {
-	/* Adding the task to the run list */
-	run_list[prio] = tcb;
-
 	/* Setting group run bits */
 	group_run_bits |= (1 << (prio >> 3));
 
@@ -100,13 +91,10 @@ void runqueue_add(tcb_t* tcb , uint8_t prio)
 tcb_t* runqueue_remove(uint8_t prio)
 {
 	/* Removing the task from the run queue */
-	//tcb_t* temp = run_list[prio];
 	tcb_t* temp = &system_tcb[prio];
 
 	if(prio == IDLE_PRIO)
 		return temp;
-
-	//run_list[prio] = null;
 
 	/* Clearing the bits from the run bits */
 	run_bits[prio >> 3] &= ~(1 << (prio & 0x07));

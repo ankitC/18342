@@ -42,10 +42,6 @@ ssize_t read_syscall(int fd, void *buff, size_t count)
 		{
 			char c = getc();
 
-			/* Null */
-			if(c == '\0')
-				break;
-
 			/* Ctrl + D */
 			if(c == EOT)
 				break;

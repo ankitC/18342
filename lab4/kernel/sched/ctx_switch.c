@@ -59,8 +59,8 @@ void dispatch_save(void)
 	if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
- 	ctx_switch_full((volatile sched_context_t*) &(next_tcb->context),
- 		(volatile sched_context_t*) &(prev_tcb->context));
+ 	ctx_switch_full((sched_context_t*) &(next_tcb->context),
+ 		(sched_context_t*) &(prev_tcb->context));
 }
 
 /**
@@ -82,7 +82,7 @@ void dispatch_nosave(void)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
     cur_tcb = next_tcb;
-    ctx_switch_half((volatile sched_context_t*) &(next_tcb->context));
+    ctx_switch_half((sched_context_t*) &(next_tcb->context));
 }
 
 /**
@@ -106,8 +106,8 @@ void dispatch_sleep(void)
     if(next_tcb->cur_prio == IDLE_PRIO)
     	runqueue_add(next_tcb, IDLE_PRIO);
 
- 	ctx_switch_full((volatile sched_context_t*) &(next_tcb->context),
- 		(volatile sched_context_t*) &(prev_tcb->context));
+ 	ctx_switch_full((sched_context_t*) &(next_tcb->context),
+ 		(sched_context_t*) &(prev_tcb->context));
 	}
 
 /**
