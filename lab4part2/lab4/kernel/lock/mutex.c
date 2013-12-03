@@ -105,6 +105,7 @@ int mutex_lock(int mutex)
 
 	/* Assign highest priority to the task */
 	cur->cur_prio = 0;
+	system_tcb[0] = system_tcb[cur->native_prio];
 
 #ifdef DEBUG
 	printf("Mutex %d allocated to task %u.\n", mutex, cur->native_prio);
