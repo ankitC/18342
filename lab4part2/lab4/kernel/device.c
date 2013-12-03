@@ -116,7 +116,7 @@ void dev_update(unsigned long millis)
 			devices[i].next_match += dev_freq[i];
 		}
 	}
-	if((flag > 0) && (get_cur_prio() < highest_prio()))
+	if((flag > 0) && (get_cur_prio() > highest_prio()))
 	{
 		/* Context switch to the highest priority task in the run queue */
 		disable_interrupts();

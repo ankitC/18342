@@ -6,21 +6,20 @@
  * @date 2008-11-20
  */
 
-//#define DEBUG 0
+#define DEBUG 0
 
 #include <sched.h>
 #ifdef DEBUG
 #include <exports.h>
 #endif
 
-float ub_table[62] = {1.0,0.828,0.78,0.757,0.743,0.735,0.729,0.724,0.721,
-	0.718,0.715,0.714,0.712,0.711,0.709,0.708,0.707,0.707,0.706,0.705,0.705,
-	0.704,0.704,0.703,0.703,0.702,0.702,0.702,0.701,0.701,0.701,0.701,0.7,0.7,
-	0.7,0.7,0.7,0.7,0.699,0.699,0.699,0.699,0.699,0.699,0.699,0.698,0.698,0.698,
-	0.698,0.698,0.698,0.698,0.698,0.698,0.698,0.697,0.697,0.697,0.697,0.697,
-	0.697,0.697 };
+uint32_t ub_table[62] = {1000, 828, 780, 757, 743, 735, 729, 724, 721,
+	 718, 715, 714, 712, 711, 709, 708, 707, 707, 706, 705, 705,
+	 704, 704, 703, 703, 702, 702, 702, 701, 701, 701, 701, 700, 700,
+	 700, 700, 700, 700, 699, 699, 699, 699, 699, 699, 699, 698, 698, 698,
+	 698, 698, 698, 698, 698, 698, 698, 697, 697, 697, 697, 697,
+	 697, 697};
 
- 
 /**
  * @brief Perform UB Test and reorder the task list.
  *
@@ -34,7 +33,7 @@ float ub_table[62] = {1.0,0.828,0.78,0.757,0.743,0.735,0.729,0.724,0.721,
  * @return 0  The test failed.
  * @return 1  Test succeeded.  The tasks are now in order.
  */
-static void sort(task_t*, int);
+static void sort(task_t*, size_t);
 
 int assign_schedule(task_t** tasks, size_t num_tasks)
 {
@@ -43,27 +42,32 @@ int assign_schedule(task_t** tasks, size_t num_tasks)
 	/* Sort the tasks according to their priority */
 	sort(temp, num_tasks);
 
-	unsigned int i = 0;
-	float constant = (temp[num_tasks - 1].C + temp[num_tasks - 1].B) / temp[num_tasks - 1].T;
-	float result = constant;
+	uint32_t i = 0;
+	uint32_t constant = (temp[num_tasks - 1].C + temp[num_tasks - 1].B) * 1000 / temp[num_tasks - 1].T;
+	printf("const=%u ub=%u", constant, ub_table[num_tasks-1]);
+	uint32_t result = constant;
 
 	for(i = 0; i < num_tasks - 1; i++)
-		result += (temp[i].C/temp[i].T);
+		result += (temp[i].C * 1000 / temp[i].T);
 
+	printf(" res=%u\n", result);
 	if(result <= ub_table[num_tasks - 1])
 		return 1;  /* task set is schedulable */
-	else
-		return 0;  /* task set is not schedulable */
 
+#ifdef DEBUG
+	printf("Task set is not schedulable!\n");
+#endif
+
+	return 0;
 }
 
 /* Sort the tasks in ascending order of their time period */
-static void sort(task_t* temp, int size)
+static void sort(task_t* temp, size_t size)
 {
-	int i = 0, j = 0;
-	for (i = 0 ;i < size ; i ++)
-		for ( j = i+1; j < size ; j++)
-			if( temp[i].T > temp[j].T)
+	uint32_t i = 0, j = 0;
+	for (i = 0; i < size; i ++)
+		for (j = i + 1; j < size; j++)
+			if(temp[i].T > temp[j].T)
 			{
 				task_t t = temp[i];
 				temp[i] = temp[j];

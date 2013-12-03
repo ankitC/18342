@@ -42,7 +42,7 @@ void mutex_init()
 /* Create a mutex */
 int mutex_create(void)
 {
-	int i = 0 ;
+	int i = 0;
 	for(i = 0; i < OS_NUM_MUTEX; i++)
 	{
 		if(gtMutex[i].bAvailable == TRUE)
@@ -153,7 +153,7 @@ int mutex_unlock(int mutex)
 	 * After the mutex is unlocked, check if any higher priority task
 	 * was blocked by the current task.
 	 */
-	if(get_cur_prio() < highest_prio())
+	if(get_cur_prio() > highest_prio())
 	{
 		disable_interrupts();
 		dispatch_save();
