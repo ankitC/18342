@@ -22,6 +22,8 @@
 
 //#define DEBUG
 
+extern tcb_t system_tcb[OS_MAX_TASKS];
+
 mutex_t gtMutex[OS_NUM_MUTEX];
 
 /* Initialize all the mutices */
@@ -105,7 +107,7 @@ int mutex_lock(int mutex)
 
 	/* Assign highest priority to the task */
 	cur->cur_prio = 0;
-	system_tcb[0] = system_tcb[cur->native_prio];
+	//system_tcb[0] = system_tcb[cur->native_prio];
 
 #ifdef DEBUG
 	printf("Mutex %d allocated to task %u.\n", mutex, cur->native_prio);
