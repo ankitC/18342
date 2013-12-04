@@ -44,13 +44,11 @@ int assign_schedule(task_t** tasks, size_t num_tasks)
 
 	uint32_t i = 0;
 	uint32_t constant = (temp[num_tasks - 1].C + temp[num_tasks - 1].B) * 1000 / temp[num_tasks - 1].T;
-	printf("const=%u ub=%u", constant, ub_table[num_tasks-1]);
 	uint32_t result = constant;
 
 	for(i = 0; i < num_tasks - 1; i++)
 		result += (temp[i].C * 1000 / temp[i].T);
 
-	printf(" res=%u\n", result);
 	if(result <= ub_table[num_tasks - 1])
 		return 1;  /* task set is schedulable */
 

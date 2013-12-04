@@ -1,7 +1,6 @@
 # Object files
 *.o
 *.ko
-*~
 
 # Libraries
 *.lib
@@ -23,7 +22,7 @@
 *.dep
 
 #Custom ignores
-.DS_Store #for MAC
+*.DS_Store #for MAC
 *~	#Swapfile ignore
 *.swp
 *.swp

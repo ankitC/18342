@@ -22,40 +22,33 @@ void panic(const char* str)
 
 void fun1(void* str)
 {
+	mut = mutex_create();
+	mutex_lock(mut);
+	putchar('1');
+	mutex_unlock(mut);
 	while(1)
 	{
 		putchar((int)str);
-		sleep(2000);
-		/*
-		int i = 1;
-		while(i<=50) {
-			putchar((int)str);
-			i++;
-		}
-		*/
-		if (event_wait(0) < 0)
+		if(event_wait(0) < 0)
 			panic("Dev 0 failed");
 	}
 }
 
 void fun2(void* str)
 {
-	mut = mutex_create();
 	while(1)
 	{
 		mutex_lock(mut);
-		putchar((int)str);
-		sleep(2000);
-		/*	
+		putchar('2');
 		int i = 1;
-		while(i<=50) {
-			putchar((int)str);
+		while(i <= 5)
+		{
+			putchar('5');
 			i++;
+			sleep(90);
 		}
-		*/
+		putchar((int)str);
 		mutex_unlock(mut);
-		if (event_wait(1) < 0)
-			panic("Dev 1 failed");
 	}
 }
 
