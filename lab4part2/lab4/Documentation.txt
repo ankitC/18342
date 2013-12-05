@@ -1,0 +1,24 @@
+﻿Group No. 18
+Group members: Ankit Chheda (achheda)
+               Arjun Ankleshwaria (aanklesh)
+               Jiten Mehta (jitenm)
+
+
+             Lab 4 - Documentation
+ 
+On booting the kernel, first the SWI and IRQ handlers are hijacked. Then the timer is initialized followed by the initialization of the devices and mutices. The user first makes a call to the syscall task_create() to which it passes an array of tasks to be created.
+
+
+task_create() first calls assign_schedule(). assign_schedule() sorts the array of tasks according to their time period, i.e., according to the rate monotonic policy. It then tests for the schedulability of the task set by using the UB Test. It returns an error if the task set is not schedulable and hence, the tasks are not created. On success, it returns back to task_create() which now makes a call to allocate_tasks().
+
+
+allocate_tasks() first initializes the runqueue. Then it initializes all the tasks in the task set and adds them to the runqueue according to their priority, and then initializes the idle task and adds it to the runqueue as well. Idle task will have the lowest priority(63). Now the function task_create() makes a final call to dispatch_nosave() which simply selects the highest priority task from the runqueue and launches it (context switch it in). Now, the highest priority task starts executing.
+
+
+When a task is selected for running, it is taken off the runqueue (runqueue_remove) and allowed to run. Based on how the task is preempted out, it is either added back to the runqueue or added to the sleep queue of the device on which it might have called dev_wait() or is put to sleep waiting for the mutex.
+
+
+A task is added back to the runqueue when the device fires and the task in consideration was on its sleep queue, else, it is put on the run queue when the task was at the head of the mutex’s sleep queue, and finally, it is put on the runqueue, when it was context switched out because of higher priority task becoming eligible to run.
+
+
+As part of implementing Highest Lockers’ priority protocol, the task is assigned a current priority (cur_prio) of 0 whenever it grabs a mutex. It then runs at the highest priority. At this point, the task can run for however long it wants before releasing the mutex. At the instance of releasing the mutex, the priority of the task is restored back to its native priority(native_prio) which might no longer be the highest priority hence making it eligible for pre-emption.

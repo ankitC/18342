@@ -1,12 +1,14 @@
 /** @file ub_test.c
- * 
+ *
  * @brief The UB Test for basic schedulability
  *
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-11-20
+ * @author Arjun Ankleshwaria <aanklesh>
+ *         Ankit Chheda <achheda>
+ *         Jiten Mehta <jitenm>
+ * @date Dec 2, 2013  5:00 pm
  */
 
-#define DEBUG 0
+#define DEBUG
 
 #include <sched.h>
 #ifdef DEBUG
@@ -43,7 +45,9 @@ int assign_schedule(task_t** tasks, size_t num_tasks)
 	sort(temp, num_tasks);
 
 	uint32_t i = 0;
-	uint32_t constant = (temp[num_tasks - 1].C + temp[num_tasks - 1].B) * 1000 / temp[num_tasks - 1].T;
+	uint32_t constant = (temp[num_tasks - 1].C + temp[num_tasks - 1].B) * 1000 \
+							/ temp[num_tasks - 1].T;
+
 	uint32_t result = constant;
 
 	for(i = 0; i < num_tasks - 1; i++)
